@@ -1,0 +1,21 @@
+{
+    "manifest_version": 2,
+    "name":"YoutubeTimer",
+    "version":"1.0",
+    "description":"Monitor the time wasted on Youtube videos",
+    
+    "browser_action":{
+        "default_popup":"popup.html"
+    },
+    "permissions":[
+        "tabs",
+        "storage",
+        "activeTab",
+        "background"
+        
+    ],
+    "background":{
+        "scripts":["background.js"],
+        "persistent": false
+    }
+}
