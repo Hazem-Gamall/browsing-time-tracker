@@ -1,9 +1,12 @@
+
+
 document.addEventListener('DOMContentLoaded', function() {
-
-
-
-
-getChromeVar();
+    var timeTable = new Object();
+    chrome.storage.local.get(['optionsTable'], function(result) {
+        timeTable = result.optionsTable;
+        console.log("timeTable: ", Object.keys(timeTable), Object.values(timeTable));   
+        createHtmlFromTable(timeTable);
+    });
 
 var refreshButton = document.getElementById('refreshButton');
 
@@ -17,23 +20,27 @@ refreshButton.addEventListener('click', function(){
 }, false);
 
 
+function createHtmlFromTable(timeTable){
+    for(var key in timeTable){
+
+        var div = document.createElement('div');
+        var label = document.createElement('label');
+        var icon = document.createElement('img');   
+
+        label.textContent = timeTable[key];
+        icon.setAttribute('src', 'https://www.google.com/s2/favicons?sz=16&domain='+key);
+        icon.style.marginRight = '5px';
+
+        div.appendChild(icon);
+        div.appendChild(label);
+
+        document.body.appendChild(div);
+    }
+}
+
 
 function getChromeVar(){
-
-    chrome.storage.local.get(['tTable'], function(data) {
-        var timeTable = new Object();
-        timeTable["www.youtube.com"] = document.getElementById('youtubeTime');
-        timeTable["www.facebook.com"] = document.getElementById('facebookTime');
-        timeTable["twitter.com"] = document.getElementById('twitterTime');
-        timeTable["www.google.com"] = document.getElementById('googleTime');
-        timeTable["github.com"] = document.getElementById('githubTime');
-        timeTable["stackoverflow.com"] = document.getElementById('stackofTime');
-
-       for(var i =0; i < 7; i++){
-           var arr = Object.keys(data.tTable);
-
-           console.log('i', arr[i]);
-           timeTable[arr[i]].textContent = new Date(data.tTable[arr[i]]).toISOString().substr(11, 8);
-       }
-      });
-}
+    chrome.storage.local.get(['optionsTable'], function(result) {
+            
+        });
+    }

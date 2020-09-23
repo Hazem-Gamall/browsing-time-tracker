@@ -1,10 +1,9 @@
 var timeTable = new Object();
-timeTable["www.youtube.com"] = 0;
-timeTable["www.facebook.com"] = 0;
-timeTable["twitter.com"] = 0;
-timeTable["stackoverflow.com"] = 0;
-timeTable["www.google.com"] = 0;
-timeTable["github.com"] = 0;
+
+chrome.storage.local.get(['optionsTable'], function(data){
+    timeTable = data.optionsTable;
+    console.log("timeTable now: ", Object.keys(timeTable), Object.values(timeTable));
+});
 
 var prevStartTime;
 var prevHostName;
