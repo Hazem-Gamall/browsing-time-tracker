@@ -4,7 +4,6 @@ var timeTable = new Object();
 document.addEventListener('DOMContentLoaded', function(){
     var addButton = document.getElementById("addButton");
     var delButton = document.getElementById("delButton");
-    console.log("hello");
     addButton.addEventListener('click', addUrl, false);
     delButton.addEventListener('click', deleteUrl, false);
     restore_options();
@@ -16,7 +15,6 @@ document.addEventListener('DOMContentLoaded', function(){
 function restore_options(){
     chrome.storage.local.get(['optionsTable'], function(data){
         timeTable = data.optionsTable;
-        console.log("restored timeTable: ", Object.keys(timeTable));
 
         //restore it to the ui
         for(var key in timeTable){
@@ -43,7 +41,6 @@ function addUrl(){
     try{    //Error Handling for the URL
     var hostname = (new URL(input).hostname);
     timeTable[hostname] = 0;
-    console.log("hostname: ", hostname);
 
     //create the new HTML elemnts for the added URL
     var div = document.createElement('div');
@@ -64,20 +61,16 @@ function addUrl(){
     
     //update the optionsTable
     chrome.storage.local.set({optionsTable:timeTable},function(){
-        console.log("set to", Object.keys(timeTable),Object.values(timeTable));
     });
 
 }
 
 function deleteUrl(){
     var input = document.getElementById("input_id").value;
-    console.log("inputText: ", document.getElementById("input_id"));
-    console.log("input: ", input);
 
     try{
     var hostname = (new URL(input).hostname);
     delete timeTable[hostname];
-    console.log("deleted hostname: ", hostname);
 
     document.body.removeChild(hostname);
     
@@ -88,6 +81,5 @@ function deleteUrl(){
     location.reload();
     //update the optionsTable
     chrome.storage.local.set({optionsTable:timeTable},function(){
-        console.log("set to", Object.keys(timeTable),Object.values(timeTable));
     });
 }
