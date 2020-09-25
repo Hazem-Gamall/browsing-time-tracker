@@ -1,18 +1,23 @@
 
 
 document.addEventListener('DOMContentLoaded', function() {    
-    getChromeVar();
-    
+        createHTMLFromTable();
 }, false);
 
 
-var page = chrome.extension.getBackgroundPage();
-var timeTable = page.timeTable;
-console.log("tb: ",tb, Object.keys(tb));
 
 
-function createHTMLFromTable(timeTable){    
+function createHTMLFromTable(){   
+    var page = chrome.extension.getBackgroundPage();
+    var timeTable = page.timeTable;
+
+    timeTable['totalTime'] = 0;
+
+    console.log("H: ", Object.keys(timeTable));
     for(var key in timeTable){
+        if(key === "totalTime") continue;
+        timeTable["totalTime"] += timeTable[key];
+        console.log("totalTime in loop: ", timeTable["totalTime"]);
         var div = document.createElement('div');
         var label = document.createElement('label');
         var icon = document.createElement('img');   
@@ -21,22 +26,16 @@ function createHTMLFromTable(timeTable){
         icon.setAttribute('src', 'https://www.google.com/s2/favicons?sz=16&domain='+key);   //set icon as website's favicon
         icon.style.marginRight = '5px';
 
-        // console.log(label.textContent);
 
         div.appendChild(icon);
         div.appendChild(label);
-
-        document.body.appendChild(div);
+        
+        document.body.insertBefore(div,document.getElementById("totalTimeText"));
     }
+    var totalTimeLabel = document.getElementById("totalTime");
+    console.log("totalTime: ", timeTable["totalTime"]);
+    totalTimeLabel.textContent = (new Date(timeTable["totalTime"]).toISOString().substr(11,8));
 }
 
 
-
-function getChromeVar(){
-    // var timeTable = new Object();
-    // chrome.storage.local.get(['optionsTable'], function(result) {
-        // timeTable = result.optionsTable;
-        createHTMLFromTable(timeTable);
-    // });
-}
 

@@ -1,12 +1,12 @@
-var timeTable = new Object();
-
-
+var timeTable = {};
+console.log("timeTable:",timeTable);
 document.addEventListener('DOMContentLoaded', function(){
+    restore_options();
     var addButton = document.getElementById("addButton");
     var delButton = document.getElementById("delButton");
     addButton.addEventListener('click', addUrl, false);
     delButton.addEventListener('click', deleteUrl, false);
-    restore_options();
+
 },false);
 
 
@@ -14,10 +14,13 @@ document.addEventListener('DOMContentLoaded', function(){
 //restore old options when the extension is loaded
 function restore_options(){
     chrome.storage.local.get(['optionsTable'], function(data){
+        if(!data.optionsTable) return;
         timeTable = data.optionsTable;
+        
 
         //restore it to the ui
         for(var key in timeTable){
+            if(key === "totalTime")continue;
             var div = document.createElement('div');
             var label = document.createElement('label');
             var icon = document.createElement("img");
@@ -27,20 +30,21 @@ function restore_options(){
 
             div.appendChild(icon);
             div.appendChild(label);
-            document.body.insertBefore(div,document.body.lastChild);
+            document.body.appendChild(div);
         }
         
     
         
     })
 }
-
 function addUrl(){    
     var input = document.getElementById("input_id").value;  //get the URL entered in the input field
 
     try{    //Error Handling for the URL
-    var hostname = (new URL(input).hostname);
+    var hostname = (new URL(input).hostname); 
     timeTable[hostname] = 0;
+    console.log("timeTable:", Object.keys(timeTable));
+    // console.log("timeTable: ", Object.keys(timeTable), Object.values(timeTable));
 
     //create the new HTML elemnts for the added URL
     var div = document.createElement('div');
@@ -53,15 +57,17 @@ function addUrl(){
 
     div.appendChild(icon);
     div.appendChild(label);
-
-    document.body.insertBefore(div,document.body.lastChild);
-    }catch(_){
-        console.log("invalid URL");
+    
+    document.body.appendChild(div);
+    }catch(err){
+        console.log(err);
     }
     
-    //update the optionsTable
+    // update the optionsTable
     chrome.storage.local.set({optionsTable:timeTable},function(){
+        // console.log("timeTable set to: ", Object.keys(timeTable), Object.values(timeTable));
     });
+    
 
 }
 
@@ -69,16 +75,18 @@ function deleteUrl(){
     var input = document.getElementById("input_id").value;
 
     try{
+    console.log("before deletion: ", Object.keys(timeTable), Object.values(timeTable));
     var hostname = (new URL(input).hostname);
     delete timeTable[hostname];
+    console.log("after deletion: ", Object.keys(timeTable), Object.values(timeTable));
 
-    document.body.removeChild(hostname);
+    document.body.removeChild(document.getElementById(hostname));
+
     
 
-    }catch(_){
-        console.log("invalid URL");
+    }catch(err){
+        console.log(err);
     }
-    location.reload();
     //update the optionsTable
     chrome.storage.local.set({optionsTable:timeTable},function(){
     });
