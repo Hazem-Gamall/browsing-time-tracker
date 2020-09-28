@@ -9,13 +9,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function createHTMLFromTable(){   
     var page = chrome.extension.getBackgroundPage();
-    var timeTable = page.timeTable;
+    var trackAll = page.trackAll;
+    console.log("tracAll: ", trackAll);
+    if(trackAll){
+        var timeTable = page.timeTable;
+    }else{
+        var timeTable = page.userOptionsTable;
+    }
+    
+    
+
+
 
     timeTable['totalTime'] = 0;
 
-    console.log("H: ", Object.keys(timeTable));
+    console.log("H: ", Object.keys(timeTable), Object.values(timeTable));
     for(var key in timeTable){
-        if(key === "totalTime") continue;
+        if(key === "totalTime" || key === "day") continue;
         timeTable["totalTime"] += timeTable[key];
         console.log("totalTime in loop: ", timeTable["totalTime"]);
         var div = document.createElement('div');
@@ -23,7 +33,8 @@ function createHTMLFromTable(){
         var icon = document.createElement('img');   
         
         label.textContent =  (new Date(timeTable[key]).toISOString().substr(11,8));
-        icon.setAttribute('src', 'https://www.google.com/s2/favicons?sz=16&domain='+key);   //set icon as website's favicon
+        icon.setAttribute('src', 'chrome://favicon/https://'+key);   //set icon as website's favicon
+        icon.title = key;
         icon.style.marginRight = '5px';
 
 

@@ -1,6 +1,23 @@
+
 var timeTable = {};
 console.log("timeTable:",timeTable);
 document.addEventListener('DOMContentLoaded', function(){
+    
+    var checkbox = document.getElementById("checkbox_id");
+    checkbox.addEventListener('click',function(){
+        var input = document.getElementById("input_id")
+        if(checkbox.checked === true){
+            input.disabled = true;
+
+        }else{
+            input.disabled = false;
+        }
+        chrome.storage.local.set({trackAll:checkbox.checked},function(){
+            console.log("trackAll set to: ", checkbox.checked);
+        });
+    })
+    
+
     restore_options();
     var addButton = document.getElementById("addButton");
     var delButton = document.getElementById("delButton");
@@ -13,19 +30,19 @@ document.addEventListener('DOMContentLoaded', function(){
 
 //restore old options when the extension is loaded
 function restore_options(){
-    chrome.storage.local.get(['optionsTable'], function(data){
-        if(!data.optionsTable) return;
-        timeTable = data.optionsTable;
+    chrome.storage.local.get(['userOptionsTable'], function(data){
+        if(!data.userOptionsTable) return;
+        timeTable = data.userOptionsTable;
         
 
         //restore it to the ui
         for(var key in timeTable){
-            if(key === "totalTime")continue;
+            if(key === "totalTime" || key === "day")continue;
             var div = document.createElement('div');
             var label = document.createElement('label');
             var icon = document.createElement("img");
 
-            icon.setAttribute('src', 'https://www.google.com/s2/favicons?sz=16&domain='+key);  //add fav"icon"
+            icon.setAttribute('src', 'chrome://favicon/https://'+key);  //add fav"icon"
             label.textContent = key;
 
             div.appendChild(icon);
@@ -67,6 +84,9 @@ function addUrl(){
     chrome.storage.local.set({optionsTable:timeTable},function(){
         // console.log("timeTable set to: ", Object.keys(timeTable), Object.values(timeTable));
     });
+    chrome.storage.local.set({userOptionsTable:timeTable},function(){
+        // console.log("timeTable set to: ", Object.keys(timeTable), Object.values(timeTable));
+    });
     
 
 }
@@ -89,5 +109,7 @@ function deleteUrl(){
     }
     //update the optionsTable
     chrome.storage.local.set({optionsTable:timeTable},function(){
+    });
+    chrome.storage.local.set({userOptionsTable:timeTable},function(){
     });
 }

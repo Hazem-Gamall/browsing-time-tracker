@@ -14,12 +14,18 @@
       },
 
     "permissions":[
+        "idle",
+        "chrome://favicon/",
         "tabs",
         "storage",
         "activeTab",
-        "background"
+        "background",
+        "management"
         
     ],
+
+    "content_security_policy": "script-src 'self'; object-src 'self'; img-src chrome://favicon;",
+
     "background":{
         "scripts":["background.js"],
         "persistent": false
