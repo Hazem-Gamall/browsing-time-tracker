@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 //restore old options when the extension is loaded
 function restore_options(){
-    chrome.storage.local.get(['userOptionsTable'], function(data){
+    chrome.storage.local.get(['userOptionsTable','trackAll'], function(data){
         if(!data.userOptionsTable) return;
         timeTable = data.userOptionsTable;
         
@@ -49,10 +49,11 @@ function restore_options(){
             div.appendChild(label);
             document.body.appendChild(div);
         }
-        
+        var checkbox = document.getElementById("checkbox_id");
+        checkbox.checked = data.trackAll;
     
         
-    })
+    });
 }
 function addUrl(){    
     var input = document.getElementById("input_id").value;  //get the URL entered in the input field
