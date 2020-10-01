@@ -1,6 +1,9 @@
 
+
+
+chrome.runtime.sendMessage("runContentScript");
+
 var timeTable = {};
-console.log("timeTable:",timeTable);
 document.addEventListener('DOMContentLoaded', function(){
     
     var checkbox = document.getElementById("checkbox_id");
@@ -13,7 +16,6 @@ document.addEventListener('DOMContentLoaded', function(){
             input.disabled = false;
         }
         chrome.storage.local.set({trackAll:checkbox.checked},function(){
-            console.log("trackAll set to: ", checkbox.checked);
         });
     })
     
@@ -61,7 +63,6 @@ function addUrl(){
     try{    //Error Handling for the URL
     var hostname = (new URL(input).hostname); 
     timeTable[hostname] = 0;
-    console.log("timeTable:", Object.keys(timeTable));
     // console.log("timeTable: ", Object.keys(timeTable), Object.values(timeTable));
 
     //create the new HTML elemnts for the added URL
@@ -96,10 +97,8 @@ function deleteUrl(){
     var input = document.getElementById("input_id").value;
 
     try{
-    console.log("before deletion: ", Object.keys(timeTable), Object.values(timeTable));
     var hostname = (new URL(input).hostname);
     delete timeTable[hostname];
-    console.log("after deletion: ", Object.keys(timeTable), Object.values(timeTable));
 
     document.body.removeChild(document.getElementById(hostname));
 

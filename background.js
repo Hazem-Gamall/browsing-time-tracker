@@ -16,6 +16,8 @@ var activeState = 'active';
 
 var trackAll =null;
 
+var vidStatus;
+
 chrome.management.onEnabled.addListener(function(){
 
 });
@@ -25,7 +27,7 @@ chrome.management.onEnabled.addListener(function(){
 chrome.runtime.onInstalled.addListener(function(){
     day = new Date().toISOString().substr(8,2);
     chrome.storage.local.set({day:day},function(){
-        console.log("day has been set to: ", day);
+        // console.log("day has been set to: ", day);
     });
 });
 
@@ -33,51 +35,61 @@ chrome.runtime.onInstalled.addListener(function(){
 chrome.storage.local.get(['optionsTable', 'userOptionsTable', 'trackAll', 'day'], function(data){
     trackAll = data.trackAll;
     userOptionsTable = data.userOptionsTable;
-    console.log("trackAll: ", trackAll);
+    // console.log("trackAll: ", trackAll);
     timeTable = data.optionsTable;
 
     
     day = data.day;
-    console.log("day get: ", day);
+    // console.log("day get: ", day);
     if(day !== (new Date().toISOString().substr(8,2))){
         reset();
         day = new Date().toISOString().substr(8,2);
     
         chrome.storage.local.set({day:day},function(){
-            console.log("day has been set to: ", day);
+            // console.log("day has been set to: ", day);
         })
     }else{
-        console.log("day is the same");
+        // console.log("day is the same");
     }
     
 
-    console.log("timeTable: ", Object.keys(timeTable), Object.values(timeTable));
-    console.log("userOptionsTable: ", Object.keys(userOptionsTable), Object.values(userOptionsTable));
+    // console.log("timeTable: ", Object.keys(timeTable), Object.values(timeTable));
+    // console.log("userOptionsTable: ", Object.keys(userOptionsTable), Object.values(userOptionsTable));
   
 });
 
 
 
+
+
+
 //checks if chrome is still in focus or not every 500ms if in focus query tab and calculate time, if not stop
+function checkState(){
+    // console.log('checkState');
     focus_timer = setInterval(function(){
-        if(activeState === 'active'){   //check if the system is active(not locked)
+        // console.log("timer");
+        if(vidStatus === 'progress' || activeState === 'active'){   //check if the system is active(not locked)
+            // console.log('vidstatus: ', vidStatus);
             if((new Date().toISOString().substr(11,8) == '00:00:00')){
                 reset();
             }
             query();
         }else{  //idle or locked
             clearInterval(focus_timer);
-            console.log("NOT ACTIVE");
+            // console.log("NOT ACTIVE");
         }
     },500);
     
+}
+
+checkState();
 
 
 //if the memory saved is changed i.e: the user changes something in the options
 //it also updates the table variables with the newly set values
 chrome.storage.onChanged.addListener(function(changes, namespace){
     for(var key in changes){
-        console.log("key: ", key,"changes: ", changes[key]);
+        // console.log("key: ", key,"changes: ", changes[key]);
         if(key === 'optionsTable'){
             timeTable = changes[key].newValue;
         }
@@ -93,28 +105,32 @@ chrome.storage.onChanged.addListener(function(changes, namespace){
         //         reset();
         //     }
         // }
-        console.log("timeTable Now: ", Object.keys(timeTable), Object.values(timeTable));
+        // console.log("timeTable Now: ", Object.keys(timeTable), Object.values(timeTable));
     }
 });
 
 
+chrome.runtime.onMessage.addListener(
+    function(message, sender) {
+        // console.log('sender: ', sender.tab.active);
+        // console.log("message: ", message);
+      if (message === "progress" && sender.tab.active){
+            // console.log('progress');
+            vidStatus = message;
+      }else{
+          vidStatus = 'ended';
+        //   console.log('Ended');
+      }
+    //   console.log('vidstatus in message: ', vidStatus);
+   });
 
 
 chrome.idle.onStateChanged.addListener(function(newState){//if the state oh the systen changes
-    console.log("state: ", newState);
     activeState = newState;
 
-
-    if(activeState === 'active'){
+    // console.log("activeState: ", activeState);
         prevStartTime = new Date();//set the start time to right before queryin so that the time spent idle isn't counted
-        focus_timer = setInterval(function(){
-            query();
-        },500);
-    }else{//idle or locked (DRY violation, think of a better solution)
-        clearInterval(focus_timer);
-        console.log("NOT ACTIVE");
-        }
-    
+        checkState();
 });
 
 
@@ -139,9 +155,9 @@ function calculateTime(){
     if(!trackAll && hostname in userOptionsTable){
         endTime = new Date();
         var dif = endTime - prevStartTime;
-        console.log("not tracking!");
+        // console.log("not tracking!");
         userOptionsTable[hostname] += dif;
-        console.log(userOptionsTable[hostname]);
+        // console.log(userOptionsTable[hostname]);
         
     }else if(trackAll){//if we track all then we want all websites to be added to the table
         if(!(hostname in timeTable)){
@@ -154,17 +170,17 @@ function calculateTime(){
         var dif = endTime - prevStartTime;
     
         timeTable[hostname] += dif;
-        console.log("tracking all: ", Object.keys(timeTable), Object.values(timeTable));
+        // console.log("tracking all: ", Object.keys(timeTable), Object.values(timeTable));
     }
 }
 
 function reset(){
     chrome.storage.local.set({optionsTable: new Object()}, function() {
-        console.log("optionsTable reseted to: ", Object.keys(timeTable), Object.values(timeTable));
+        // console.log("optionsTable reseted to: ", Object.keys(timeTable), Object.values(timeTable));
     });
     for(var key in userOptionsTable){userOptionsTable[key] = 0;}
     chrome.storage.local.set({userOptionsTable: userOptionsTable}, function() {
-        console.log("userOptionsTable reseted to: ", Object.keys(userOptionsTable), Object.values(userOptionsTable));
+        // console.log("userOptionsTable reseted to: ", Object.keys(userOptionsTable), Object.values(userOptionsTable));
     });   
 }
 
@@ -180,11 +196,11 @@ function query(){//query the tab's url
                 var tabURL = tabs[0].url;
                 try{//error handling for if the url is incorrect
                     hostname = (new URL(tabURL).hostname);
-                    console.log("hostname: ", hostname);
+                    // console.log("hostname: ", hostname);
                     startTime = new Date();
         
                     calculateTime();
-                    console.log("after calculate time: ", Object.keys(timeTable), Object.keys(userOptionsTable));
+                    // console.log("after calculate time: ", Object.keys(timeTable), Object.keys(userOptionsTable));
         
                     prevStartTime = startTime;  //set the time at the end of querying this tab
                 }
@@ -194,12 +210,12 @@ function query(){//query the tab's url
 
 
                 chrome.storage.local.set({optionsTable: timeTable, userOptionsTable: userOptionsTable}, function() {
-                    console.log("optionsTable set to: ", Object.keys(timeTable), Object.values(timeTable));
-                    console.log("userOptionsTable set to: ", Object.keys(userOptionsTable), Object.values(userOptionsTable));
+                    // console.log("optionsTable set to: ", Object.keys(timeTable), Object.values(timeTable));
+                    // console.log("userOptionsTable set to: ", Object.keys(userOptionsTable), Object.values(userOptionsTable));
                 });
             })
       }else{
           prevStartTime = new Date();   //reset time to not count it
-          console.log("not in focus");
+        //   console.log("not in focus");
       }
 }

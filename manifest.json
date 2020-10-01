@@ -13,6 +13,13 @@
         "open_in_tab": true
       },
 
+    "content_scripts":[
+        {
+            "matches":["https://*.youtube.com/*"],
+            "js":["content.js"]
+        }
+    ],
+
     "permissions":[
         "idle",
         "chrome://favicon/",
