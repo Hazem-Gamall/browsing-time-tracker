@@ -19,13 +19,13 @@ var trackAll =null;
 var vidStatus;
 
 chrome.management.onEnabled.addListener(function(){
-
 });
 
+chrome.browserAction.setBadgeBackgroundColor({color: "red"});
 
 //inatialize the day when the extension is first installed
 chrome.runtime.onInstalled.addListener(function(){
-    day = new Date().toISOString().substr(8,2);
+    day = new Date().toString().substr(8,2);
     chrome.storage.local.set({day:day},function(){
         // console.log("day has been set to: ", day);
     });
@@ -43,7 +43,7 @@ chrome.storage.local.get(['optionsTable', 'userOptionsTable', 'trackAll', 'day']
     // console.log("day get: ", day);
     if(day !== (new Date().toISOString().substr(8,2))){
         reset();
-        day = new Date().toISOString().substr(8,2);
+        day = new Date().toString().substr(8,2);
     
         chrome.storage.local.set({day:day},function(){
             // console.log("day has been set to: ", day);
@@ -66,13 +66,20 @@ chrome.storage.local.get(['optionsTable', 'userOptionsTable', 'trackAll', 'day']
 //checks if chrome is still in focus or not every 500ms if in focus query tab and calculate time, if not stop
 function checkState(){
     // console.log('checkState');
+
     focus_timer = setInterval(function(){
         // console.log("timer");
+        // console.log(new Date());
+        // console.log(day);
+        // console.log("date", new Date().toString().substr(8,2));  
+        if(day !== (new Date().toString().substr(8,2))){
+            // console.log("new Day");
+            day = new Date().toString().substr(8,2);
+            chrome.storage.local.set({day,day});
+            reset();
+        }
         if(vidStatus === 'progress' || activeState === 'active'){   //check if the system is active(not locked)
             // console.log('vidstatus: ', vidStatus);
-            if((new Date().toISOString().substr(11,8) == '00:00:00')){
-                reset();
-            }
             query();
         }else{  //idle or locked
             clearInterval(focus_timer);
@@ -99,12 +106,9 @@ chrome.storage.onChanged.addListener(function(changes, namespace){
         if(key === 'userOptionsTable'){
             userOptionsTable = changes[key].newValue;
         }
-        // if(key === 'day'){//unused for now
-        //     if(changes[key].newValue !== (new Date().toISOString().substr(8,2))){
-        //         day = new Date().toISOString().substr(8,2);
-        //         reset();
-        //     }
-        // }
+        if(key === 'day'){//unused for now
+            day = changes[key].newValue;
+        }
         // console.log("timeTable Now: ", Object.keys(timeTable), Object.values(timeTable));
     }
 });
@@ -157,6 +161,8 @@ function calculateTime(){
         var dif = endTime - prevStartTime;
         // console.log("not tracking!");
         userOptionsTable[hostname] += dif;
+
+        chrome.browserAction.setBadgeText({text: (new Date(userOptionsTable[hostname]).toISOString().substr(13,2))});
         // console.log(userOptionsTable[hostname]);
         
     }else if(trackAll){//if we track all then we want all websites to be added to the table
@@ -170,12 +176,16 @@ function calculateTime(){
         var dif = endTime - prevStartTime;
     
         timeTable[hostname] += dif;
+        
+        chrome.browserAction.setBadgeText({text: msToMin(timeTable[hostname])});
+        
         // console.log("tracking all: ", Object.keys(timeTable), Object.values(timeTable));
     }
 }
 
 function reset(){
-    chrome.storage.local.set({optionsTable: new Object()}, function() {
+    timeTable = {};
+    chrome.storage.local.set({optionsTable: timeTable}, function() {
         // console.log("optionsTable reseted to: ", Object.keys(timeTable), Object.values(timeTable));
     });
     for(var key in userOptionsTable){userOptionsTable[key] = 0;}
@@ -218,4 +228,15 @@ function query(){//query the tab's url
           prevStartTime = new Date();   //reset time to not count it
         //   console.log("not in focus");
       }
+}
+
+function msToMin(ms){
+    if(ms < 59000){
+        return(Math.round((ms/1000)).toString() + "s");
+    }
+    var mins = ms/60000;
+    // console.log(mins);
+    mins = Math.floor(mins);
+    if(isNaN(mins)) return;
+    return (mins.toString() + 'm');
 }
