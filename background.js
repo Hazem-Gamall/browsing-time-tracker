@@ -7,6 +7,7 @@ var userOptionsTable = {};
 
 var day;
 
+var pause = false;
 
 var focus = true;
 
@@ -67,25 +68,26 @@ chrome.storage.local.get(['optionsTable', 'userOptionsTable', 'trackAll', 'day']
 function checkState(){
     // console.log('checkState');
 
-    focus_timer = setInterval(function(){
-        // console.log("timer");
-        // console.log(new Date());
-        // console.log(day);
-        // console.log("date", new Date().toString().substr(8,2));  
-        if(day !== (new Date().toString().substr(8,2))){
-            // console.log("new Day");
-            day = new Date().toString().substr(8,2);
-            chrome.storage.local.set({day,day});
-            reset();
-        }
-        if(vidStatus === 'progress' || activeState === 'active'){   //check if the system is active(not locked)
-            // console.log('vidstatus: ', vidStatus);
+
+    if(activeState === 'active' || (vidStatus === 'progress' &&  activeState === "idle" && !pause)){   //check if the system is active(not locked)
+        // console.log('vidstatus: ', vidStatus);
+        
+        focus_timer = setInterval(function(){
+            if(day !== (new Date().toString().substr(8,2))){
+                // console.log("new Day");
+                day = new Date().toString().substr(8,2);
+                chrome.storage.local.set({day,day});
+                reset();
+            }
+            // console.log("pause check", pause);
             query();
-        }else{  //idle or locked
+
+            },500);
+        }else{  //idle or locked or paused
             clearInterval(focus_timer);
             // console.log("NOT ACTIVE");
         }
-    },500);
+    
     
 }
 
@@ -121,8 +123,15 @@ chrome.runtime.onMessage.addListener(
       if (message === "progress" && sender.tab.active){
             // console.log('progress');
             vidStatus = message;
+      }else if(message === "pause"){
+        pause = true;
+
+      }else if(message === "play"){
+        pause = false;
+        checkState();
+        // console.log(pause);
       }else{
-          vidStatus = 'ended';
+          vidStatus = message;
         //   console.log('Ended');
       }
     //   console.log('vidstatus in message: ', vidStatus);
