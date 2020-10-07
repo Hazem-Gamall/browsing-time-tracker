@@ -13,16 +13,18 @@ function createHTMLFromTable(){
     // console.log("trackAll: ", trackAll);
     if(trackAll){
         var timeTable = page.timeTable;
+        
     }else{
         var timeTable = page.userOptionsTable;
     }
 
-
+    var timeTable = Object.fromEntries(Object.entries(timeTable).sort(([,a],[,b])=>b-a));
 
     timeTable['totalTime'] = 0;
 
     // console.log("H: ", Object.keys(timeTable), Object.values(timeTable));
     var websites = 0;
+    var i =0;
     for(var key in timeTable){
         if(key === "totalTime" || key === "day" || key === "newtab") continue;
         // console.log("key:",key);
@@ -43,6 +45,7 @@ function createHTMLFromTable(){
         
         document.body.insertBefore(div,document.getElementById("totalTimeText"));
         websites++;
+        i++;
     }
     var numberOfWbs = document.getElementById("numberOfWbs");
     numberOfWbs.textContent = websites;
