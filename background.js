@@ -50,7 +50,7 @@ chrome.runtime.onMessage.addListener(
 
    chrome.idle.onStateChanged.addListener(function(newState){//if the state oh the systen changes
     activeState = newState;
-
+ 
         prevStartTime = new Date();//set the start time to right before queryin so that the time spent idle isn't counted
         checkState();
 });
@@ -63,6 +63,7 @@ chrome.storage.local.get(['optionsTable', 'userOptionsTable', 'trackAll', 'day']
     trackAll = data.trackAll;
     userOptionsTable = data.userOptionsTable;
     timeTable = data.optionsTable;
+    day = data.day;
   
 });
 
@@ -92,7 +93,7 @@ function checkState(){
             if(activeState === 'active' || (vidStatus === 'progress' &&  activeState === "idle" && !pause)){   //check if the system is active(not locked)
 
             if(day !== (Date().substr(8,2))){
-                alert("day: ", day + '\n', "Date(): ", (Date().substr(8,2)));
+                alert(day);
                 day = Date().substr(8,2);
                 chrome.storage.local.set({day,day});
                 reset();
@@ -170,20 +171,24 @@ function query(){//query the tab's url
 
       if(focus){
             chrome.tabs.query({active: true, currentWindow: true}, function(tabs){//query the active tab's url
-                var tabURL = tabs[0].url;
+            if(tabs[0] !== undefined){
+
                 try{//error handling for if the url is incorrect
-                    hostname = (new URL(tabURL).hostname);
-                    startTime = new Date();
-        
-                    calculateTime();
-        
-                    prevStartTime = startTime;  //set the time at the end of querying this tab
+                        var tabURL = tabs[0].url;
+    
+                        hostname = (new URL(tabURL).hostname);
+                        startTime = new Date();
+            
+                        calculateTime();
+            
+                        prevStartTime = startTime;  //set the time at the end of querying this tab    
+                    
                 }
                 catch(err){
                     console.error(err);
                 }
 
-
+            }
                 chrome.storage.local.set({optionsTable: timeTable, userOptionsTable: userOptionsTable}, function() {
                     
                 });
