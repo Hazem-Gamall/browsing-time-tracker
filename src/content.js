@@ -2,23 +2,23 @@
 
 var vid = document.getElementsByTagName('video')[0];
 
-if(vid !== undefined){
+if(vid){
     vid.addEventListener('progress',function(){
         chrome.runtime.sendMessage('progress');
-        // console.log('progress');
+        console.log('progress');
     });    
     
     
     
     vid.addEventListener('ended',function(){
         chrome.runtime.sendMessage('ended');
-        // console.log('ended');
+        console.log('ended');
     });
     
     
     vid.addEventListener('pause',function(){
         chrome.runtime.sendMessage('pause');
-        // console.log("pause");
+        console.log("pause");
     });
     
     

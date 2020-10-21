@@ -31,13 +31,16 @@ function createHTMLFromTable(){
         timeTable["totalTime"] += timeTable[key];
         // console.log("totalTime in loop: ", timeTable["totalTime"]);
         var div = document.createElement('div');
+        div.title = key;
+        div.classList.add("div");
+        
         var label = document.createElement('label');
         var icon = document.createElement('img');   
         
         label.textContent =  (new Date(timeTable[key]).toISOString().substr(11,8));
         icon.setAttribute('src', 'chrome://favicon/https://'+key);   //set icon as website's favicon
-        icon.title = key;
         icon.style.marginRight = '5px';
+        // icon.style.background = "white";
 
 
         div.appendChild(icon);

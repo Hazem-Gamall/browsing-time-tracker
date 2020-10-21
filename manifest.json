@@ -5,18 +5,18 @@
     "description":"Monitor the time wasted on websites",
         
     "browser_action":{
-        "default_popup":"popup.html"
+        "default_popup":"src/popup.html"
     },
 
     "options_ui": {
-        "page": "options.html",
+        "page": "src/options.html",
         "open_in_tab": true
       },
 
     "content_scripts":[
         {
             "matches":["https://*.youtube.com/*"],
-            "js":["content.js"]
+            "js":["src/content.js"]
         }
     ],
 
@@ -28,15 +28,14 @@
         "activeTab",
         "background",
         "management"
-        
     ],
 
-    "icons": {"48": "icon.png" },
+    "icons": {"48": "icons/icon.png" },
 
     "content_security_policy": "script-src 'self'; object-src 'self'; img-src chrome://favicon;",
 
     "background":{
-        "scripts":["background.js"],
-        "persistent": false
+        "scripts":["src/background.js"],
+        "persistent": true
     }
 }

@@ -1,14 +1,11 @@
 
 
-
-chrome.runtime.sendMessage("runContentScript");
-
 var timeTable = {};
 document.addEventListener('DOMContentLoaded', function(){
     
     var checkbox = document.getElementById("checkbox_id");
     checkbox.addEventListener('click',function(){
-        var input = document.getElementById("input_id")
+        var input = document.getElementById("input_id");
         if(checkbox.checked === true){
             input.disabled = true;
 
@@ -52,7 +49,10 @@ function restore_options(){
             document.body.appendChild(div);
         }
         var checkbox = document.getElementById("checkbox_id");
+        var input = document.getElementById("input_id");
+
         checkbox.checked = data.trackAll;
+        input.disabled = data.trackAll;
     
         
     });
@@ -83,14 +83,10 @@ function addUrl(){
     }
     
     // update the optionsTable
-    chrome.storage.local.set({optionsTable:timeTable},function(){
-        // console.log("timeTable set to: ", Object.keys(timeTable), Object.values(timeTable));
-    });
-    chrome.storage.local.set({userOptionsTable:timeTable},function(){
+    chrome.storage.local.set({optionsTable:timeTable, userOptionsTable:timeTable},function(){
         // console.log("timeTable set to: ", Object.keys(timeTable), Object.values(timeTable));
     });
     
-
 }
 
 function deleteUrl(){
@@ -108,8 +104,6 @@ function deleteUrl(){
         console.log(err);
     }
     //update the optionsTable
-    chrome.storage.local.set({optionsTable:timeTable},function(){
-    });
-    chrome.storage.local.set({userOptionsTable:timeTable},function(){
+    chrome.storage.local.set({optionsTable:timeTable, userOptionsTable:timeTable},function(){
     });
 }

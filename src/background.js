@@ -1,6 +1,6 @@
 /*** globals ***/
 
-var prevStartTime;
+var prevStartTime = new Date();
 
 var hostname;
 
@@ -19,10 +19,11 @@ var trackAll =null;
 var vidStatus;
 
 
+
 /*** chrome utilities ***/
 
-chrome.management.onEnabled.addListener(function(){
-});
+// chrome.management.onEnabled.addListener(function(){
+// });
 
 chrome.browserAction.setBadgeBackgroundColor({color: "red"});
 
@@ -64,6 +65,8 @@ chrome.storage.local.get(['optionsTable', 'userOptionsTable', 'trackAll', 'day']
     userOptionsTable = data.userOptionsTable;
     timeTable = data.optionsTable;
     day = data.day;
+
+    checkState();
   
 });
 
@@ -93,7 +96,6 @@ function checkState(){
             if(activeState === 'active' || (vidStatus === 'progress' &&  activeState === "idle" && !pause)){   //check if the system is active(not locked)
 
             if(day !== (Date().substr(8,2))){
-                alert(day);
                 day = Date().substr(8,2);
                 chrome.storage.local.set({day,day});
                 reset();
@@ -108,60 +110,6 @@ function checkState(){
     
 }
 
-checkState();
-
-
-
-function calculateTime(){
-    //if it's the first time running and the user hasn't set websites to track
-    //initalize these variables to begin using them
-    if(trackAll === undefined){
-        trackAll = true;
-    }
-    if(timeTable === undefined){
-        timeTable = {};
-
-    }
-    if(userOptionsTable === undefined){
-        userOptionsTable = {};
-    }
-    
-    
-    //when only tracking user-specefied websites we check if it's in the user-populated table
-    if(!trackAll && hostname in userOptionsTable){
-        endTime = new Date();
-        var dif = endTime - prevStartTime;
-        userOptionsTable[hostname] += dif;
-
-        chrome.browserAction.setBadgeText({text: (new Date(userOptionsTable[hostname]).toISOString().substr(13,2))});
-        
-    }else if(trackAll){//if we track all then we want all websites to be added to the table
-        if(!(hostname in timeTable)){
-            //if not in the table already, add it and initalize it to 0
-            if(hostname !== "newtab" && hostname !== "extensions" && hostname !== 'ndpjmleniilehoebcbpkcomfhjnppnlk' ){
-                timeTable[hostname] =0;
-            }
-        } 
-        endTime = new Date();
-        var dif = endTime - prevStartTime;
-    
-        timeTable[hostname] += dif;
-        
-        chrome.browserAction.setBadgeText({text: msToMin(timeTable[hostname])});
-        
-    }
-}
-
-function reset(){
-    timeTable = {};
-    chrome.storage.local.set({optionsTable: timeTable}, function() {
-    });
-
-    for(var key in userOptionsTable){userOptionsTable[key] = 0;}
-    chrome.storage.local.set({userOptionsTable: userOptionsTable}, function() {
-    });   
-}
-
 function query(){//query the tab's url
 
     //check if chrome is in focus
@@ -171,7 +119,7 @@ function query(){//query the tab's url
 
       if(focus){
             chrome.tabs.query({active: true, currentWindow: true}, function(tabs){//query the active tab's url
-            if(tabs[0] !== undefined){
+            if(tabs[0]){
 
                 try{//error handling for if the url is incorrect
                         var tabURL = tabs[0].url;
@@ -198,6 +146,47 @@ function query(){//query the tab's url
       }
 }
 
+
+function calculateTime(){
+    //if it's the first time running and the user hasn't set websites to track
+    //initalize these variables to begin using them
+    if(trackAll === undefined){
+        trackAll = true;
+    }
+    if(timeTable === undefined){
+        timeTable = {};
+    }
+    if(userOptionsTable === undefined){
+        userOptionsTable = {};
+    }
+    
+    
+    //when only tracking user-specefied websites we check if it's in the user-populated table
+    if(!trackAll && hostname in userOptionsTable){
+        endTime = new Date();
+        var dif = endTime - prevStartTime;
+        userOptionsTable[hostname] += dif;
+
+        chrome.browserAction.setBadgeText({text: msToMin(userOptionsTable[hostname])});
+        
+    }else if(trackAll){//if we track all then we want all websites to be added to the table
+        if(!(hostname in timeTable)){
+            //if not in the table already, add it and initalize it to 0
+            if(hostname !== "newtab" && hostname !== "extensions" && hostname !== 'ndpjmleniilehoebcbpkcomfhjnppnlk' ){
+                timeTable[hostname] =0;
+            }
+        } 
+        endTime = new Date();
+        var dif = endTime - prevStartTime;
+    
+        timeTable[hostname] += dif;
+        
+        chrome.browserAction.setBadgeText({text: msToMin(timeTable[hostname])});
+        
+    }
+}
+
+
 function msToMin(ms){
     if(ms < 59000){
         return(Math.round((ms/1000)).toString() + "s");
@@ -207,4 +196,15 @@ function msToMin(ms){
     mins = Math.floor(mins);
     if(isNaN(mins)) return;
     return (mins.toString() + 'm');
+}
+
+
+function reset(){
+    timeTable = {};
+    chrome.storage.local.set({optionsTable: timeTable}, function() {
+    });
+
+    for(var key in userOptionsTable){userOptionsTable[key] = 0;}
+    chrome.storage.local.set({userOptionsTable: userOptionsTable}, function() {
+    });   
 }
