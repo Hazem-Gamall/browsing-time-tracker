@@ -1,0 +1,26 @@
+{
+  "name": "browsing-time-tracker",
+  "version": "1.0.0",
+  "description": "Track the time spent browsing the web.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hazem-Gamall/browsing-time-tracker.git"
+  },
+  "author": "Hazem Gamal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Hazem-Gamall/browsing-time-tracker/issues"
+  },
+  "homepage": "https://github.com/Hazem-Gamall/browsing-time-tracker#readme",
+  "dependencies": {
+    "jquery": "^3.5.1",
+    "popper.js": "^1.16.1"
+  },
+  "devDependencies": {
+    "bootstrap": "^4.5.3"
+  }
+}
