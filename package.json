@@ -17,10 +17,9 @@
   },
   "homepage": "https://github.com/Hazem-Gamall/browsing-time-tracker#readme",
   "dependencies": {
+    "bootstrap": "^4.5.3",
     "jquery": "^3.5.1",
     "popper.js": "^1.16.1"
   },
-  "devDependencies": {
-    "bootstrap": "^4.5.3"
-  }
+  "devDependencies": {}
 }
