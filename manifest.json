@@ -1,15 +1,15 @@
 {
-    "manifest_version": 2,
-    "name":"Browsing Time Tracker",
-    "version":"1.0",
+    "manifest_version": 3,
+    "name":"Test Time Tracker",
+    "version":"2.0",
     "description":"Monitor the time wasted on websites",
         
-    "browser_action":{
-        "default_popup":"src/popup.html"
+    "action":{
+        "default_popup":"src/html/popup.html"
     },
 
     "options_ui": {
-        "page": "src/options.html",
+        "page": "src/html/options.html",
         "open_in_tab": true
       },
 
@@ -22,20 +22,24 @@
 
     "permissions":[
         "idle",
-        "chrome://favicon/",
         "tabs",
         "storage",
         "activeTab",
         "background",
-        "management"
+        "alarms",
+        "management",
+        "unlimitedStorage"
     ],
 
-    "icons": {"48": "icons/icon.png" },
+    
 
-    "content_security_policy": "script-src 'self'; object-src 'self'; img-src chrome://favicon;",
+    "content_security_policy":{
+        "script-src":"self",
+        "object-src":"self",
+        "img-src":"//favicon"
+    },
 
     "background":{
-        "scripts":["src/javascript/background.js"],
-        "persistent": true
+        "service_worker":"src/javascript/test.js"
     }
 }

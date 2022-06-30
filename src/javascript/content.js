@@ -1,30 +1,24 @@
 //handle the video events
 
-var vid = document.getElementsByTagName('video')[0];
+window.addEventListener('yt-page-data-updated', function () {
+    console.log('url change');
+    console.log('hello there')
+    var vid = document.getElementsByTagName('video')[0];
 
-if(vid){
-    vid.addEventListener('progress',function(){
-        chrome.runtime.sendMessage('progress');
-        console.log('progress');
-    });    
-    
-    
-    
-    vid.addEventListener('ended',function(){
-        chrome.runtime.sendMessage('ended');
-        console.log('ended');
-    });
-    
-    
-    vid.addEventListener('pause',function(){
-        chrome.runtime.sendMessage('pause');
-        console.log("pause");
-    });
-    
-    
-    vid.addEventListener('play',function(){
-        chrome.runtime.sendMessage('play');
-        // console.log("play");
-    });
-}
+    if(vid){
+        let vid_event_handler = (message) => 
+            () => {
+                console.log(`video ${message}`);
+                chrome.runtime.sendMessage(message);
+            }
+        
+        vid.onpause = vid_event_handler('pause');
+        vid.onplay = vid_event_handler('play');
+        vid.onplaying = vid_event_handler('play');
+        vid.onabort = vid_event_handler('ended');
+        vid.onended = vid_event_handler('ended');
+
+    }
+
+});
 
