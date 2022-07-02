@@ -15,7 +15,7 @@ window.addEventListener('yt-page-data-updated', function () {
         vid.onpause = vid_event_handler('pause');
         vid.onplay = vid_event_handler('play');
         vid.onplaying = vid_event_handler('play');
-        vid.onabort = vid_event_handler('ended');
+        vid.onabort = vid_event_handler('abort');
         vid.onended = vid_event_handler('ended');
 
     }

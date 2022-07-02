@@ -1,0 +1,78 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='../bootstrap-4.6.1-dist/css/bootstrap.min.css'>
+    <link rel="stylesheet" href="../css/styles.css">
+
+    <title>Document</title>
+</head>
+
+<body class="m-3">
+    <div class="container">
+        <div class="row justify-content-center">
+            <h4 class="text-center">Browsing Time Tracker</h3>
+        </div>
+        <hr>
+        <div class="row justify-content-center">
+            <nav class="nav nav-pills nav-justified">
+                <a href="popup.html" class="nav-link">Today</a>
+                <a class="nav-link active">Week</a>
+            </nav>
+        </div>
+
+        <div class="row justify-content-center mt-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <span class="text-secondary">Daily Average</span>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <h4 id="week-average">
+                                    <span class="num" id='week-average-h'></span>h 
+                                    <span class="num" id='week-average-m'></span>m
+                                </h4>
+                            </div>
+                            <div class="col-6">
+                                <small id="relation-to-last-week" class="text-secondary">20% lower than last
+                                    week</small>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row justify-content-between">
+                            <div class="col-7">
+                                <p style="font-size: 13px;">Total Browsing Time</p>
+                            </div>
+                            <div class="col-5">
+                                <p id='total-week-time' class="text-secondary">
+                                    <span class="num" id='total-week-time-h'></span>
+                                    h 
+                                    <span class="num" id='total-week-time-m'></span>
+                                    m
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="accordion">
+
+        </div>
+
+
+    </div>
+    <script src="../jquery/jquery-3.6.0.min.js"></script>
+    <script src='../bootstrap-4.6.1-dist/js/bootstrap.bundle.min.js'></script>
+    <script src="../javascript/week.js"></script>
+</body>
+
+</html>

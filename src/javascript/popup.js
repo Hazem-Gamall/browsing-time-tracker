@@ -9,6 +9,12 @@ let renderTable = async () => {
     console.log('time_table', time_table);
     console.log('prev_url', prev_url);
 
+    let day_total = 0
+    Object.values(time_table).forEach((value) => day_total += value);
+    let day_usage_element = document.querySelector('#day-usage');
+    let day_total_time = new Date(day_total);
+    day_usage_element.textContent = `${day_total_time.getHours()-2}h ${day_total_time.getMinutes()}m`
+
 
     let websites_element = document.querySelector('#websites');
     time_table = Object.fromEntries(
@@ -58,14 +64,18 @@ let renderTable = async () => {
     }
 }
 
-let btn = document.querySelector('#clear-btn');
-btn.addEventListener('click', async () => 
-{
-    let {history} = await chrome.storage.local.get({'history':{}});
+// let btn = document.querySelector('#clear-btn');
+// btn.addEventListener('click', async () => 
+// {
+//     let {history} = await chrome.storage.local.get({'history':{}});
 
-    await chrome.storage.local.clear();
-    await chrome.storage.local.set({history});
-    location.reload();
-});
+//     await chrome.storage.local.clear();
+//     await chrome.storage.local.set({history});
+//     location.reload();
+// });
 
 renderTable();
+
+let today_element = document.querySelector('#today');
+today_element.textContent = `Today, ${new Date().toDateString()}`
+
