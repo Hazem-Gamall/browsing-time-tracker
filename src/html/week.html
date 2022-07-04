@@ -20,6 +20,7 @@
             <nav class="nav nav-pills nav-justified">
                 <a href="popup.html" class="nav-link">Today</a>
                 <a class="nav-link active">Week</a>
+                <a href="history.html" class="nav-link">History</a>
             </nav>
         </div>
 
@@ -36,8 +37,8 @@
                         <div class="row">
                             <div class="col-6">
                                 <h4 id="week-average">
-                                    <span class="num" id='week-average-h'></span>h 
-                                    <span class="num" id='week-average-m'></span>m
+                                    <span class="num" id='week-average-h'>0</span>h
+                                    <span class="num" id='week-average-m'>0</span>m
                                 </h4>
                             </div>
                             <div class="col-6">
@@ -52,10 +53,8 @@
                             </div>
                             <div class="col-5">
                                 <p id='total-week-time' class="text-secondary">
-                                    <span class="num" id='total-week-time-h'></span>
-                                    h 
-                                    <span class="num" id='total-week-time-m'></span>
-                                    m
+                                    <span class="num" id='total-week-time-h'>0</span>h
+                                    <span class="num" id='total-week-time-m'>0</span>m
                                 </p>
                             </div>
                         </div>
@@ -72,7 +71,7 @@
     </div>
     <script src="../jquery/jquery-3.6.0.min.js"></script>
     <script src='../bootstrap-4.6.1-dist/js/bootstrap.bundle.min.js'></script>
-    <script src="../javascript/week.js"></script>
+    <script type="module" src="../javascript/week.js"></script>
 </body>
 
 </html>

@@ -1,28 +1,39 @@
 chrome.alarms.create('refreshBadge', { periodInMinutes: 1 });
-chrome.alarms.create('newDayCheck', { periodInMinutes: 10 });
-chrome.alarms.create('newWeekCheck', { periodInMinutes: 360 });
-
+chrome.alarms.create('newDayCheck', { periodInMinutes: 5 });
+chrome.alarms.create('newWeekCheck', { periodInMinutes: 60*24})
 let save_day = async (prev_day) => {
     let { time_table, week } = await chrome.storage.local.get({ 'time_table': null, 'week': {} })
     week[prev_day] = time_table;
-    await chrome.storage.local.clear();
-    await chrome.storage.local.set({ 'prev_day': (new Date()).toDateString(), week});
+    await chrome.storage.local.set({ 'prev_day': (new Date()).toDateString(), week, 'time_table':{} });
     console.log('saved week', week);
 }
 
-let updateBadge = async (prev_url, time_table, tab_url) => {
-    let { idle_state } = await chrome.storage.local.get({ 'idle_state': false });
-    console.log('badge update and idle_state', idle_state);
-    if (/*!idle_state*/true) {
-        let time_diff = new Date().getTime() - prev_url.time;
-        let time_spent = new Date(time_diff + time_table[tab_url.hostname]);
-        console.log('time_spent', time_spent);
-        let badge_time = time_spent.getMinutes() + ((time_spent.getHours() - 2) * 60)
-        console.log('badge_time', badge_time);
-        chrome.action.setBadgeText({ text: (isNaN(badge_time) ? 0 : badge_time) + 'm' });
-        console.log('badge updated');
+let newWeekCheck = async () => {
+    let today = new Date().getDay();
+    const SUNDAY = 0;
+    const SATURDAY = 6;
+    let { week, prev_sunday } = await chrome.storage.local.get({ 'week': null, prev_sunday: null });
+    let week_diff_days;
+    if (prev_sunday) {
+        week_diff_days = Math.floor((new Date() - prev_sunday) / 1000 / 60 / 60 / 24);
+    }
+    if (today == SUNDAY || week_diff_days >= 7) {
+
+        if (week) {
+            let week_dates = Object.keys(week).map((day) => new Date(day));
+            let [min_day, max_day] = [new Date(Math.min.apply(null, week_dates)), new Date(Math.max.apply(null, week_dates))];
+            console.log('week', week);
+            console.log('week_date', week_dates)
+            console.log('min_day', min_day)
+            console.log('max_day', max_day);
+            let { history } = await chrome.storage.local.get({ 'history': {} });
+            history[`${min_day.toDateString()} - ${max_day.toDateString()}`] = week;
+            console.log('history after week got added', history);
+            chrome.storage.local.set({ history, 'week2': week, 'prev_sunday': new Date() });
+            chrome.storage.local.remove('week');
+        }
     } else {
-        console.log('badge not updated because user is idle');
+        console.log("today isn't sunday");
     }
 }
 
@@ -36,7 +47,7 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
         if (prev_day) {
             today = (new Date()).toDateString();
             if (prev_day != today) {
-                save_day(prev_day);
+                await save_day(prev_day);
             }
         } else {
             chrome.storage.local.set({ 'prev_day': (new Date()).toDateString() });
@@ -44,17 +55,10 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
 
     } else if (alarm.name == 'refreshBadge') {
 
-        // let [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-        // let { time_table, prev_url } = await chrome.storage.local.get({ 'time_table': null, 'prev_url': null })
-        // console.log('prev_url', prev_url);
-        // console.log('tab', tab);
-        // console.log('time_table', time_table);
-
-        
         calculateTime();
-        
-    } else if (alarm.name == 'newWeekCheck') {
 
+    } else if (alarm.name == 'newWeekCheck') {
+        newWeekCheck();
     }
 
 });
@@ -63,64 +67,65 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
 let calculateTime = async () => {
     console.log('calculating time\n\n')
     let [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-
-    // console.log('activated tab', tab.url);
-    let { prev_url, time_table, idle_state, vid_status } = await chrome.storage.local.get({ 'prev_url': null, 'time_table': {}, 'idle_state': false, 'vid_status':null})
-
-
-    console.log('tab', tab)
-    console.log('prev_url', prev_url);
-    console.log('time_tabl', time_table)
-    console.log('idle_state', idle_state);
-    console.log('vid_status', vid_status);
+    if (tab) {
+        // console.log('activated tab', tab.url);
+        let { prev_url, time_table, idle_state, vid_status } = await chrome.storage.local.get({ 'prev_url': null, 'time_table': {}, 'idle_state': false, 'vid_status': null })
 
 
-    if (prev_url && (!idle_state || vid_status == 'play')) {
-        let tab_url = new URL(tab.url);
+        console.log('tab', tab)
+        console.log('prev_url', prev_url);
+        console.log('time_tabl', time_table)
+        console.log('idle_state', idle_state);
+        console.log('vid_status', vid_status);
 
-        if (tab) {
+
+        if (prev_url && (!idle_state || vid_status == 'play')) {
+            let tab_url = new URL(tab.url);
+
+
             let time_diff = new Date().getTime() - prev_url.time;
             let time_spent = new Date(time_diff + time_table[tab_url.hostname]);
             console.log('time_spent', time_spent);
             let badge_time = time_spent.getMinutes() + ((time_spent.getHours() - 2) * 60)
             console.log('badge_time', badge_time);
             chrome.action.setBadgeText({ text: (isNaN(badge_time) ? 0 : badge_time) + 'm' });
-            console.log('badge updated');        }
+            console.log('badge updated');
 
-        let now = new Date();
-        console.log('now in ms', now.getTime());
-        console.log('now', now);
+            let now = new Date();
+            console.log('now in ms', now.getTime());
+            console.log('now', now);
 
 
 
-        console.log('diff', (new Date).getTime() - prev_url.time);
-        let prev_tab_url;
-        try {
-            prev_tab_url = new URL(prev_url.url);
-            console.log('prev tab url', prev_tab_url.hostname);
-            if (time_table[prev_tab_url.hostname]) {
-                time_table[prev_tab_url.hostname] += (new Date).getTime() - prev_url.time;
-            } else {
-                time_table[prev_tab_url.hostname] = (new Date).getTime() - prev_url.time;
+            console.log('diff', (new Date).getTime() - prev_url.time);
+            let prev_tab_url;
+            try {
+                prev_tab_url = new URL(prev_url.url);
+                console.log('prev tab url', prev_tab_url.hostname);
+                if (time_table[prev_tab_url.hostname]) {
+                    time_table[prev_tab_url.hostname] += (new Date).getTime() - prev_url.time;
+                } else {
+                    time_table[prev_tab_url.hostname] = (new Date).getTime() - prev_url.time;
+                }
+
+
+            } catch (e) {
+                console.log('ERROR', e);
             }
-
-
-        } catch (e) {
-            console.log('ERROR', e);
         }
+        prev_url = (tab ? { 'url': tab.url, 'time': (new Date()).getTime() } : null);
+        console.log('prev_url before set', prev_url);
+        await chrome.storage.local.set(
+            {
+                prev_url,
+                'idle_period': 0,
+                time_table
+
+            }
+        );
+
+        console.log('\n\n\n done calculating time')
     }
-    prev_url = (tab ? { 'url': tab.url, 'time': (new Date()).getTime() } : null);
-    console.log('prev_url before set', prev_url);
-    await chrome.storage.local.set(
-        {
-            prev_url,
-            'idle_period': 0,
-            time_table
-
-        }
-    );
-
-    console.log('\n\n\n done calculating time')
 };
 
 chrome.tabs.onActivated.addListener(() => { console.log('on Activated'); calculateTime(); });
@@ -171,7 +176,7 @@ chrome.action.setBadgeBackgroundColor({ color: "cyan" });
 
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     console.log('message is here', message);
-    
-    await chrome.storage.local.set({ 'vid_status': message});
+
+    await chrome.storage.local.set({ 'vid_status': message });
 
 });

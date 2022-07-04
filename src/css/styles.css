@@ -49,6 +49,20 @@ body{
   display: none;
 }
 
+.arrow-btn{
+  padding: 0;
+}
+
+#week-title{
+  /* width: 50px; */
+  /* overflow-wrap: break-word; */
+  margin-top: revert;
+}
+
+button[disabled] i{
+  color: #888;
+}
+
 
 ::-webkit-scrollbar {
     width: 10px;
