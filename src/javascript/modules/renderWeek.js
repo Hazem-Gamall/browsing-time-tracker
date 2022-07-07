@@ -1,4 +1,5 @@
-export let renderDay = (day) => {
+
+let renderDay = (day) => {
     let day_div = document.createElement('div');
     day_div.classList = 'container';
     let day_total = 0
@@ -54,6 +55,55 @@ export let renderDay = (day) => {
     return { day_div, day_total };
 }
 
+let renderDayChart = (day) => {
+    let dynamicColors = function() {
+        var r = Math.floor(Math.random() * 255);
+        var g = Math.floor(Math.random() * 255);
+        var b = Math.floor(Math.random() * 255);
+        return "rgb(" + r + "," + g + "," + b + ")";
+     };
+
+    let day_canvas = document.createElement('canvas');
+    day_canvas.width = 300
+    day_canvas.height = 300
+    let day_total = 0
+    day = Object.fromEntries(
+        Object.entries(day).sort(([,a],[,b]) => b-a)
+    );
+    Object.values(day).forEach((value) => day_total += value);
+    let other_count = 0;
+    let hostname_percentages = Object.values(day).map((value) => Math.ceil((value/ day_total) * 100))
+    hostname_percentages.slice(5).forEach((val)=>other_count+=val);
+    hostname_percentages = hostname_percentages.slice(0,5);
+    hostname_percentages.push(other_count)
+    let day_keys = Object.keys(day).slice(0,5);
+    day_keys.push('other');
+    console.log('day keys', day_keys)
+    console.log('day values', hostname_percentages)
+    new Chart(day_canvas, {
+        type: 'pie',
+        data: {
+            labels: day_keys,
+            datasets: [{
+                label: '# of Votes',
+                data: hostname_percentages,
+                borderWidth: 1,
+                backgroundColor: Object.keys(day).map(dynamicColors)
+            }]
+        },
+        options: {
+            responsive: false,
+            maintainAspectRatio: false,
+            hoverOffset: 4
+
+        }
+    });
+    // document.body.innerHTML+=('<canvas  width="200" height="100"></canvas>')
+    // document.body.append(day_canvas)
+    return day_canvas;
+}
+
+
 export let renderWeek = async (week) => {
     if (!week) {
         week = await chrome.storage.local.get({ 'week': null }).week;
@@ -106,16 +156,19 @@ export let renderWeek = async (week) => {
                         </div>
                     </div>
                     <div id="${date.replaceAll(' ', '-')}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
-                                <div class="card-body">
+                                <div class="card-body row justify-content-center">
                                 </div>
                     </div>
                 </div>
             </div>
             `
-            day_entry.querySelector('.card-body').append(day_div)
+            let dayChart =  renderDayChart(week[date]);
+            console.log(dayChart); 
+            day_entry.querySelector('.card-body').append(dayChart)
             week_day_elements.append(day_entry);
         }
-        accordion.innerHTML = week_day_elements.innerHTML;
+        accordion.innerHTML = '';
+        accordion.append(week_day_elements)
         let total_week_time_element = document.querySelector('#total-week-time');
         let week_total_time = new Date(week_total);
         total_week_time_element.innerHTML =

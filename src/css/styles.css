@@ -65,7 +65,7 @@ button[disabled] i{
 
 
 ::-webkit-scrollbar {
-    width: 10px;
+    width: 7px;
   }
   
   /* Track */
@@ -75,6 +75,7 @@ button[disabled] i{
   
   /* Handle */
   ::-webkit-scrollbar-thumb {
+    border-radius: 12%;
     background: #888;
   }
   

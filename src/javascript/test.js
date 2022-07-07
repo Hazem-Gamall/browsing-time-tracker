@@ -45,7 +45,7 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
         console.log('prev_day', prev_day);
         console.log('today', (new Date()).toDateString());
         if (prev_day) {
-            today = (new Date()).toDateString();
+            let today = (new Date()).toDateString();
             if (prev_day != today) {
                 await save_day(prev_day);
             }

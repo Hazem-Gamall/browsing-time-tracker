@@ -1,9 +1,4 @@
 
-
-
-
-
-
 let renderTable = async () => {
     let {time_table, prev_url} = await chrome.storage.local.get({'time_table':{}, 'prev_url':null});
     console.log('time_table', time_table);
