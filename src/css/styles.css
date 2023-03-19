@@ -46,11 +46,25 @@ body{
 }
 
 .hidden-content{
-  display: none;
+  display: none !important;
 }
 
 .arrow-btn{
   padding: 0;
+
+  transition: box-shadow 0.3s;
+}
+
+.arrow-btn:not([disabled]):hover{
+  box-shadow: 1px 1px 7px 2px #888
+
+}
+.nav-link:not(.active){
+  transition: background-color 0.4s;
+}
+.nav-link:not(.active):hover{
+  background-color:#459ae4;
+  color: #fff;
 }
 
 #week-title{
@@ -65,7 +79,7 @@ button[disabled] i{
 
 
 ::-webkit-scrollbar {
-    width: 10px;
+    width: 7px;
   }
   
   /* Track */
@@ -75,10 +89,10 @@ button[disabled] i{
   
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: #888;
+    background: #555;
   }
   
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
-    background: #555;
+    background: #888;
   }

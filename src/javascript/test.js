@@ -3,8 +3,11 @@ chrome.alarms.create('newDayCheck', { periodInMinutes: 5 });
 chrome.alarms.create('newWeekCheck', { periodInMinutes: 60*24})
 let save_day = async (prev_day) => {
     let { time_table, week } = await chrome.storage.local.get({ 'time_table': null, 'week': {} })
+    console.log('save day week:', week)
     week[prev_day] = time_table;
-    await chrome.storage.local.set({ 'prev_day': (new Date()).toDateString(), week, 'time_table':{} });
+    console.log('save day week after modification:', week)
+    await chrome.storage.local.set({ 'prev_day': (new Date()).toDateString(), week});
+    await chrome.storage.local.remove('time_table');
     console.log('saved week', week);
 }
 
@@ -45,8 +48,9 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
         console.log('prev_day', prev_day);
         console.log('today', (new Date()).toDateString());
         if (prev_day) {
-            today = (new Date()).toDateString();
+            let today = (new Date()).toDateString();
             if (prev_day != today) {
+                console.log('trying to save day');
                 await save_day(prev_day);
             }
         } else {

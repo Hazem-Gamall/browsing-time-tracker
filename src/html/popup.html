@@ -19,10 +19,10 @@
         <hr>
 
         <div class="row justify-content-center">
-            <nav class="nav nav-pills nav-justified">
-                <a class="nav-link active">Today</a>
-                <a href="week.html" class="nav-link">Week</a>
-                <a href="history.html" class="nav-link">History</a>
+            <nav class="nav nav-pills d-flex nav-justified justify-content-between">
+                <li><a class="nav-link active mx-1">Today</a></li>
+                <li><a href="week.html" class="nav-link mx-1">Week</a></li>
+                <li><a href="history.html" class="nav-link mx-1">History</a></li>
             </nav>
         </div>
         <!-- <div class="row justify-content-center mt-3">
@@ -44,21 +44,28 @@
                                 <h4 id="day-usage">12h 39m</h4>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
         </div>
-        <div id="websites">
+
+        <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="more-detail-switch">
+            <label class="custom-control-label" for="more-detail-switch">Get more details</label>
+        </div>
+        <div id="websites" class=" row justify-content-center">
 
         </div>
 
 
-
     </div>
     <script src="../jquery/jquery-3.6.0.min.js"></script>
-    <script src="../javascript/popup.js"></script>
+    <script src="../chartjs/chart.min.js"></script>
+    <script src="../javascript/modules/renderWeek.js"></script>
+    <script type="module" src="../javascript/popup.js"></script>
     <script src='../bootstrap-4.6.1-dist/js/bootstrap.bundle.min.js'></script>
+
 
 </body>
 
