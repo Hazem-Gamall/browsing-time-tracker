@@ -89,7 +89,8 @@ button[disabled] i{
   
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: #555;
+    border-radius: 12%;
+    background: #888;
   }
   
   /* Handle on hover */

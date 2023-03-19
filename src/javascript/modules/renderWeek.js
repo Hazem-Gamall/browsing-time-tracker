@@ -56,28 +56,27 @@ let renderDay = (day) => {
 }
 
 let renderDayChart = (day) => {
-    let dynamicColors = function () {
+    let dynamicColors = function() {
         var r = Math.floor(Math.random() * 255);
         var g = Math.floor(Math.random() * 255);
         var b = Math.floor(Math.random() * 255);
         return "rgb(" + r + "," + g + "," + b + ")";
-    };
+     };
 
     let day_canvas = document.createElement('canvas');
-
     day_canvas.width = 300
     day_canvas.height = 300
     let day_total = 0
     day = Object.fromEntries(
-        Object.entries(day).sort(([, a], [, b]) => b - a)
+        Object.entries(day).sort(([,a],[,b]) => b-a)
     );
     Object.values(day).forEach((value) => day_total += value);
     let other_count = 0;
-    let hostname_percentages = Object.values(day).map((value) => Math.ceil((value / day_total) * 100))
-    hostname_percentages.slice(5).forEach((val) => other_count += val);
-    hostname_percentages = hostname_percentages.slice(0, 5);
+    let hostname_percentages = Object.values(day).map((value) => Math.ceil((value/ day_total) * 100))
+    hostname_percentages.slice(5).forEach((val)=>other_count+=val);
+    hostname_percentages = hostname_percentages.slice(0,5);
     hostname_percentages.push(other_count)
-    let day_keys = Object.keys(day).slice(0, 5);
+    let day_keys = Object.keys(day).slice(0,5);
     day_keys.push('other');
     console.log('day keys', day_keys)
     console.log('day values', hostname_percentages)
@@ -92,17 +91,10 @@ let renderDayChart = (day) => {
                 backgroundColor: Object.keys(day).map(dynamicColors)
             }]
         },
-
         options: {
-            animation: {
-                duration: 1000,
-                delay: 300,
-                easing: 'easeInOutSine',
-
-            },
             responsive: false,
             maintainAspectRatio: false,
-            hoverOffset: 6
+            hoverOffset: 4
 
         }
     });
@@ -110,6 +102,8 @@ let renderDayChart = (day) => {
     // document.body.append(day_canvas)
     return day_canvas;
 }
+
+
 
 
 let renderWeek = async (week) => {
@@ -172,8 +166,8 @@ let renderWeek = async (week) => {
                 </div>
             </div>
             `
-            let dayChart = renderDayChart(week[date]);
-            console.log(dayChart);
+            let dayChart =  renderDayChart(week[date]);
+            console.log(dayChart); 
             day_entry.querySelector('.card-body').append(dayChart)
             week_day_elements.append(day_entry);
         }
