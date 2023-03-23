@@ -1,6 +1,6 @@
 chrome.alarms.create('refreshBadge', { periodInMinutes: 1 });
 chrome.alarms.create('newDayCheck', { periodInMinutes: 5 });
-chrome.alarms.create('newWeekCheck', { periodInMinutes: 60*24})
+chrome.alarms.create('newWeekCheck', { periodInMinutes: 60})
 let save_day = async (prev_day) => {
     let { time_table, week } = await chrome.storage.local.get({ 'time_table': null, 'week': {} })
     console.log('save day week:', week)
@@ -15,12 +15,14 @@ let newWeekCheck = async () => {
     let today = new Date().getDay();
     const SUNDAY = 0;
     const SATURDAY = 6;
+    const THURSDAY = 4;
     let { week, prev_sunday } = await chrome.storage.local.get({ 'week': null, prev_sunday: null });
     let week_diff_days;
     if (prev_sunday) {
         week_diff_days = Math.floor((new Date() - prev_sunday) / 1000 / 60 / 60 / 24);
     }
     if (today == SUNDAY || week_diff_days >= 7) {
+        console.log("new week check");
 
         if (week) {
             let week_dates = Object.keys(week).map((day) => new Date(day));
@@ -32,7 +34,7 @@ let newWeekCheck = async () => {
             let { history } = await chrome.storage.local.get({ 'history': {} });
             history[`${min_day.toDateString()} - ${max_day.toDateString()}`] = week;
             console.log('history after week got added', history);
-            chrome.storage.local.set({ history, 'week2': week, 'prev_sunday': new Date() });
+            chrome.storage.local.set({ 'history':history ,'week2': week, 'prev_sunday': new Date() });
             chrome.storage.local.remove('week');
         }
     } else {
