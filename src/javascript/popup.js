@@ -31,36 +31,11 @@ let renderTable = async (chart) => {
                     console.log('equal')
                 }
             }
-            let website_entry = document.createElement('div');
-            website_entry.innerHTML =
-                `
-            <div class="row mt-3 m-1 justify-content-center">
-                    <div class="card">
-                        <div class="card-header pt-2 pb-0">
-                            <div class='container'>
-                                <div class='row justify-content-center'>
-                                    <img src = 'http://www.google.com/s2/favicons?domain=${hostname}'>
-                                </div>
-                                <div class='row justify-content-center'>
-                                    <h5 class='text-center'>
-                                            ${hostname}
-
-                                    </h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="card-text">
-                                <h5 class='text-center'>
-                                        ${new Date(time_table[hostname] + prev_url_time).toISOString().slice(11, 19)}
-                                </h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <hr>
-            `;
-
+            let website_entry = document.querySelector("#website-card").content.cloneNode(true);
+            website_entry.querySelector("#website-favicon").src = `http://www.google.com/s2/favicons?domain=${hostname}`;
+            website_entry.querySelector("#hostname").textContent = hostname;
+            website_entry.querySelector("#time-spent").textContent = new Date(time_table[hostname] + prev_url_time).toISOString().slice(11, 19);
+                
             websites_element.append(website_entry);
         }
     }
