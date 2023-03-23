@@ -56,30 +56,41 @@ let renderDay = (day) => {
 }
 
 let renderDayChart = (day) => {
-    let dynamicColors = function() {
-        var r = Math.floor(Math.random() * 255);
-        var g = Math.floor(Math.random() * 255);
-        var b = Math.floor(Math.random() * 255);
-        return "rgb(" + r + "," + g + "," + b + ")";
-     };
+    let color_index = 0;
+    let slice_size;
+    let dynamicColors = function () {
+        const colors = [
+            { r: 0, g: 0, b: 255 }, //blue
+            { r: 60, g: 179, b: 113 }, //green
+            { r: 106, g: 90, b: 205 }, //purple
+            { r: 238, g: 130, b: 238 }, //pink
+            { r: 255, g: 0, b: 0 }, //red
+            { r: 179, g: 115, b: 123 }, //
+            { r: 255, g: 165, b: 0 }, //yellow
+        ]
+        slice_size = colors.length+1;
+        let color = `rgb(${colors[color_index].r}, ${colors[color_index].g}, ${colors[color_index].b})`;
+        color_index++;
+        return color;
+    };
+
+
 
     let day_canvas = document.createElement('canvas');
     day_canvas.width = 300
     day_canvas.height = 300
     let day_total = 0
     day = Object.fromEntries(
-        Object.entries(day).sort(([,a],[,b]) => b-a)
+        Object.entries(day).sort(([, a], [, b]) => b - a)
     );
     Object.values(day).forEach((value) => day_total += value);
     let other_count = 0;
-    let hostname_percentages = Object.values(day).map((value) => Math.ceil((value/ day_total) * 100))
-    hostname_percentages.slice(5).forEach((val)=>other_count+=val);
-    hostname_percentages = hostname_percentages.slice(0,5);
+    let hostname_percentages = Object.values(day).map((value) => Math.ceil((value / day_total) * 100))
+    hostname_percentages.slice(6).forEach((val) => other_count += val);
+    hostname_percentages = hostname_percentages.slice(0, 6);
     hostname_percentages.push(other_count)
-    let day_keys = Object.keys(day).slice(0,5);
+    let day_keys = Object.keys(day).slice(0, 6);
     day_keys.push('other');
-    console.log('day keys', day_keys)
-    console.log('day values', hostname_percentages)
     new Chart(day_canvas, {
         type: 'pie',
         data: {
@@ -88,7 +99,7 @@ let renderDayChart = (day) => {
                 label: '# of Votes',
                 data: hostname_percentages,
                 borderWidth: 1,
-                backgroundColor: Object.keys(day).map(dynamicColors)
+                backgroundColor: day_keys.map(dynamicColors)
             }]
         },
         options: {
@@ -142,7 +153,6 @@ let renderWeek = async (week) => {
         for (const date in week) {
 
             let day_entry = document.createElement('div');
-            console.log(renderDay(week[date]));
             let { day_total, day_div } = renderDay(week[date])
             week_total += day_total;
             day_entry.innerHTML =
@@ -166,8 +176,7 @@ let renderWeek = async (week) => {
                 </div>
             </div>
             `
-            let dayChart =  renderDayChart(week[date]);
-            console.log(dayChart); 
+            let dayChart = renderDayChart(week[date]);
             day_entry.querySelector('.card-body').append(dayChart)
             week_day_elements.append(day_entry);
         }
@@ -192,16 +201,13 @@ let renderWeek = async (week) => {
 
 
         let nums = document.querySelectorAll('.num');
-        console.log('nums', nums)
         if (nums) {
             nums.forEach((num_element) => {
                 let startValue = 0;
                 let endValue = parseInt(num_element.textContent);
-                console.log('end', endValue);
                 let interval = 1500
                 let duration = Math.floor(interval / endValue);
                 if (!isNaN(endValue)) {
-                    console.log('no NaN');
                     let counter = setInterval(() => {
                         if (startValue < endValue) {
                             startValue += 1;
