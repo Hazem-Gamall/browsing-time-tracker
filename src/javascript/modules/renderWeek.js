@@ -1,58 +1,9 @@
 
-let renderDay = (day) => {
-    let day_div = document.createElement('div');
-    day_div.classList = 'container';
+let getDayTotal = (day) => {
     let day_total = 0
     Object.values(day).forEach((value) => day_total += value);
-    day = Object.fromEntries(
-        Object.entries(day).sort(([, a], [, b]) => b - a)
-    );
-    let i = 0;
-    let hidden_content = document.createElement('div');
-    hidden_content.classList.add('hidden-content');
-    for (const hostname in day) {
-        let percentage = Math.ceil((day[hostname] / day_total) * 100);
-        let time_spent = new Date(day[hostname]);
-        let day_card =
-            `
-        <div class='row justify-content-center'>
-            <span class='text-center'>
-                ${hostname}
-            </span>
-        </div>
-            
-            <div class='row'>
-                <div class='col-12'>
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: ${percentage}%" aria-valuenow="${percentage}" aria-valuemin="0" aria-valuemax="100">${time_spent.getHours() - 2}h ${time_spent.getMinutes()}m</div>
-                    </div>        
-                </div>
-            </div>
-        `
-        // console.log(i)
-        if (i < 7) {
-
-            day_div.innerHTML += day_card;
-
-        } else {
-            hidden_content.innerHTML += day_card;
-        }
-        i++;
-    }
-    if (i >= 7) {
-
-
-        let show_button = document.createElement('button');
-        show_button.classList.add('btn', 'bg-primary', 'text-white', 'mt-3')
-        show_button.textContent = 'Show More';
-        show_button.onclick = () => {
-            hidden_content.classList.remove('hidden-content')
-            show_button.remove();
-        }
-        day_div.append(show_button)
-    }
-    day_div.append(hidden_content);
-    return { day_div, day_total };
+    
+    return day_total
 }
 
 let renderDayChart = (day) => {
@@ -151,31 +102,14 @@ let renderWeek = async (week) => {
         let week_day_elements = document.createElement('div');
         let week_total = 0;
         for (const date in week) {
-
-            let day_entry = document.createElement('div');
-            let { day_total, day_div } = renderDay(week[date])
+            const date_id = date.replaceAll(' ', '-');
+            let day_entry = document.querySelector('#week-accordion').content.cloneNode(true);
+            day_entry.querySelector("#accordion-button").setAttribute("data-target", `#${date_id}`)
+            day_entry.querySelector("#accordion-button").setAttribute("aria-controls", `#${date_id}`)
+            day_entry.querySelector("#date").textContent = date;
+            day_entry.querySelector("#accordion-body").id = date_id
+            let day_total = getDayTotal(week[date])
             week_total += day_total;
-            day_entry.innerHTML =
-                `
-            <div class="row mt-3 m-1 justify-content-center">
-                <div class="card">
-                    <div class="card-header" id="headingOne">
-                        <div class='row justify-content-center'>
-                            <button class="btn" data-toggle="collapse" data-target="#${date.replaceAll(' ', '-')}"
-                                aria-expanded="true" aria-controls="${date.replaceAll(' ', '-')}">
-                                <h5 class="mb-0 text-center">
-                                    ${date}
-                                </h5>
-                            </button>
-                        </div>
-                    </div>
-                    <div id="${date.replaceAll(' ', '-')}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
-                                <div class="card-body row justify-content-center">
-                                </div>
-                    </div>
-                </div>
-            </div>
-            `
             let dayChart = renderDayChart(week[date]);
             day_entry.querySelector('.card-body').append(dayChart)
             week_day_elements.append(day_entry);

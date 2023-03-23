@@ -80,6 +80,28 @@
 
 
     </div>
+
+    <template id="week-accordion">
+        <div class="row mt-3 m-1 justify-content-center">
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <div class='row justify-content-center'>
+                        <button id="accordion-button" class="btn" data-toggle="collapse" data-target="#${date.replaceAll(' ', '-')}"
+                            aria-expanded="true" aria-controls="${date.replaceAll(' ', '-')}">
+                            <h5 class="mb-0 text-center" id="date">
+                                ${date}
+                            </h5>
+                        </button>
+                    </div>
+                </div>
+                <div id="accordion-body" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                            <div class="card-body row justify-content-center">
+                            </div>
+                </div>
+            </div>
+        </div>
+    </template> 
+
     <script src="../jquery/jquery-3.6.0.min.js"></script>
     <script src='../bootstrap-4.6.1-dist/js/bootstrap.bundle.min.js'></script>
     <script src="../chartjs/chart.min.js"></script>
