@@ -45,10 +45,9 @@ let renderWeek = async (week) => {
             accordion_button.onclick = () => {
                 let day_chart = renderDayChart(week[date]);
                 if (!accordion_body.classList.contains("show")) {
+                    card_body.removeChild(card_body.lastChild);
                     card_body.append(day_chart);
-                } else {
-                    setTimeout(() => card_body.removeChild(card_body.lastChild), 500);
-                }
+                } 
             };
             date_element.textContent = date;
             accordion_body.id = date_id;
