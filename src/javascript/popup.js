@@ -1,5 +1,5 @@
 
-import { renderDayChart } from './modules/renderWeek.js'
+import { renderDayChart } from './modules/dayChart.js'
 
 let renderTable = async (chart) => {
     let { time_table, prev_url } = await chrome.storage.local.get({ 'time_table': {}, 'prev_url': null });

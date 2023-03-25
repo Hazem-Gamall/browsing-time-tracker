@@ -1,70 +1,26 @@
 
+import { renderDayChart } from "./dayChart.js";
+import { numberAnimation } from "./numberAnimation.js";
+
 let getDayTotal = (day) => {
     let day_total = 0
     Object.values(day).forEach((value) => day_total += value);
-    
+
     return day_total
 }
 
-let renderDayChart = (day) => {
-    let color_index = 0;
-    let slice_size;
-    let dynamicColors = function () {
-        const colors = [
-            { r: 0, g: 0, b: 255 }, //blue
-            { r: 60, g: 179, b: 113 }, //green
-            { r: 106, g: 90, b: 205 }, //purple
-            { r: 238, g: 130, b: 238 }, //pink
-            { r: 255, g: 0, b: 0 }, //red
-            { r: 179, g: 115, b: 123 }, //
-            { r: 255, g: 165, b: 0 }, //yellow
-        ]
-        slice_size = colors.length+1;
-        let color = `rgb(${colors[color_index].r}, ${colors[color_index].g}, ${colors[color_index].b})`;
-        color_index++;
-        return color;
-    };
 
+let getAccordionElements = () => {
+    let day_entry = document.querySelector('#week-accordion').content.cloneNode(true);
+    return {
+        day_entry,
+        accordion_button: day_entry.querySelector("#accordion-button"),
+        card_body: day_entry.querySelector('.card-body'),
+        date_element: day_entry.querySelector("#date"),
+        accordion_body: day_entry.querySelector("#accordion-body")
 
-
-    let day_canvas = document.createElement('canvas');
-    day_canvas.width = 300
-    day_canvas.height = 300
-    let day_total = 0
-    day = Object.fromEntries(
-        Object.entries(day).sort(([, a], [, b]) => b - a)
-    );
-    Object.values(day).forEach((value) => day_total += value);
-    let other_count = 0;
-    let hostname_percentages = Object.values(day).map((value) => Math.ceil((value / day_total) * 100))
-    hostname_percentages.slice(6).forEach((val) => other_count += val);
-    hostname_percentages = hostname_percentages.slice(0, 6);
-    hostname_percentages.push(other_count)
-    let day_keys = Object.keys(day).slice(0, 6);
-    day_keys.push('other');
-    new Chart(day_canvas, {
-        type: 'pie',
-        data: {
-            labels: day_keys,
-            datasets: [{
-                label: '# of Votes',
-                data: hostname_percentages,
-                borderWidth: 1,
-                backgroundColor: day_keys.map(dynamicColors)
-            }]
-        },
-        options: {
-            responsive: false,
-            maintainAspectRatio: false,
-            hoverOffset: 4
-
-        }
-    });
-    // document.body.innerHTML+=('<canvas  width="200" height="100"></canvas>')
-    // document.body.append(day_canvas)
-    return day_canvas;
+    }
 }
-
 
 
 
@@ -76,42 +32,28 @@ let renderWeek = async (week) => {
         );
     }
 
-    // history = {
-    //     'date1':{
-    //         's1':244,
-    //         'stackoverflow.com':42315135,
-    //         's3':42315135,
-    //         's4':42315135,
-    //         's5':42315135,
-    //         's6':42315135,
-    //         's7':42315135,
-    //         's8':42315135,
-    //         's9':42315135,
-    //         's0':42315135,
-    //         's11':42315135,
-    //     },
-    //     'date2':{
-    //         's1':42315135,'s2':42315135,'s3':42315135,'s4':42315135,'s5':42315135,'s6':42315135,
-    //         's7':42315135,'s8':42315135,'s9':42315135,'s10':42315135,'s11':42315135,'s12':42315135,
-    //         's3':42315135,'s3':42315135,'s3':42315135,'s3':42315135,'s3':42315135,'s3':42315135,
-    //     },
-    //     'date3':{}
-    // }
+
     if (week) {
         let accordion = document.querySelector('#accordion');
         let week_day_elements = document.createElement('div');
         let week_total = 0;
         for (const date in week) {
             const date_id = date.replaceAll(' ', '-');
-            let day_entry = document.querySelector('#week-accordion').content.cloneNode(true);
-            day_entry.querySelector("#accordion-button").setAttribute("data-target", `#${date_id}`)
-            day_entry.querySelector("#accordion-button").setAttribute("aria-controls", `#${date_id}`)
-            day_entry.querySelector("#date").textContent = date;
-            day_entry.querySelector("#accordion-body").id = date_id
+            let {day_entry, accordion_button, card_body, date_element, accordion_body} = getAccordionElements();
+            accordion_button.setAttribute("data-target", `#${date_id}`)
+            accordion_button.setAttribute("aria-controls", `#${date_id}`)
+            accordion_button.onclick = () => {
+                let day_chart = renderDayChart(week[date]);
+                if (!accordion_body.classList.contains("show")) {
+                    card_body.append(day_chart);
+                } else {
+                    setTimeout(() => card_body.removeChild(card_body.lastChild), 500);
+                }
+            };
+            date_element.textContent = date;
+            accordion_body.id = date_id;
             let day_total = getDayTotal(week[date])
             week_total += day_total;
-            let dayChart = renderDayChart(week[date]);
-            day_entry.querySelector('.card-body').append(dayChart)
             week_day_elements.append(day_entry);
         }
         accordion.innerHTML = '';
@@ -134,29 +76,9 @@ let renderWeek = async (week) => {
         // `
 
 
-        let nums = document.querySelectorAll('.num');
-        if (nums) {
-            nums.forEach((num_element) => {
-                let startValue = 0;
-                let endValue = parseInt(num_element.textContent);
-                let interval = 1500
-                let duration = Math.floor(interval / endValue);
-                if (!isNaN(endValue)) {
-                    let counter = setInterval(() => {
-                        if (startValue < endValue) {
-                            startValue += 1;
-                            num_element.textContent = startValue
-
-
-                        } else {
-                            clearInterval(counter);
-                        }
-                    }, duration)
-                }
-            })
-        }
+        numberAnimation();
     }
 
 }
 
-export { renderDayChart, renderWeek }
+export { renderWeek }
