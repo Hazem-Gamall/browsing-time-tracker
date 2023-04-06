@@ -1,13 +1,14 @@
 
 import { renderDayChart } from './modules/dayChart.js'
+import { faviconURL } from './modules/faviconURL.js';
+import { getDayTotal } from './modules/getDayTotal.js';
 
 let renderTable = async (chart) => {
     let { time_table, prev_url } = await chrome.storage.local.get({ 'time_table': {}, 'prev_url': null });
     console.log('time_table', time_table);
     console.log('prev_url', prev_url);
 
-    let day_total = 0
-    Object.values(time_table).forEach((value) => day_total += value);
+    let day_total = getDayTotal(time_table);
     let day_usage_element = document.querySelector('#day-usage');
     let day_total_time = new Date(day_total);
     day_usage_element.textContent = `${day_total_time.getHours() - 2}h ${day_total_time.getMinutes()}m`
@@ -33,6 +34,7 @@ let renderTable = async (chart) => {
             }
             let website_entry = document.querySelector("#website-card").content.cloneNode(true);
             website_entry.querySelector("#website-favicon").src = `http://www.google.com/s2/favicons?domain=${hostname}`;
+            // website_entry.querySelector("#website-favicon").src = faviconURL(`https://${hostname}`);
             website_entry.querySelector("#hostname").textContent = hostname;
             website_entry.querySelector("#time-spent").textContent = new Date(time_table[hostname] + prev_url_time).toISOString().slice(11, 19);
                 

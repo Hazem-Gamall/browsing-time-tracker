@@ -1,3 +1,5 @@
+import { getDayTotal } from "./getDayTotal.js";
+
 let renderDayChart = (day) => {
     let color_index = 0;
     let slice_size;
@@ -5,7 +7,7 @@ let renderDayChart = (day) => {
         const colors = [
             { r: 0, g: 0, b: 255 }, //blue
             { r: 60, g: 179, b: 113 }, //green
-            { r: 106, g: 90, b: 205 }, //purple
+            { r: 128, g: 0, b: 128 }, //purple
             { r: 238, g: 130, b: 238 }, //pink
             { r: 255, g: 0, b: 0 }, //red
             { r: 179, g: 115, b: 123 }, //
@@ -22,14 +24,11 @@ let renderDayChart = (day) => {
     let day_canvas = document.createElement('canvas');
     day_canvas.width = 320
     day_canvas.height = 320
-    let day_total = 0
     day = Object.fromEntries(
         Object.entries(day).sort(([, a], [, b]) => b - a)
     );
-    Object.values(day).forEach((value) => day_total += value);
     let other_count = 0;
     let hostname_percentages = Object.values(day);
-    // .map((value) => Math.ceil((value / day_total) * 100))
     hostname_percentages.slice(6).forEach((val) => other_count += val);
     hostname_percentages = hostname_percentages.slice(0, 6);
     hostname_percentages.push(other_count)
@@ -82,8 +81,11 @@ let renderDayChart = (day) => {
         plugins: [ChartDataLabels],
         options
     });
+    let day_chart_div = document.createElement("div");
+    
 
-    return day_canvas;
+    day_chart_div.append(day_canvas);
+    return day_chart_div;
 }
 
 export {renderDayChart};

@@ -1,40 +1,48 @@
 chrome.alarms.create('refreshBadge', { periodInMinutes: 1 });
-chrome.alarms.create('newDayCheck', { periodInMinutes: 5 });
-chrome.alarms.create('newWeekCheck', { periodInMinutes: 60})
+chrome.alarms.create('newDayCheck', { periodInMinutes: 1 });
+chrome.alarms.create('newWeekCheck', { periodInMinutes: 1 })
 let save_day = async (prev_day) => {
     let { time_table, week } = await chrome.storage.local.get({ 'time_table': null, 'week': {} })
     console.log('save day week:', week)
     week[prev_day] = time_table;
     console.log('save day week after modification:', week)
-    await chrome.storage.local.set({ 'prev_day': (new Date()).toDateString(), week});
+    await chrome.storage.local.set({ 'prev_day': (new Date()).toDateString(), week });
     await chrome.storage.local.remove('time_table');
     console.log('saved week', week);
+}
+
+let newDayCheck = async () => {
+    let { prev_day } = await chrome.storage.local.get({ 'prev_day': null });
+    console.log('prev_day', prev_day);
+    console.log('today', (new Date()).toDateString());
+    if (prev_day) {
+        let today = (new Date()).toDateString();
+        if (prev_day != today) {
+            console.log('trying to save day');
+            await save_day(prev_day);
+        }
+    } else {
+        chrome.storage.local.set({ 'prev_day': (new Date()).toDateString() });
+    }
 }
 
 let newWeekCheck = async () => {
     let today = new Date().getDay();
     const SUNDAY = 0;
-    const SATURDAY = 6;
-    const THURSDAY = 4;
-    let { week, prev_sunday } = await chrome.storage.local.get({ 'week': null, prev_sunday: null });
+    let { week, prev_sunday } = await chrome.storage.local.get({ 'week': null, 'prev_sunday': null });
     let week_diff_days;
     if (prev_sunday) {
         week_diff_days = Math.floor((new Date() - prev_sunday) / 1000 / 60 / 60 / 24);
     }
-    if (today == SUNDAY || week_diff_days >= 7) {
+    if (today === SUNDAY || week_diff_days >= 7) {
         console.log("new week check");
 
         if (week) {
             let week_dates = Object.keys(week).map((day) => new Date(day));
             let [min_day, max_day] = [new Date(Math.min.apply(null, week_dates)), new Date(Math.max.apply(null, week_dates))];
-            console.log('week', week);
-            console.log('week_date', week_dates)
-            console.log('min_day', min_day)
-            console.log('max_day', max_day);
             let { history } = await chrome.storage.local.get({ 'history': {} });
             history[`${min_day.toDateString()} - ${max_day.toDateString()}`] = week;
-            console.log('history after week got added', history);
-            chrome.storage.local.set({ 'history':history ,'week2': week, 'prev_sunday': new Date() });
+            chrome.storage.local.set({ 'history': history, 'week2': week, 'prev_sunday': new Date() });
             chrome.storage.local.remove('week');
         }
     } else {
@@ -46,19 +54,7 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
     console.log('alarm here');
     console.log('alarm', alarm);
     if (alarm.name == 'newDayCheck') {
-        let { prev_day } = await chrome.storage.local.get({ 'prev_day': null });
-        console.log('prev_day', prev_day);
-        console.log('today', (new Date()).toDateString());
-        if (prev_day) {
-            let today = (new Date()).toDateString();
-            if (prev_day != today) {
-                console.log('trying to save day');
-                await save_day(prev_day);
-            }
-        } else {
-            chrome.storage.local.set({ 'prev_day': (new Date()).toDateString() });
-        }
-
+        newDayCheck();
     } else if (alarm.name == 'refreshBadge') {
 
         calculateTime();
@@ -86,7 +82,13 @@ let calculateTime = async () => {
 
 
         if (prev_url && (!idle_state || vid_status == 'play')) {
-            let tab_url = new URL(tab.url);
+            let tab_url;
+            try {
+                tab_url = new URL(tab.url);
+            }catch(e){
+                console.log("exception", e);
+                return;
+            }
 
 
             let time_diff = new Date().getTime() - prev_url.time;
@@ -186,3 +188,5 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     await chrome.storage.local.set({ 'vid_status': message });
 
 });
+
+setInterval(calculateTime, 1000)

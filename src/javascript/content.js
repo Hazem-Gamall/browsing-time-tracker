@@ -9,7 +9,11 @@ window.addEventListener('yt-page-data-updated', function () {
         let vid_event_handler = (message) => 
             () => {
                 console.log(`video ${message}`);
-                chrome.runtime.sendMessage(message);
+                try{
+                    chrome.runtime.sendMessage(message);
+                }catch(e){
+                    console.log(e);
+                }
             }
         
         vid.onpause = vid_event_handler('pause');

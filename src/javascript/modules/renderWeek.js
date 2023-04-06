@@ -1,13 +1,7 @@
 
 import { renderDayChart } from "./dayChart.js";
+import { getDayTotal } from "./getDayTotal.js";
 import { numberAnimation } from "./numberAnimation.js";
-
-let getDayTotal = (day) => {
-    let day_total = 0
-    Object.values(day).forEach((value) => day_total += value);
-
-    return day_total
-}
 
 
 let getAccordionElements = () => {
@@ -22,11 +16,22 @@ let getAccordionElements = () => {
     }
 }
 
+const renderDayChartWithTotal = (day) => {
+    let day_chart = renderDayChart(day);
+    let day_total_time = new Date(getDayTotal(day));
+    let day_total_element = document.createElement("h5");
+    day_total_element.classList.add("text-center", "mt-4");
+
+    day_total_element.textContent = `Total time: ${day_total_time.getHours() - 2}h ${day_total_time.getMinutes()}m`
+    day_chart.append(day_total_element);
+    return day_chart;
+}
+
 
 
 let renderWeek = async (week) => {
     if (!week) {
-        var { week } = await chrome.storage.local.get({ 'week': null });
+        var { week } = await chrome.storage.local.get({ 'week': {} });
         week = Object.fromEntries(
             Object.entries(week).sort(([a,], [b,]) => (new Date(b) - new Date(a)))
         );
@@ -39,15 +44,15 @@ let renderWeek = async (week) => {
         let week_total = 0;
         for (const date in week) {
             const date_id = date.replaceAll(' ', '-');
-            let {day_entry, accordion_button, card_body, date_element, accordion_body} = getAccordionElements();
+            let { day_entry, accordion_button, card_body, date_element, accordion_body } = getAccordionElements();
             accordion_button.setAttribute("data-target", `#${date_id}`)
             accordion_button.setAttribute("aria-controls", `#${date_id}`)
             accordion_button.onclick = () => {
-                let day_chart = renderDayChart(week[date]);
+                const day_chart = renderDayChartWithTotal(week[date]);
                 if (!accordion_body.classList.contains("show")) {
                     card_body.removeChild(card_body.lastChild);
                     card_body.append(day_chart);
-                } 
+                }
             };
             date_element.textContent = date;
             accordion_body.id = date_id;
