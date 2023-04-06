@@ -1,6 +1,4 @@
-chrome.alarms.create('refreshBadge', { periodInMinutes: 1 });
-chrome.alarms.create('newDayCheck', { periodInMinutes: 1 });
-chrome.alarms.create('newWeekCheck', { periodInMinutes: 1 })
+chrome.alarms.create('oneMinuteAlarm', { periodInMinutes: 1 });
 let save_day = async (prev_day) => {
     let { time_table, week } = await chrome.storage.local.get({ 'time_table': null, 'week': {} })
     console.log('save day week:', week)
@@ -53,15 +51,9 @@ let newWeekCheck = async () => {
 chrome.alarms.onAlarm.addListener(async (alarm) => {
     console.log('alarm here');
     console.log('alarm', alarm);
-    if (alarm.name == 'newDayCheck') {
-        newDayCheck();
-    } else if (alarm.name == 'refreshBadge') {
-
-        calculateTime();
-
-    } else if (alarm.name == 'newWeekCheck') {
-        newWeekCheck();
-    }
+    calculateTime();
+    newDayCheck();
+    newWeekCheck();
 
 });
 
@@ -69,6 +61,7 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
 let calculateTime = async () => {
     console.log('calculating time\n\n')
     let [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+    console.log('tab variable', tab);
     if (tab) {
         // console.log('activated tab', tab.url);
         let { prev_url, time_table, idle_state, vid_status } = await chrome.storage.local.get({ 'prev_url': null, 'time_table': {}, 'idle_state': false, 'vid_status': null })
@@ -85,7 +78,7 @@ let calculateTime = async () => {
             let tab_url;
             try {
                 tab_url = new URL(tab.url);
-            }catch(e){
+            } catch (e) {
                 console.log("exception", e);
                 return;
             }
@@ -151,7 +144,8 @@ chrome.windows.onFocusChanged.addListener(
         } else {
             console.log('window in focus', windowId);
             let [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-            await chrome.storage.local.set({ 'prev_url': { 'url': tab.url, 'time': new Date().getTime() } });
+            if(tab)
+                await chrome.storage.local.set({ 'prev_url': { 'url': tab.url, 'time': new Date().getTime() } });
         }
     }
 )
@@ -178,7 +172,7 @@ chrome.idle.onStateChanged.addListener(async (newState) => {
     }
 })
 
-chrome.action.setBadgeText({ text: '' })
+// chrome.action.setBadgeText({ text: '' })
 chrome.action.setBadgeBackgroundColor({ color: "cyan" });
 
 
