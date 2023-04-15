@@ -1,4 +1,5 @@
 import { getDayTotal } from "./getDayTotal.js";
+import { msToHM } from "./msToHM.js";
 
 let renderDayChart = (day) => {
     let color_index = 0;
@@ -35,10 +36,11 @@ let renderDayChart = (day) => {
     let day_keys = Object.keys(day).slice(0, 6);
     day_keys.push('other');
 
+    
 
     const options = {
         responsive: false,
-        maintainAspectRatio: false,
+        maintainAspectRatio: true,
         hoverOffset: 4,
         plugins: {
 
@@ -46,8 +48,8 @@ let renderDayChart = (day) => {
                 callbacks: {
                     label: function (context) {
                         let day_total = context.parsed;
-                        let day_total_time = new Date(day_total);
-                        return `${day_total_time.getHours() - 2}h ${day_total_time.getMinutes()}m`
+                        const formatted_total = msToHM(day_total);
+                        return `${formatted_total.h.toFixed(0)}h ${formatted_total.m.toFixed(0)}m`
                     }
                 }
             },

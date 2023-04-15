@@ -1,6 +1,7 @@
 
 import { renderDayChart } from "./dayChart.js";
 import { getDayTotal } from "./getDayTotal.js";
+import { msToHM } from "./msToHM.js";
 import { numberAnimation } from "./numberAnimation.js";
 
 
@@ -18,11 +19,11 @@ let getAccordionElements = () => {
 
 const renderDayChartWithTotal = (day) => {
     let day_chart = renderDayChart(day);
-    let day_total_time = new Date(getDayTotal(day));
+    let day_total_formatted = msToHM(getDayTotal(day));
     let day_total_element = document.createElement("h5");
     day_total_element.classList.add("text-center", "mt-4");
 
-    day_total_element.textContent = `Total time: ${day_total_time.getHours() - 2}h ${day_total_time.getMinutes()}m`
+    day_total_element.textContent = `Total time: ${day_total_formatted.h.toFixed(0)}h ${day_total_formatted.m.toFixed(0)}m`
     day_chart.append(day_total_element);
     return day_chart;
 }
@@ -63,21 +64,17 @@ let renderWeek = async (week) => {
         accordion.innerHTML = '';
         accordion.append(week_day_elements)
         let total_week_time_element = document.querySelector('#total-week-time');
-        let week_total_time = new Date(week_total);
+        let week_total_formatted = msToHM(week_total);
         total_week_time_element.innerHTML =
             `
-        <span class='num'>${week_total_time.getHours() - 2}</span>h <span class='num'>${week_total_time.getMinutes()}</span>m
+        <span class='num'>${week_total_formatted.h.toFixed(0)}</span>h <span class='num'>${week_total_formatted.m.toFixed(0)}</span>m
         `;
 
 
 
-        let week_average_time = new Date(week_total / (Object.keys(week).length));
-        document.querySelector('#week-average-h').textContent = week_average_time.getHours() - 2;
-        document.querySelector('#week-average-m').textContent = week_average_time.getMinutes();
-        // week_average_element.innerHTML = 
-        // `
-        // <span class='num'>${week_average_time.getHours()-2}</span>h <span class='num'>${week_average_time.getMinutes()}</span>m
-        // `
+        let week_average_formatted = msToHM(week_total / (Object.keys(week).length));
+        document.querySelector('#week-average-h').textContent = week_average_formatted.h.toFixed(0);
+        document.querySelector('#week-average-m').textContent = week_average_formatted.m.toFixed(0);
 
 
         numberAnimation();

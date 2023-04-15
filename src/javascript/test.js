@@ -28,11 +28,21 @@ let newWeekCheck = async () => {
     let today = new Date().getDay();
     const SUNDAY = 0;
     let { week, prev_sunday } = await chrome.storage.local.get({ 'week': null, 'prev_sunday': null });
-    let week_diff_days;
+    let week_passed = false;
     if (prev_sunday) {
-        week_diff_days = Math.floor((new Date() - prev_sunday) / 1000 / 60 / 60 / 24);
+        
+        let week_diff_days = Math.floor((new Date() - prev_sunday) / 1000 / 60 / 60 / 24);
+        if(week_diff_days >= 7)
+            week_passed = true;
+    } else {
+        const [[oldest_day,]] = Object.entries(week).sort(([a,], [b,]) => (new Date(b) - new Date(a))).slice(-1);
+        const oldest_date = new Date(oldest_day);
+        let week_diff_days = Math.floor((new Date() - oldest_date) / 1000 / 60 / 60 / 24);
+        if (week_diff_days < 7 && (oldest_date.getDay() > new Date().getDay())) {
+            week_passed = true;
+        }
     }
-    if (today === SUNDAY || week_diff_days >= 7) {
+    if (today === SUNDAY || week_passed) {
         console.log("new week check");
 
         if (week) {
@@ -40,7 +50,7 @@ let newWeekCheck = async () => {
             let [min_day, max_day] = [new Date(Math.min.apply(null, week_dates)), new Date(Math.max.apply(null, week_dates))];
             let { history } = await chrome.storage.local.get({ 'history': {} });
             history[`${min_day.toDateString()} - ${max_day.toDateString()}`] = week;
-            chrome.storage.local.set({ 'history': history, 'week2': week, 'prev_sunday': new Date() });
+            chrome.storage.local.set({ history, 'week2': week, 'prev_sunday': new Date() });
             chrome.storage.local.remove('week');
         }
     } else {
@@ -144,7 +154,7 @@ chrome.windows.onFocusChanged.addListener(
         } else {
             console.log('window in focus', windowId);
             let [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-            if(tab)
+            if (tab)
                 await chrome.storage.local.set({ 'prev_url': { 'url': tab.url, 'time': new Date().getTime() } });
         }
     }
