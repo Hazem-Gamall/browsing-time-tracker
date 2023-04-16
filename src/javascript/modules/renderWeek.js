@@ -1,8 +1,9 @@
 
 import { renderDayChart } from "./dayChart.js";
 import { getDayTotal } from "./getDayTotal.js";
-import { msToHM } from "./msToHM.js";
+import { msToHM } from "./millisFormatting.js";
 import { numberAnimation } from "./numberAnimation.js";
+import { removeAllChildNodes } from './removeAllChildNode.js';
 
 
 let getAccordionElements = () => {
@@ -51,7 +52,7 @@ let renderWeek = async (week) => {
             accordion_button.onclick = () => {
                 const day_chart = renderDayChartWithTotal(week[date]);
                 if (!accordion_body.classList.contains("show")) {
-                    card_body.removeChild(card_body.lastChild);
+                    removeAllChildNodes(card_body);
                     card_body.append(day_chart);
                 }
             };

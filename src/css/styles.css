@@ -1,20 +1,28 @@
-html{
+html {
   height: max-content;
   width: 400px;
 }
 
-body{
+body {
   background-color: rgb(230, 230, 230);
 }
 
-
-.card{
-  width: 300px;
-  border-radius: 4%;
-  outline:  rgb(195, 195, 195) solid 1px;
+.hostname {
+  font-size: 0.8rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 85%;
+  word-wrap: normal;
 }
 
-.card-header{
+
+.card {
+  width: 300px;
+  border-radius: 4%;
+  outline: rgb(195, 195, 195) solid 1px;
+}
+
+.card-header {
   border-radius: 100%;
   height: 60px;
   background-color: rgb(199, 199, 199);
@@ -22,7 +30,7 @@ body{
   /* background-color: rgb(220, 220, 220); */
 }
 
-.card:hover{
+.card:hover {
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
 }
 
@@ -30,70 +38,73 @@ body{
   0% {
     transform: translateX(-100%);
   }
+
   100% {
     transform: translateX(0);
   }
 }
 
 
-.progress-bar{
+.progress-bar {
   animation: 1.5s ease 0s 1 slideInFromLeft;
 
 }
 
-.progress{
+.progress {
   transition: width 1s linear;
+
 }
 
-.hidden-content{
+.hidden-content {
   display: none !important;
 }
 
-.arrow-btn{
+.arrow-btn {
   padding: 0;
 
   transition: box-shadow 0.3s;
 }
 
-.arrow-btn:not([disabled]):hover{
+.arrow-btn:not([disabled]):hover {
   box-shadow: 1px 1px 7px 2px #888
-
 }
-.nav-link:not(.active){
+
+.nav-link:not(.active) {
   transition: background-color 0.4s;
 }
-.nav-link:not(.active):hover{
-  background-color:#459ae4;
+
+.nav-link:not(.active):hover {
+  background-color: #459ae4;
   color: #fff;
 }
 
-#week-title{
+#week-title {
   /* width: 50px; */
   /* overflow-wrap: break-word; */
   margin-top: revert;
 }
 
-button[disabled] i{
+button[disabled] i {
   color: #888;
 }
 
 
 ::-webkit-scrollbar {
-    width: 7px;
-  }
-  
-  /* Track */
-  ::-webkit-scrollbar-track {
-    background: #f1f1f1;
-  }
-  
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    border-radius: 12%;
-    background: #888;
-  }
-  
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: #888;
-  }
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  /* border-radius: 12%; */
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #888;
+}

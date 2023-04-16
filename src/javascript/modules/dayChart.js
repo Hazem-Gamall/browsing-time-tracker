@@ -1,5 +1,5 @@
 import { getDayTotal } from "./getDayTotal.js";
-import { msToHM } from "./msToHM.js";
+import { msToHM } from "./millisFormatting.js";
 
 let renderDayChart = (day) => {
     let color_index = 0;
