@@ -1,5 +1,6 @@
 import { getDayTotal } from "./getDayTotal.js";
 import { msToHM } from "./millisFormatting.js";
+import { truncateString } from "./truncateString.js";
 
 let renderDayChart = (day) => {
     let color_index = 0;
@@ -36,7 +37,7 @@ let renderDayChart = (day) => {
     let day_keys = Object.keys(day).slice(0, 6);
     day_keys.push('other');
 
-    
+
 
     const options = {
         responsive: false,
@@ -44,12 +45,27 @@ let renderDayChart = (day) => {
         hoverOffset: 4,
         plugins: {
 
+            legend: {
+                labels: {
+                    generateLabels: function (chart) {
+                        const pieGenerateLabelsLegend = Chart.controllers.doughnut.overrides.plugins.legend.labels.generateLabels;
+                        const labels = pieGenerateLabelsLegend(chart);
+                        const truncatedLabels = labels.map((labelObject) => ({
+                            ...labelObject,
+                            text: truncateString(labelObject.text, 15),
+                        }));
+
+                        return truncatedLabels;
+
+                    }
+                }
+            },
             tooltip: {
                 callbacks: {
                     label: function (context) {
                         let day_total = context.parsed;
                         const formatted_total = msToHM(day_total);
-                        return `${formatted_total.h.toFixed(0)}h ${formatted_total.m.toFixed(0)}m`
+                        return [`${context.label}`, `${formatted_total.h.toFixed(0)}h ${formatted_total.m.toFixed(0)}m`]
                     }
                 }
             },
@@ -84,10 +100,10 @@ let renderDayChart = (day) => {
         options
     });
     let day_chart_div = document.createElement("div");
-    
+
 
     day_chart_div.append(day_canvas);
     return day_chart_div;
 }
 
-export {renderDayChart};
+export { renderDayChart };
