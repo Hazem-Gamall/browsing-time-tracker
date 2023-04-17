@@ -1,6 +1,6 @@
 
 import { renderDayChart } from './modules/dayChart.js'
-import { faviconURL } from './modules/faviconURL.js';
+import { renderDayProgress } from './modules/dayProgress.js';
 import { getDayTotal } from './modules/getDayTotal.js';
 import { msToHM, msToM } from './modules/millisFormatting.js';
 import { removeAllChildNodes } from './modules/removeAllChildNode.js';
@@ -26,60 +26,10 @@ let renderTable = async (chart) => {
         websites_card.append(renderDayChart(time_table))
         return;
     }
-    const websites_grid = document.querySelector("#websites-container").content.firstElementChild.cloneNode(true);
-
-    for (const hostname in time_table) {
-        let prev_url_time = 0;
-        if (prev_url) {
-            let prev_url_hostname = (new URL(prev_url.url)).hostname;
-            console.log('prev_url_hostname', prev_url_hostname);
-            if (prev_url_hostname == hostname) {
-                prev_url_time = ((new Date()).getTime() - prev_url.time);
-                console.log('equal')
-            }
-        }
-        const website_entry = document.querySelector("#website-entry").content.firstElementChild.cloneNode(true);
-        console.log('website entry', website_entry);
-       
-        const time_spent_on_hostname = time_table[hostname] + prev_url_time;
-        const percentage = (time_spent_on_hostname / day_total) * 100;
-        const img = website_entry.querySelector("img");
-        img.src = faviconURL(`https://${hostname}`);
-        img.onload = function(){
-            const colorThief = new ColorThief();
-            let color = undefined;
-            try{
-                color = colorThief.getColor(this);
-            }catch(e){
-                console.log("error", e);
-            }
-            if(color)
-                website_entry.querySelector(".progress-bar").style.backgroundColor = `rgb(${color[0]},${color[1]},${color[2]})`;
-
-        }
-        website_entry.querySelector("span").textContent = hostname;
-        const formatted_entry = msToHM(time_spent_on_hostname);
-        website_entry.querySelector(".progress-bar").textContent = `${Math.floor(formatted_entry.h)}h ${Math.floor(formatted_entry.m)}m`;
-        website_entry.querySelector(".progress-bar").style.width = `${percentage}%`;
-
-        website_entry.title =
-         `
-        <p>${hostname}</p>
-        <span>${Math.floor(formatted_entry.h)}h ${Math.floor(formatted_entry.m)}m (${Math.floor(percentage)}%)</span>
-        `;
-
-
-        // removeAllChildNodes(websites_grid);
-        websites_grid.append(website_entry);
-        console.log(websites_grid);
-
-    }
-    websites_card.append(websites_grid);
-
-    $('[data-toggle="tooltip"]').tooltip()
+    const day_progress = await renderDayProgress(time_table, prev_url)
+    websites_card.append(day_progress);
 
 }
-
 
 
 let today_element = document.querySelector('#today');
@@ -98,12 +48,7 @@ if (btn)
 
 let toggle_btn = document.querySelector('#more-detail-switch')
 toggle_btn.addEventListener('click', () => {
-    console.log('toggle_btn', toggle_btn.checked)
-    if (toggle_btn.checked) {
-        renderTable(true)
-    } else {
-        renderTable(false)
-    }
+    renderTable(toggle_btn.checked)
 });
 
 renderTable();

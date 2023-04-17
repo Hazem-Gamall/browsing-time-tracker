@@ -25,9 +25,10 @@ const getFaviconColor = (hostname, chart, index) => {
 }
 
 const renderDayChart = (day) => {
+
     let color_index = 0;
     let slice_size;
-    let dynamicColors = function (day_key) {
+    let dynamicColors = function () {
         const colors = [
             { r: 0, g: 0, b: 255 }, //blue
             { r: 60, g: 179, b: 113 }, //green
@@ -39,7 +40,8 @@ const renderDayChart = (day) => {
         ]
         slice_size = colors.length + 1;
         let color = `rgb(${colors[color_index].r}, ${colors[color_index].g}, ${colors[color_index].b})`;
-        color_index++;
+        if (color_index < colors.length - 1)
+            color_index++;
         return color;
     };
 
