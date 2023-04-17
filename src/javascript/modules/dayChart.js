@@ -1,11 +1,33 @@
 import { getDayTotal } from "./getDayTotal.js";
 import { msToHM } from "./millisFormatting.js";
 import { truncateString } from "./truncateString.js";
+import { faviconURL } from "./faviconURL.js";
 
-let renderDayChart = (day) => {
+
+const getFaviconColor = (hostname, chart, index) => {
+    const colorThief = new ColorThief();
+    let color = undefined;
+    const img = new Image();
+    img.hidden = true;
+    img.src = faviconURL(`https://${hostname}`);
+    document.body.append(img);
+    img.onload = function () {
+        try {
+            color = colorThief.getColor(this);
+            color = `rgb(${color[0]},${color[1]},${color[2]})`;
+            chart.data.datasets[0].backgroundColor[index] = color;
+            chart.update('none');
+        } catch (e) {
+            console.log("error", e);
+        }
+        document.body.removeChild(this);
+    }
+}
+
+const renderDayChart = (day) => {
     let color_index = 0;
     let slice_size;
-    let dynamicColors = function () {
+    let dynamicColors = function (day_key) {
         const colors = [
             { r: 0, g: 0, b: 255 }, //blue
             { r: 60, g: 179, b: 113 }, //green
@@ -30,10 +52,10 @@ let renderDayChart = (day) => {
         Object.entries(day).sort(([, a], [, b]) => b - a)
     );
     let other_count = 0;
-    let hostname_percentages = Object.values(day);
-    hostname_percentages.slice(6).forEach((val) => other_count += val);
-    hostname_percentages = hostname_percentages.slice(0, 6);
-    hostname_percentages.push(other_count)
+    let hostname_totals = Object.values(day);
+    hostname_totals.slice(6).forEach((val) => other_count += val);
+    hostname_totals = hostname_totals.slice(0, 6);
+    hostname_totals.push(other_count)
     let day_keys = Object.keys(day).slice(0, 6);
     day_keys.push('other');
 
@@ -85,13 +107,13 @@ let renderDayChart = (day) => {
 
     };
 
-    new Chart(day_canvas, {
+    const chart = new Chart(day_canvas, {
         type: 'pie',
         data: {
             labels: day_keys,
             datasets: [{
-                label: '# of Votes',
-                data: hostname_percentages,
+                label: 'Time spent',
+                data: hostname_totals,
                 borderWidth: 1,
                 backgroundColor: day_keys.map(dynamicColors)
             }]
@@ -101,6 +123,7 @@ let renderDayChart = (day) => {
     });
     let day_chart_div = document.createElement("div");
 
+    day_keys.forEach((hostname, index) => getFaviconColor(hostname, chart, index))
 
     day_chart_div.append(day_canvas);
     return day_chart_div;
