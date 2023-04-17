@@ -43,7 +43,20 @@ let renderTable = async (chart) => {
        
         const time_spent_on_hostname = time_table[hostname] + prev_url_time;
         const percentage = (time_spent_on_hostname / day_total) * 100;
-        website_entry.querySelector("img").src = `http://www.google.com/s2/favicons?domain=${hostname}`;
+        const img = website_entry.querySelector("img");
+        img.src = faviconURL(`https://${hostname}`);
+        img.onload = function(){
+            const colorThief = new ColorThief();
+            let color = undefined;
+            try{
+                color = colorThief.getColor(this);
+            }catch(e){
+                console.log("error", e);
+            }
+            if(color)
+                website_entry.querySelector(".progress-bar").style.backgroundColor = `rgb(${color[0]},${color[1]},${color[2]})`;
+
+        }
         website_entry.querySelector("span").textContent = hostname;
         const formatted_entry = msToHM(time_spent_on_hostname);
         website_entry.querySelector(".progress-bar").textContent = `${Math.floor(formatted_entry.h)}h ${Math.floor(formatted_entry.m)}m`;
@@ -52,7 +65,7 @@ let renderTable = async (chart) => {
         website_entry.title =
          `
         <p>${hostname}</p>
-        ${Math.floor(formatted_entry.h)}h ${Math.floor(formatted_entry.m)}m (${Math.floor(percentage)}%)
+        <span>${Math.floor(formatted_entry.h)}h ${Math.floor(formatted_entry.m)}m (${Math.floor(percentage)}%)</span>
         `;
 
 
