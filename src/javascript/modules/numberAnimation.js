@@ -12,8 +12,6 @@ function numberAnimation(){
                     if (startValue < endValue) {
                         startValue += 1;
                         num_element.textContent = startValue
-                        console.log("start value", startValue);
-
                     } else {
                         clearInterval(counter);
                     }

@@ -10,10 +10,9 @@ const setChartFaviconColor = async (hostname, chart, index) => {
     const color = palette.Vibrant?._rgb ?? [192, 192, 192];
     const color_string = `rgb(${color[0]},${color[1]},${color[2]})`;
     chart.data.datasets[0].backgroundColor[index] = color_string;
-    chart.update('none');
 }
 
-const renderDayChart = async (day) => {
+const renderDayChart = (day) => {
 
     let day_canvas = document.createElement('canvas');
     day_canvas.width = 320
@@ -92,7 +91,7 @@ const renderDayChart = async (day) => {
     });
     let day_chart_div = document.createElement("div");
 
-    day_keys.forEach((hostname, index) => setChartFaviconColor(hostname, chart, index))
+    Promise.all(day_keys.map((hostname, index) => setChartFaviconColor(hostname, chart, index))).then(() => chart.update());
 
     day_chart_div.append(day_canvas);
     return day_chart_div;

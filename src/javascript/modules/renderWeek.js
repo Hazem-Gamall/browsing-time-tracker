@@ -6,8 +6,7 @@ import { msToHM } from "./millisFormatting.js";
 import { numberAnimation } from "./numberAnimation.js";
 import { removeAllChildNodes } from './removeAllChildNode.js';
 
-
-let getAccordionElements = () => {
+const getAccordionElements = () => {
     let day_entry = document.querySelector('#day-accordion').content.cloneNode(true);
     return {
         day_entry,
@@ -20,6 +19,10 @@ let getAccordionElements = () => {
 
     }
 }
+
+
+
+
 
 const renderDayChartWithTotal = async (day) => {
     let day_chart = await renderDayChart(day);
@@ -34,7 +37,7 @@ const renderDayChartWithTotal = async (day) => {
 
 
 
-let renderWeek = async (week) => {
+const renderWeek = async (week) => {
     if (!week) {
         ({ week } = await chrome.storage.local.get({ 'week': {} }));
     }
@@ -42,6 +45,7 @@ let renderWeek = async (week) => {
     week = Object.fromEntries(
         Object.entries(week).sort(([a,], [b,]) => (new Date(b) - new Date(a)))
     );
+
 
 
     let accordion = document.querySelector('#accordion');
@@ -54,21 +58,54 @@ let renderWeek = async (week) => {
         toggle_label.htmlFor = `${day}-toggle`;
         accordion_button.setAttribute("data-target", `#${day_id}`)
         accordion_button.setAttribute("aria-controls", `#${day_id}`)
-        accordion_button.onclick = async () => {
-            removeAllChildNodes(card_body);
+
+        let day_chart, day_progress;
+
+
+        const toggleCharts = () => {
+            console.log("day progress", day_progress);
+            console.log("day chart", day_chart);
             const w = Object.fromEntries(
                 Object.entries(week[day]).sort(([, a], [, b]) => b - a)
             );
-            if (!accordion_body.classList.contains("show")) {
-                if (toggle_btn.checked) {
-                    card_body.append(await renderDayProgress(w))
-                } else {
-                    const day_chart = await renderDayChartWithTotal(week[day]);
-                    card_body.append(day_chart);
+            if (toggle_btn.checked) {
+                day_chart && (day_chart.style.display = "none");
+                if (day_progress) {
+                    day_progress.style.display = "grid"
+                    return;
                 }
-
+                day_progress ||= renderDayProgress(w)
+                day_progress && card_body.append(day_progress);
+                return;
             }
-        };
+            
+            day_progress && (day_progress.style.display = "none");
+            if (day_chart) {
+                day_chart.style.display = "block"
+                return;
+            }
+            day_chart ||= renderDayChart(w)
+            day_chart && card_body.append(day_chart);
+
+        }
+
+
+
+        const renderCharts = () => {
+            if (accordion_body.classList.contains("show")) {
+                setTimeout(() => {
+                    day_progress && (day_progress.style.display = "none");
+                    day_chart && (day_chart.style.display = "none");
+                }, 300)
+                return;
+            }
+         
+
+            toggleCharts();
+
+        }
+
+        accordion_button.onclick = renderCharts;
         date_element.textContent = day;
         accordion_body.id = day_id;
 
@@ -76,18 +113,7 @@ let renderWeek = async (week) => {
         week_day_elements.append(day_entry);
 
 
-        toggle_btn.addEventListener('click', async function () {
-            const w = Object.fromEntries(
-                Object.entries(week[day]).sort(([, a], [, b]) => b - a)
-            );
-            if (this.checked) {
-                removeAllChildNodes(card_body);
-                card_body.append(await renderDayProgress(w));
-            } else {
-                removeAllChildNodes(card_body);
-                card_body.append(await renderDayChartWithTotal(w));
-            }
-        });
+        toggle_btn.onclick = toggleCharts;
 
 
     }

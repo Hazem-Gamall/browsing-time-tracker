@@ -2,9 +2,8 @@ import { faviconURL } from "./faviconURL.js";
 import { getDayTotal } from "./getDayTotal.js";
 import { msToHM } from "./millisFormatting.js";
 
-export async function renderDayProgress(day, prev_url) {
-    if (!prev_url)
-        ({ prev_url } = await chrome.storage.local.get({ 'prev_url': null }));
+export function renderDayProgress(day, prev_url) {
+
     const websites_grid = document.querySelector("#websites-container").content.firstElementChild.cloneNode(true);
 
     for (const hostname in day) {
@@ -18,7 +17,6 @@ export async function renderDayProgress(day, prev_url) {
             }
         }
         const website_entry = document.querySelector("#website-entry").content.firstElementChild.cloneNode(true);
-        console.log('website entry', website_entry);
         const day_total = getDayTotal(day);
 
         const time_spent_on_hostname = day[hostname] + prev_url_time;
