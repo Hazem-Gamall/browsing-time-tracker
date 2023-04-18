@@ -21,8 +21,8 @@ let getAccordionElements = () => {
     }
 }
 
-const renderDayChartWithTotal = (day) => {
-    let day_chart = renderDayChart(day);
+const renderDayChartWithTotal = async (day) => {
+    let day_chart = await renderDayChart(day);
     let day_total_formatted = msToHM(getDayTotal(day));
     let day_total_element = document.createElement("h5");
     day_total_element.classList.add("text-center", "mt-4");
@@ -59,14 +59,13 @@ let renderWeek = async (week) => {
             const w = Object.fromEntries(
                 Object.entries(week[day]).sort(([, a], [, b]) => b - a)
             );
-            if (toggle_btn.checked) {
-                card_body.append(await renderDayProgress(w))
-            } else {
-                const day_chart = renderDayChartWithTotal(week[day]);
-                card_body.append(day_chart);
-            }
-
             if (!accordion_body.classList.contains("show")) {
+                if (toggle_btn.checked) {
+                    card_body.append(await renderDayProgress(w))
+                } else {
+                    const day_chart = await renderDayChartWithTotal(week[day]);
+                    card_body.append(day_chart);
+                }
 
             }
         };
@@ -86,7 +85,7 @@ let renderWeek = async (week) => {
                 card_body.append(await renderDayProgress(w));
             } else {
                 removeAllChildNodes(card_body);
-                card_body.append(renderDayChartWithTotal(w));
+                card_body.append(await renderDayChartWithTotal(w));
             }
         });
 

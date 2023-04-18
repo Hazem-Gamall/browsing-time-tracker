@@ -23,7 +23,7 @@ let renderTable = async (chart) => {
     removeAllChildNodes(websites_card);
 
     if (!chart) {
-        websites_card.append(renderDayChart(time_table))
+        websites_card.append(await renderDayChart(time_table))
         return;
     }
     const day_progress = await renderDayProgress(time_table, prev_url)

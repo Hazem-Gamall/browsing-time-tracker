@@ -4,48 +4,16 @@ import { truncateString } from "./truncateString.js";
 import { faviconURL } from "./faviconURL.js";
 
 
-const getFaviconColor = (hostname, chart, index) => {
-    const colorThief = new ColorThief();
-    let color = undefined;
-    const img = new Image();
-    img.hidden = true;
-    img.src = faviconURL(`https://${hostname}`);
-    document.body.append(img);
-    img.onload = function () {
-        try {
-            color = colorThief.getColor(this);
-            color = `rgb(${color[0]},${color[1]},${color[2]})`;
-            chart.data.datasets[0].backgroundColor[index] = color;
-            chart.update('none');
-        } catch (e) {
-            console.log("error", e);
-        }
-        document.body.removeChild(this);
-    }
+const setChartFaviconColor = async (hostname, chart, index) => {
+    const img_url = faviconURL(`https://${hostname}`);
+    const palette = await Vibrant.from(img_url).getPalette();
+    const color = palette.Vibrant?._rgb ?? [192, 192, 192];
+    const color_string = `rgb(${color[0]},${color[1]},${color[2]})`;
+    chart.data.datasets[0].backgroundColor[index] = color_string;
+    chart.update('none');
 }
 
-const renderDayChart = (day) => {
-
-    let color_index = 0;
-    let slice_size;
-    let dynamicColors = function () {
-        const colors = [
-            { r: 0, g: 0, b: 255 }, //blue
-            { r: 60, g: 179, b: 113 }, //green
-            { r: 128, g: 0, b: 128 }, //purple
-            { r: 238, g: 130, b: 238 }, //pink
-            { r: 255, g: 0, b: 0 }, //red
-            { r: 179, g: 115, b: 123 }, //
-            { r: 255, g: 165, b: 0 }, //yellow
-        ]
-        slice_size = colors.length + 1;
-        let color = `rgb(${colors[color_index].r}, ${colors[color_index].g}, ${colors[color_index].b})`;
-        if (color_index < colors.length - 1)
-            color_index++;
-        return color;
-    };
-
-
+const renderDayChart = async (day) => {
 
     let day_canvas = document.createElement('canvas');
     day_canvas.width = 320
@@ -108,7 +76,6 @@ const renderDayChart = (day) => {
         }
 
     };
-
     const chart = new Chart(day_canvas, {
         type: 'pie',
         data: {
@@ -117,7 +84,7 @@ const renderDayChart = (day) => {
                 label: 'Time spent',
                 data: hostname_totals,
                 borderWidth: 1,
-                backgroundColor: day_keys.map(dynamicColors)
+                backgroundColor: day_keys.map(() => `rgb(10,32,113)`)
             }]
         },
         plugins: [ChartDataLabels],
@@ -125,7 +92,7 @@ const renderDayChart = (day) => {
     });
     let day_chart_div = document.createElement("div");
 
-    day_keys.forEach((hostname, index) => getFaviconColor(hostname, chart, index))
+    day_keys.forEach((hostname, index) => setChartFaviconColor(hostname, chart, index))
 
     day_chart_div.append(day_canvas);
     return day_chart_div;

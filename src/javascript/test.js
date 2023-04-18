@@ -84,7 +84,7 @@ let calculateTime = async () => {
         console.log('vid_status', vid_status);
 
 
-        if (prev_url && (!idle_state || vid_status == 'play')) {
+        if (prev_url && (!idle_state || vid_status === 'play')) {
             let tab_url;
             try {
                 tab_url = new URL(tab.url);
@@ -123,6 +123,8 @@ let calculateTime = async () => {
             } catch (e) {
                 console.log('ERROR', e);
             }
+        }else{
+            console.log("idle");
         }
         prev_url = (tab ? { 'url': tab.url, 'time': (new Date()).getTime() } : null);
         console.log('prev_url before set', prev_url);
@@ -146,6 +148,7 @@ chrome.tabs.onUpdated.addListener(() => { console.log('on Updated'); calculateTi
 chrome.windows.onFocusChanged.addListener(
     async (windowId) => {
         console.log(windowId);
+        console.log("window focus changed!!!!!!!!!!!!!!!!!!!!");
         if (windowId == chrome.windows.WINDOW_ID_NONE) {
             console.log('no window in focus');
             await calculateTime();

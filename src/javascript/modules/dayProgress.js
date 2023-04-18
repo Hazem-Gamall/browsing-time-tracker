@@ -2,11 +2,11 @@ import { faviconURL } from "./faviconURL.js";
 import { getDayTotal } from "./getDayTotal.js";
 import { msToHM } from "./millisFormatting.js";
 
-export async function renderDayProgress(day, prev_url){
-    if(!prev_url)
-        ({prev_url} = await chrome.storage.local.get({'prev_url':null}));
+export async function renderDayProgress(day, prev_url) {
+    if (!prev_url)
+        ({ prev_url } = await chrome.storage.local.get({ 'prev_url': null }));
     const websites_grid = document.querySelector("#websites-container").content.firstElementChild.cloneNode(true);
-    
+
     for (const hostname in day) {
         let prev_url_time = 0;
         if (prev_url) {
@@ -25,11 +25,11 @@ export async function renderDayProgress(day, prev_url){
         const percentage = (time_spent_on_hostname / day_total) * 100;
         const img = website_entry.querySelector("img");
         img.src = faviconURL(`https://${hostname}`);
-        img.onload = function () {
-            const colorThief = new ColorThief();
+        img.onload = async function () {
             let color = undefined;
             try {
-                color = colorThief.getColor(this);
+                const palette = await Vibrant.from(this.src).getPalette();
+                color = palette?.Vibrant?._rgb;
             } catch (e) {
                 console.log("error", e);
             }
