@@ -2,10 +2,27 @@ html,body{
   min-height:101%;
 }
 
+
+@keyframes slideFromTop {
+  0%{
+    transform: translateX(-100%);
+  }
+  100%{
+    transform: translateX(0);
+  }
+}
+
+
 body {
   background-color: rgb(230, 230, 230);
   width: 380px;
   max-height: 100px;
+
+}
+
+.content{
+  animation: 0.25s ease-out 0s 1 slideFromTop;
+
 }
 
 .hostname {

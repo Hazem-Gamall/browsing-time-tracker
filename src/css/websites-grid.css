@@ -3,6 +3,7 @@
     grid-template-columns: 48% 48%;
     overflow-y: scroll;
     max-height: 300px;
+    min-height: 300px;
     max-width: 100%;
     column-gap: 4%;
     row-gap: 8%;

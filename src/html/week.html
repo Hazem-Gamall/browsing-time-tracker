@@ -24,48 +24,51 @@
                 <a href="history.html" class="nav-link mx-1">History</a>
             </nav>
         </div>
+        
+        <div class="content">
 
-        <div class="row justify-content-center mt-3">
-            <div class="card">
-                <div class="card-body">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-12">
-                                <span class="text-secondary">Daily Average</span>
-                            </div>
+            <div class="row justify-content-center mt-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-12">
+                                    <span class="text-secondary">Daily Average</span>
+                                </div>
 
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <h4 id="week-average">
-                                    <span class="num" id='week-average-h'>0</span>h
-                                    <span class="num" id='week-average-m'>0</span>m
-                                </h4>
                             </div>
-                            <div class="col-6">
-                                <small id="relation-to-last-week" class="text-secondary">20% lower than last
-                                    week</small>
+                            <div class="row">
+                                <div class="col-6">
+                                    <h4 id="week-average">
+                                        <span class="num" id='week-average-h'>0</span>h
+                                        <span class="num" id='week-average-m'>0</span>m
+                                    </h4>
+                                </div>
+                                <div class="col-6">
+                                    <small id="relation-to-last-week" class="text-secondary">20% lower than last
+                                        week</small>
+                                </div>
                             </div>
-                        </div>
-                        <hr>
-                        <div class="row justify-content-between">
-                            <div class="col-7">
-                                <p style="font-size: 13px;">Total Browsing Time</p>
-                            </div>
-                            <div class="col-5">
-                                <p id='total-week-time' class="text-secondary">
-                                    <span class="num" id='total-week-time-h'>0</span>h
-                                    <span class="num" id='total-week-time-m'>0</span>m
-                                </p>
+                            <hr>
+                            <div class="row justify-content-between">
+                                <div class="col-7">
+                                    <p style="font-size: 13px;">Total Browsing Time</p>
+                                </div>
+                                <div class="col-5">
+                                    <p id='total-week-time' class="text-secondary">
+                                        <span class="num" id='total-week-time-h'>0</span>h
+                                        <span class="num" id='total-week-time-m'>0</span>m
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div id="accordion">
+            <div id="accordion">
 
+            </div>
         </div>
 
 
@@ -77,8 +80,9 @@
             <div class="card">
                 <div class="card-header" id="headingOne">
                     <div class='row justify-content-center'>
-                        <button id="accordion-button" class="btn" data-toggle="collapse" data-target="#${date.replaceAll(' ', '-')}"
-                            aria-expanded="true" aria-controls="${date.replaceAll(' ', '-')}">
+                        <button id="accordion-button" class="btn" data-toggle="collapse"
+                            data-target="#${date.replaceAll(' ', '-')}" aria-expanded="true"
+                            aria-controls="${date.replaceAll(' ', '-')}">
                             <h5 class="mb-0 text-center" id="date">
                                 ${date}
                             </h5>
@@ -90,14 +94,14 @@
                         <input type="checkbox" class="custom-control-input" id="more-detail-switch">
                         <label class="custom-control-label" for="more-detail-switch">Get more details</label>
                     </div>
-                            <div class="card-body row justify-content-center pt-0">
-                                
-                            </div>
+                    <div class="card-body row justify-content-center pt-0">
+
+                    </div>
                 </div>
             </div>
         </div>
-    </template> 
-    
+    </template>
+
     <template id="websites-container">
         <div class="websites-grid">
 
@@ -105,8 +109,7 @@
     </template>
 
     <template id="website-entry">
-        <div class="container" data-toggle="tooltip" data-html="true"
-        title="">
+        <div class="container" data-toggle="tooltip" data-html="true" title="">
             <div class="row flex-nowrap">
                 <img class="mr-1" style='width:16px; height:16px;'>
                 <span class="hostname"></span>

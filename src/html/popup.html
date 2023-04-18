@@ -30,44 +30,46 @@
             <button id='clear-btn' class="btn bg-danger text-white"><i class="fa fa-trash"></i> Clear</button>
         </div> -->
 
-        <div class="row justify-content-center mt-3">
-            <div class="card">
-                <div class="card-body">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-12">
-                                <span id='today' class="text-secondary"></span>
+        <div class="content">
+
+            <div class="row justify-content-center mt-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-12">
+                                    <span id='today' class="text-secondary"></span>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <h4 id="day-usage"></h4>
+                                </div>
                             </div>
 
                         </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <h4 id="day-usage"></h4>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="custom-control custom-switch">
-            <input type="checkbox" class="custom-control-input" id="more-detail-switch">
-            <label class="custom-control-label" for="more-detail-switch">Get more details</label>
-        </div>
-        <div id="websites" class="container justify-content-center">
-            <div id="websites-chart">
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="more-detail-switch">
+                <label class="custom-control-label" for="more-detail-switch">Get more details</label>
+            </div>
+            <div id="websites" class="container justify-content-center">
+                <div id="websites-chart">
+
+                </div>
+                <div id="websites-card" class="card pb-1" style="width: 100%;">
+
+                </div>
+
+
 
             </div>
-            <div id="websites-card" class="card pb-1" style="width: 100%;">
-
-            </div>
-
-
 
         </div>
-
-
     </div>
 
     <template id="websites-container">
@@ -77,8 +79,7 @@
     </template>
 
     <template id="website-entry">
-        <div class="container" data-toggle="tooltip" data-html="true"
-        title="">
+        <div class="container" data-toggle="tooltip" data-html="true" title="">
             <div class="row flex-nowrap">
                 <img class="mr-1" style='width:16px; height:16px;'>
                 <span class="hostname"></span>
