@@ -1,8 +1,13 @@
+import { msToDays } from "./modules/millisFormatting.js";
+import { sortDay, sortWeek } from "./modules/sorting.js";
+
 chrome.alarms.create('oneMinuteAlarm', { periodInMinutes: 1 });
 let save_day = async (prev_day) => {
     let { time_table, week } = await chrome.storage.local.get({ 'time_table': null, 'week': {} })
     console.log('save day week:', week)
+    time_table = sortDay(time_table);
     week[prev_day] = time_table;
+    week = sortWeek(week);
     console.log('save day week after modification:', week)
     await chrome.storage.local.set({ 'prev_day': (new Date()).toDateString(), week });
     await chrome.storage.local.remove('time_table');
@@ -30,14 +35,14 @@ let newWeekCheck = async () => {
     let { week, prev_sunday } = await chrome.storage.local.get({ 'week': null, 'prev_sunday': null });
     let week_passed = false;
     if (prev_sunday) {
-        
-        let week_diff_days = Math.floor((new Date() - prev_sunday) / 1000 / 60 / 60 / 24);
-        if(week_diff_days >= 7)
+
+        let week_diff_days = Math.floor(msToDays(new Date() - prev_sunday));
+        if (week_diff_days >= 7)
             week_passed = true;
     } else {
-        const [[oldest_day,]] = Object.entries(week).sort(([a,], [b,]) => (new Date(b) - new Date(a))).slice(-1);
+        const [[oldest_day,]] = sortWeek(week).slice(-1);
         const oldest_date = new Date(oldest_day);
-        let week_diff_days = Math.floor((new Date() - oldest_date) / 1000 / 60 / 60 / 24);
+        let week_diff_days = Math.floor(msToDays(new Date() - oldest_date));
         if (week_diff_days < 7 && (oldest_date.getDay() > new Date().getDay())) {
             week_passed = true;
         }
@@ -123,7 +128,7 @@ let calculateTime = async () => {
             } catch (e) {
                 console.log('ERROR', e);
             }
-        }else{
+        } else {
             console.log("idle");
         }
         prev_url = (tab ? { 'url': tab.url, 'time': (new Date()).getTime() } : null);

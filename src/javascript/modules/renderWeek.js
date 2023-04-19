@@ -4,7 +4,7 @@ import { renderDayProgress } from "./dayProgress.js";
 import { getDayTotal } from "./getDayTotal.js";
 import { msToHM } from "./millisFormatting.js";
 import { numberAnimation } from "./numberAnimation.js";
-import { removeAllChildNodes } from './removeAllChildNode.js';
+import { sortDay, sortWeek } from "./sorting.js";
 
 const getAccordionElements = () => {
     let day_entry = document.querySelector('#day-accordion').content.cloneNode(true);
@@ -24,8 +24,8 @@ const getAccordionElements = () => {
 
 
 
-const renderDayChartWithTotal = async (day) => {
-    let day_chart = await renderDayChart(day);
+const renderDayChartWithTotal = (day) => {
+    let day_chart = renderDayChart(day);
     let day_total_formatted = msToHM(getDayTotal(day));
     let day_total_element = document.createElement("h5");
     day_total_element.classList.add("text-center", "mt-4");
@@ -42,39 +42,33 @@ const renderWeek = async (week) => {
         ({ week } = await chrome.storage.local.get({ 'week': {} }));
     }
 
-    week = Object.fromEntries(
-        Object.entries(week).sort(([a,], [b,]) => (new Date(b) - new Date(a)))
-    );
+    week = sortWeek(week);
 
 
 
     let accordion = document.querySelector('#accordion');
     let week_day_elements = document.createElement('div');
     let week_total = 0;
-    for (const day in week) {
-        const day_id = day.replaceAll(' ', '-');
+    for (const day_key in week) {
+        const day_key_id = day_key.replaceAll(' ', '-');
         let { day_entry, accordion_button, card_body, date_element, accordion_body, toggle_btn, toggle_label } = getAccordionElements();
-        toggle_btn.id = `${day}-toggle`
-        toggle_label.htmlFor = `${day}-toggle`;
-        accordion_button.setAttribute("data-target", `#${day_id}`)
-        accordion_button.setAttribute("aria-controls", `#${day_id}`)
+        toggle_btn.id = `${day_key}-toggle`
+        toggle_label.htmlFor = `${day_key}-toggle`;
+        accordion_button.setAttribute("data-target", `#${day_key_id}`)
+        accordion_button.setAttribute("aria-controls", `#${day_key_id}`)
 
         let day_chart, day_progress;
 
 
         const toggleCharts = () => {
-            console.log("day progress", day_progress);
-            console.log("day chart", day_chart);
-            const w = Object.fromEntries(
-                Object.entries(week[day]).sort(([, a], [, b]) => b - a)
-            );
+            const day = sortDay(week[day_key]);
             if (toggle_btn.checked) {
                 day_chart && (day_chart.style.display = "none");
                 if (day_progress) {
                     day_progress.style.display = "grid"
                     return;
                 }
-                day_progress ||= renderDayProgress(w)
+                day_progress ||= renderDayProgress(day)
                 day_progress && card_body.append(day_progress);
                 return;
             }
@@ -84,7 +78,7 @@ const renderWeek = async (week) => {
                 day_chart.style.display = "block"
                 return;
             }
-            day_chart ||= renderDayChart(w)
+            day_chart ||= renderDayChartWithTotal(day)
             day_chart && card_body.append(day_chart);
 
         }
@@ -106,10 +100,10 @@ const renderWeek = async (week) => {
         }
 
         accordion_button.onclick = renderCharts;
-        date_element.textContent = day;
-        accordion_body.id = day_id;
+        date_element.textContent = day_key;
+        accordion_body.id = day_key_id;
 
-        week_total += getDayTotal(week[day]);
+        week_total += getDayTotal(week[day_key]);
         week_day_elements.append(day_entry);
 
 
@@ -132,7 +126,6 @@ const renderWeek = async (week) => {
     document.querySelector('#week-average-h').textContent = week_average_formatted.h.toFixed(0);
     document.querySelector('#week-average-m').textContent = week_average_formatted.m.toFixed(0);
 
-    console.log("tooltip elements", $('[data-toggle="tooltip"]'));
     numberAnimation();
 
 }

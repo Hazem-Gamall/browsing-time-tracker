@@ -3,9 +3,7 @@ let index = 0;
 
 let renderHistory = async () => {
     let { history } = await chrome.storage.local.get({ 'history': null });
-    let week_div = document.querySelector('#week');
     let week_title = document.querySelector('#week-title');
-    console.log('history', history);
 
     if (history) {
         history['de7k'] = {
@@ -30,7 +28,6 @@ let renderHistory = async () => {
             }
         }
         let history_list = Object.keys(history);
-        console.log('history_list', history_list);
         if (index < history_list.length && index >= 0) {
             week_title.textContent = history_list[index];
             renderWeek(history[history_list[index]]);

@@ -11,4 +11,11 @@ function msToM(miliseconds) {
     return miliseconds / 1000 / 60;
 }
 
-export { msToHM, msToM }
+
+function msToDays(miliseconds) {
+    const days = miliseconds / 1000 / 60 / 60 / 24;
+    return days;
+
+}
+
+export { msToHM, msToM,msToDays }
