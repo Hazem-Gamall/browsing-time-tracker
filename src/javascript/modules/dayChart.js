@@ -33,7 +33,7 @@ const renderDayChart = (day) => {
     const options = {
         responsive: false,
         maintainAspectRatio: true,
-        hoverOffset: 4,
+        hoverOffset: 3,
         plugins: {
 
             legend: {
