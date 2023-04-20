@@ -1,4 +1,5 @@
 import { renderWeek } from './modules/renderWeek.js'
+import { sortHistory } from './modules/sorting.js';
 let index = 0;
 
 let renderHistory = async () => {
@@ -6,6 +7,7 @@ let renderHistory = async () => {
     let week_title = document.querySelector('#week-title');
 
     if (history) {
+        history = sortHistory(history);
         history['de7k'] = {
             'Fri Jul 01 2022': {
                 '192.168.1.1': 18370,
