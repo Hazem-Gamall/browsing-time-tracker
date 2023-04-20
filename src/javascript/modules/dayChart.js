@@ -2,6 +2,7 @@ import { getDayTotal } from "./getDayTotal.js";
 import { msToHM } from "./millisFormatting.js";
 import { truncateString } from "./truncateString.js";
 import { faviconURL } from "./faviconURL.js";
+import { sortDay } from "./sorting.js";
 
 
 const setChartFaviconColor = async (hostname, chart, index) => {
@@ -17,9 +18,7 @@ const renderDayChart = (day) => {
     let day_canvas = document.createElement('canvas');
     day_canvas.width = 320
     day_canvas.height = 320
-    day = Object.fromEntries(
-        Object.entries(day).sort(([, a], [, b]) => b - a)
-    );
+    day = sortDay(day)
     let other_count = 0;
     let hostname_totals = Object.values(day);
     hostname_totals.slice(6).forEach((val) => other_count += val);

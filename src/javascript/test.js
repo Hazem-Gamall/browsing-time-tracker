@@ -5,9 +5,7 @@ chrome.alarms.create('oneMinuteAlarm', { periodInMinutes: 1 });
 let save_day = async (prev_day) => {
     let { time_table, week } = await chrome.storage.local.get({ 'time_table': null, 'week': {} })
     console.log('save day week:', week)
-    time_table = sortDay(time_table);
     week[prev_day] = time_table;
-    week = sortWeek(week);
     console.log('save day week after modification:', week)
     await chrome.storage.local.set({ 'prev_day': (new Date()).toDateString(), week });
     await chrome.storage.local.remove('time_table');
