@@ -1,9 +1,10 @@
 
 import { renderDayChart } from './modules/dayChart.js'
 import { renderDayProgress } from './modules/dayProgress.js';
-import { getDayTotal } from './modules/getDayTotal.js';
+import { getDayTotal } from './modules/getTotal.js';
 import { msToHM, msToM } from './modules/millisFormatting.js';
 import { removeAllChildNodes } from './modules/removeAllChildNode.js';
+import { sortDay } from './modules/sorting.js';
 
 let renderTable = async (chart) => {
     let { time_table, prev_url } = await chrome.storage.local.get({ 'time_table': {}, 'prev_url': null });
@@ -16,17 +17,15 @@ let renderTable = async (chart) => {
 
 
     const websites_card = document.querySelector('#websites-card');
-    time_table = Object.fromEntries(
-        Object.entries(time_table).sort(([, a], [, b]) => b - a)
-    );
+    time_table = sortDay(time_table);
 
     removeAllChildNodes(websites_card);
 
     if (!chart) {
-        websites_card.append(await renderDayChart(time_table))
+        websites_card.append(renderDayChart(time_table))
         return;
     }
-    const day_progress = await renderDayProgress(time_table, prev_url)
+    const day_progress = renderDayProgress(time_table, prev_url)
     websites_card.append(day_progress);
 
 }

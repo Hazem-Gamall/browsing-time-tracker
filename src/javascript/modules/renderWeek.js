@@ -1,7 +1,7 @@
 
 import { renderDayChart } from "./dayChart.js";
 import { renderDayProgress } from "./dayProgress.js";
-import { getDayTotal } from "./getDayTotal.js";
+import { getDayTotal } from "./getTotal.js";
 import { msToHM } from "./millisFormatting.js";
 import { numberAnimation } from "./numberAnimation.js";
 import { sortDay, sortWeek } from "./sorting.js";

@@ -1,3 +1,4 @@
+import { getWeekTotal } from "./modules/getTotal.js";
 import { msToDays } from "./modules/millisFormatting.js";
 import { sortDay, sortWeek } from "./modules/sorting.js";
 
@@ -52,7 +53,7 @@ let newWeekCheck = async () => {
             let week_dates = Object.keys(week).map((day) => new Date(day));
             let [min_day, max_day] = [new Date(Math.min.apply(null, week_dates)), new Date(Math.max.apply(null, week_dates))];
             let { history } = await chrome.storage.local.get({ 'history': {} });
-            history[`${min_day.toDateString()} - ${max_day.toDateString()}`] = week;
+            history[`${min_day.toDateString()} - ${max_day.toDateString()}`] = { week, total: getWeekTotal(week) };
             chrome.storage.local.set({ history, 'week2': week, 'prev_sunday': new Date() });
             chrome.storage.local.remove('week');
         }

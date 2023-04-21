@@ -1,4 +1,4 @@
-import { getDayTotal } from "./getDayTotal.js";
+import { getDayTotal } from "./getTotal.js";
 import { msToHM } from "./millisFormatting.js";
 import { truncateString } from "./truncateString.js";
 import { faviconURL } from "./faviconURL.js";

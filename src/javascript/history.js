@@ -32,7 +32,8 @@ let renderHistory = async () => {
         let history_list = Object.keys(history);
         if (index < history_list.length && index >= 0) {
             week_title.textContent = history_list[index];
-            renderWeek(history[history_list[index]]);
+            let {week} = history[history_list[index]]
+            renderWeek(week);
             if (index == 0 ) {
                 document.querySelector('#left-arrow').disabled = true;
                 
