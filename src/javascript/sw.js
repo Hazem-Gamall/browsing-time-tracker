@@ -64,11 +64,9 @@ const handleAlarm = async (alarm) => {
 
 chrome.alarms.onAlarm.addListener(handleAlarm);
 
-function updateBadgeText(prev_time, tab_hostname_time) {
-    let time_diff = new Date().getTime() - prev_time;
-    let time_spent = new Date(time_diff + tab_hostname_time).getTime();
-    let badge_time_fromatted = msToBadgeFormat(time_spent);
-    chrome.action.setBadgeText({ text: (isNaN(time_spent) ? '0s' : badge_time_fromatted) });
+function updateBadgeText(tab_hostname_time) {
+    let badge_time_fromatted = msToBadgeFormat(tab_hostname_time);
+    chrome.action.setBadgeText({ text: badge_time_fromatted });
 }
 
 
@@ -78,10 +76,10 @@ let calculateTime = async () => {
 
     if (tab) {
         // console.log('activated tab', tab.url);
-        let { prev_time, time_table, idle_state, vid_status } = await chrome.storage.local.get({ 'prev_time': null, 'time_table': {}, 'idle_state': false, 'vid_status': null })
+        let { prev_time, time_table, idle_state, vid_status, inFocus } = await chrome.storage.local.get({ 'prev_time': null, 'time_table': {}, 'idle_state': false, 'vid_status': null, 'inFocus': true })
 
-
-        if (prev_time && (!idle_state || vid_status === 'play')) {
+        console.log({ idle_state }, { inFocus }, { vid_status });
+        if (inFocus && (!idle_state || vid_status === 'play')) {
             let tab_url;
             try {
                 tab_url = new URL(tab.url);
@@ -91,22 +89,21 @@ let calculateTime = async () => {
                 return;
             }
 
-            updateBadgeText(prev_time, time_table[tab_url.hostname]);
-
+            const time_diff = (new Date).getTime() - prev_time;
             if (time_table[tab_url.hostname]) {
-                time_table[tab_url.hostname] += (new Date).getTime() - prev_time;
+                time_table[tab_url.hostname] += time_diff;
             } else {
-                time_table[tab_url.hostname] = (new Date).getTime() - prev_time;
+                time_table[tab_url.hostname] = time_diff;
             }
+            updateBadgeText(time_table[tab_url.hostname]);
             console.log("time_table updated");
 
         } else {
             console.log("idle", { idle_state }, { vid_status });
         }
-        prev_time = new Date().getTime();
         await chrome.storage.local.set(
             {
-                prev_time,
+                prev_time: new Date().getTime(),
                 time_table
             }
         );
@@ -128,24 +125,19 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 });
 
 function checkBrowserFocus() {
-
-    chrome.windows.getCurrent(async function (browser) {
-
-        if (browser.focused)
-            return;
-        chrome.storage.local.set({ 'prev_time': 0 });
+    chrome.windows.getCurrent(function (browser) {
+        chrome.storage.local.set({ inFocus: browser.focused });
     })
-
 }
 
 function checkUserIdle() {
     chrome.idle.queryState(
-        60, // seconds
+        30, // seconds
         async function (newState) {
             if (newState === "active") {
                 chrome.storage.local.set({ 'idle_state': false });
             } else {
-                chrome.storage.local.set({ 'prev_time': 0, 'idle_state': true });
+                chrome.storage.local.set({ 'idle_state': true });
             }
         }
     );
