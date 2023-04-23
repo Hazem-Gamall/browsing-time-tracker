@@ -41,6 +41,6 @@
     },
 
     "background":{
-        "service_worker":"src/javascript/test.js", "type":"module"
+        "service_worker":"src/javascript/service_worker.js", "type":"module"
     }
 }

@@ -64,72 +64,52 @@ const handleAlarm = async (alarm) => {
 
 chrome.alarms.onAlarm.addListener(handleAlarm);
 
+function updateBadgeText(prev_time, tab_hostname_time) {
+    let time_diff = new Date().getTime() - prev_time;
+    let time_spent = new Date(time_diff + tab_hostname_time).getTime();
+    let badge_time_fromatted = msToBadgeFormat(time_spent);
+    chrome.action.setBadgeText({ text: (isNaN(time_spent) ? '0s' : badge_time_fromatted) });
+}
+
+
 //on page updated, tab changed, state is idle/locked, or window is back in focus
 let calculateTime = async () => {
-    console.log('calculating time\n\n')
     let [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-    console.log('tab variable', tab);
+
     if (tab) {
         // console.log('activated tab', tab.url);
-        let { prev_url, time_table, idle_state, vid_status } = await chrome.storage.local.get({ 'prev_url': null, 'time_table': {}, 'idle_state': false, 'vid_status': null })
+        let { prev_time, time_table, idle_state, vid_status } = await chrome.storage.local.get({ 'prev_time': null, 'time_table': {}, 'idle_state': false, 'vid_status': null })
 
 
-        console.log('tab', tab)
-        console.log('prev_url', prev_url);
-        console.log('time_tabl', time_table)
-        console.log('idle_state', idle_state);
-        console.log('vid_status', vid_status);
-
-
-        if (prev_url && (!idle_state || vid_status === 'play')) {
+        if (prev_time && (!idle_state || vid_status === 'play')) {
             let tab_url;
             try {
                 tab_url = new URL(tab.url);
             } catch (e) {
-                console.log("exception", e);
+                console.log("exception in converting url", e);
+                console.log('tab: ', tab);
                 return;
             }
 
+            updateBadgeText(prev_time, time_table[tab_url.hostname]);
 
-            let time_diff = new Date().getTime() - prev_url.time;
-            let time_spent = new Date(time_diff + time_table[tab_url.hostname]);
-            console.log('time_spent', time_spent);
-            let badge_time = time_spent.getMinutes() + ((time_spent.getHours() - 2) * 60)
-            console.log('badge_time', badge_time);
-            chrome.action.setBadgeText({ text: (isNaN(badge_time) ? 0 : badge_time) + 'm' });
-            console.log('badge updated');
-
-            let now = new Date();
-
-            let prev_tab_url;
-            try {
-                prev_tab_url = new URL(prev_url.url);
-                console.log('prev tab url', prev_tab_url.hostname);
-                if (time_table[prev_tab_url.hostname]) {
-                    time_table[prev_tab_url.hostname] += (new Date).getTime() - prev_url.time;
-                } else {
-                    time_table[prev_tab_url.hostname] = (new Date).getTime() - prev_url.time;
-                }
-
-
-            } catch (e) {
-                console.log('ERROR', e);
+            if (time_table[tab_url.hostname]) {
+                time_table[tab_url.hostname] += (new Date).getTime() - prev_time;
+            } else {
+                time_table[tab_url.hostname] = (new Date).getTime() - prev_time;
             }
+            console.log("time_table updated");
+
         } else {
             console.log("idle", { idle_state }, { vid_status });
         }
-        prev_url = (tab ? { 'url': tab.url, 'time': (new Date()).getTime() } : null);
-        console.log('prev_url before set', prev_url);
+        prev_time = new Date().getTime();
         await chrome.storage.local.set(
             {
-                prev_url,
-                'idle_period': 0,
+                prev_time,
                 time_table
-
             }
         );
-
-        console.log('\n\n\n done calculating time')
     }
 };
 
@@ -137,47 +117,6 @@ chrome.tabs.onActivated.addListener(() => { console.log('on Activated'); calcula
 
 chrome.tabs.onUpdated.addListener(() => { console.log('on Updated'); calculateTime(); });
 
-chrome.windows.onFocusChanged.addListener(
-    async (windowId) => {
-        console.log(windowId);
-        console.log("window focus changed!!!!!!!!!!!!!!!!!!!!");
-        if (windowId == chrome.windows.WINDOW_ID_NONE) {
-            console.log('no window in focus');
-            await calculateTime();
-            await chrome.storage.local.set({ 'prev_url': null });
-            console.log('prev_url set to null in onFocusChanged')
-        } else {
-            console.log('window in focus', windowId);
-            let [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-            if (tab)
-                await chrome.storage.local.set({ 'prev_url': { 'url': tab.url, 'time': new Date().getTime() } });
-        }
-    }
-)
-
-chrome.idle.onStateChanged.addListener(async (newState) => {
-    console.log('state before if condition', newState);
-
-    if (newState != 'active') {
-        let { vid_status } = await chrome.storage.local.get({ 'vid_status': null });
-        if (vid_status && newState == 'idle') {
-            if (vid_status == 'play') {
-                console.log('state is idle but video playing');
-                // return;
-            }
-        }
-        console.log('state after if', newState);
-        await calculateTime();
-        await chrome.storage.local.set({ 'prev_url': null, 'idle_state': true });
-        console.log('prev_url set to null in onStateChanged');
-    } else {
-        let [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-        await chrome.storage.local.set({ 'idle_state': false, 'prev_url': tab ? { 'url': tab.url, 'time': new Date().getTime() } : null });
-        console.log('idlle_state is now false');
-    }
-})
-
-// chrome.action.setBadgeText({ text: '' })
 chrome.action.setBadgeBackgroundColor({ color: "cyan" });
 
 
@@ -188,4 +127,28 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 
 });
 
-setInterval(calculateTime, 1000)
+function checkBrowserFocus() {
+
+    chrome.windows.getCurrent(async function (browser) {
+
+        if (browser.focused)
+            return;
+        chrome.storage.local.set({ 'prev_time': 0 });
+    })
+
+}
+
+function checkUserIdle() {
+    chrome.idle.queryState(
+        60, // seconds
+        async function (newState) {
+            if (newState === "active") {
+                chrome.storage.local.set({ 'idle_state': false });
+            } else {
+                chrome.storage.local.set({ 'prev_time': 0, 'idle_state': true });
+            }
+        }
+    );
+}
+
+setInterval(() => { checkUserIdle(); checkBrowserFocus(); calculateTime(); }, 1000)
