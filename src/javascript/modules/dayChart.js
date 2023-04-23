@@ -55,7 +55,7 @@ const renderDayChart = (day) => {
                     label: function (context) {
                         let day_total = context.parsed;
                         const formatted_total = msToHM(day_total);
-                        return [`${context.label}`, `${formatted_total.h.toFixed(0)}h ${formatted_total.m.toFixed(0)}m`]
+                        return [`${context.label}`, `${Math.floor(formatted_total.h)}h ${Math.floor(formatted_total.m)}m`]
                     }
                 }
             },

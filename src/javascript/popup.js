@@ -25,7 +25,7 @@ let renderTable = async (chart) => {
         websites_card.append(renderDayChart(time_table))
         return;
     }
-    const day_progress = renderDayProgress(time_table, prev_url)
+    const day_progress = renderDayProgress(time_table)
     websites_card.append(day_progress);
 
 }
