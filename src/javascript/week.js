@@ -11,7 +11,11 @@ renderWeek();
 
 
 (async function () {
-    const { week, history } = await chrome.storage.local.get({ week: {}, history: {} });
+    const { week, history } = await chrome.storage.local.get({ week: null, history: null });
+    if(!week || !history){
+        document.querySelector("#relative-to-last-week").append("no enough data yet");
+        return;
+    }
     const [{ total }] = Object.values(sortHistory(history)).slice(0, 1);
 
     const percentage = getWeekDiffPercentage(getWeekTotal(week), total);
