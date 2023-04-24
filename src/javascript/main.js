@@ -1,11 +1,10 @@
 import { renderTable } from "./pages/popup.js";
 import { removeAllChildNodes } from "./modules/removeAllChildNode.js";
-import { renderWeek } from "./modules/renderWeek.js";
 import { renderHistory } from "./pages/history.js";
+import { renderWeekRelativeToHistory } from "./pages/week.js";
 
 
 var currentTarget = "";
-var _renderHistory;
 const contentElement = document.querySelector('#content');
 
 const navButtons = {
@@ -14,11 +13,12 @@ const navButtons = {
     history: document.querySelector('[data-target="history"]'),
 }
 
+
 function renderPopupContent() {
     removeAllChildNodes(contentElement);
     const popupContent = document.querySelector("#popup-content").content.cloneNode(true);
     contentElement.append(popupContent);
-    renderTable();
+    renderTable()();
 }
 
 
@@ -26,7 +26,7 @@ function renderWeekContent() {
     removeAllChildNodes(contentElement);
     const weekContent = document.querySelector("#week-content").content.cloneNode(true);
     contentElement.append(weekContent);
-    renderWeek();
+    renderWeekRelativeToHistory()();
 }
 
 
@@ -34,8 +34,7 @@ function renderHistoryContent() {
     removeAllChildNodes(contentElement);
     const historyContent = document.querySelector("#history-content").content.cloneNode(true);
     contentElement.append(historyContent);
-    // _renderHistory ??= renderHistory();
-    // _renderHistory();
+
     renderHistory()();
 }
 
