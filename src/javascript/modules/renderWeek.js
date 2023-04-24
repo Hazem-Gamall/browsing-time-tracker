@@ -1,4 +1,5 @@
 
+import { store } from "../store/store.js";
 import { renderDayChart } from "./dayChart.js";
 import { renderDayProgress } from "./dayProgress.js";
 import { getDayTotal } from "./getTotal.js";
@@ -41,11 +42,8 @@ const renderDayChartWithTotal = (day) => {
 
 const renderWeek = async (week) => {
     if (!week) {
-        ({ week } = await chrome.storage.local.get({ 'week': {} }));
+        week  = await store.week;
     }
-
-    week = sortWeek(week);
-
 
 
     let accordion = document.querySelector('#accordion');
