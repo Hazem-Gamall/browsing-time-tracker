@@ -1,6 +1,7 @@
 import { renderWeek } from '../modules/renderWeek.js'
 import { sortHistory } from '../modules/sorting.js';
 import { getFormattedWeekDiffPercentage, getPercentageArrowIconSpan, getWeekDiffPercentage } from '../modules/weekDiffPercentage.js';
+import { store } from '../store/store.js';
 
 
 export const renderHistory = (() => {
@@ -16,57 +17,10 @@ export const renderHistory = (() => {
     })
 
     async function closure() {
-        let { history } = await chrome.storage.local.get({ 'history': null });
+        let history = await store.history;
         let week_title = document.querySelector('#week-title');
-        //     history = {
-        //         "Fri Jul 01 2022 - Sat Jul 02 2022":{
-        //         week: {
-        //             'Fri Jul 01 2022': {
-        //                 '192.168.1.1': 18370,
-        //                     'business.whatsapp.com': 21618,
-        //                         'developer.mozilla.org': 1467,
-        //                             'developers.facebook.com': 388466,
-        //                                 'extensions': 63746,
-        //                                     'fast.com': 8095,
-        //                                         'getbootstrap.com': 160529,
-        //                                             'github.com': 31044,
-        //                                                 'ndpjmleniilehoebcbpkcomfhjnppnlk': 926,
-        //                                                     'newtab': 24159,
-        //                                                         'settings': 4851,
-        //                                                             'www.coursera.org': 1201,
-        //                                                                 'www.facebook.com': 98852,
-        //                                                                     'www.google.com': 33383,
-        //                                                                         'www.messenger.com': 7505,
-        //                                                                             'www.wati.io': 1920,
-        //                                                                                 'www.youtube.com': 5217232
-        //             },
-        //             'Sat Jul 02 2022': {
-        //                 '192.168.1.1': 18370,
-        //                     'business.whatsapp.com': 21618,
-        //                         'developer.mozilla.org': 1467,
-        //                             'developers.facebook.com': 388466,
-        //                                 'extensions': 63746,
-        //                                     'fast.com': 8095,
-        //                                         'getbootstrap.com': 160529,
-        //                                             'github.com': 31044,
-        //                                                 'ndpjmleniilehoebcbpkcomfhjnppnlk': 926,
-        //                                                     'newtab': 24159,
-        //                                                         'settings': 4851,
-        //                                                             'www.coursera.org': 1201,
-        //                                                                 'www.facebook.com': 98852,
-        //                                                                     'www.google.com': 33383,
-        //                                                                         'www.messenger.com': 7505,
-        //                                                                             'www.wati.io': 1920,
-        //                                                                                 'www.youtube.com': 5217232
-        //             },
-        //         },
-        //         total: 6083364
-        //     }
-        // }
-
+        
         if (history) {
-            history = sortHistory(history);
-
             let history_list = Object.keys(history);
             if (index < history_list.length && index >= 0) {
                 week_title.textContent = history_list[index];

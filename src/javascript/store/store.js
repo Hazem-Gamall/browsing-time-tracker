@@ -1,4 +1,4 @@
-import { sortDay, sortWeek } from "../modules/sorting.js";
+import { sortDay, sortHistory, sortWeek } from "../modules/sorting.js";
 
 export const store = {
     _time_table: undefined,
@@ -21,5 +21,15 @@ export const store = {
             return this._week;
         })();
     },
-    history: {},
+
+    _history: undefined,
+    get history() {
+        return (async () => {
+            if (!this._history) {
+                const { history: temp } = await chrome.storage.local.get({ "history": {} });
+                this._history = sortHistory(temp);
+            }
+            return this._history;
+        })();
+    },
 }
