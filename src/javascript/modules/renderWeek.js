@@ -4,7 +4,9 @@ import { renderDayProgress } from "./dayProgress.js";
 import { getDayTotal } from "./getTotal.js";
 import { msToHM } from "./millisFormatting.js";
 import { numberAnimation } from "./numberAnimation.js";
+import { removeAllChildNodes } from "./removeAllChildNode.js";
 import { sortDay, sortWeek } from "./sorting.js";
+import { renderWweekChart } from "./weekChart.js";
 
 const getAccordionElements = () => {
     let day_entry = document.querySelector('#day-accordion').content.cloneNode(true);
@@ -72,7 +74,7 @@ const renderWeek = async (week) => {
                 day_progress && card_body.append(day_progress);
                 return;
             }
-            
+
             day_progress && (day_progress.style.display = "none");
             if (day_chart) {
                 day_chart.style.display = "block"
@@ -93,7 +95,7 @@ const renderWeek = async (week) => {
                 }, 300)
                 return;
             }
-         
+
 
             toggleCharts();
 
@@ -117,14 +119,16 @@ const renderWeek = async (week) => {
     let week_total_formatted = msToHM(week_total);
     total_week_time_element.innerHTML =
         `
-        <span class='num'>${week_total_formatted.h.toFixed(0)}</span>h <span class='num'>${week_total_formatted.m.toFixed(0)}</span>m
+        <span class='num'>${Math.floor(week_total_formatted.h)}</span>h <span class='num'>${Math.floor(week_total_formatted.m)}</span>m
         `;
 
 
 
     let week_average_formatted = msToHM(week_total / (Object.keys(week).length));
-    document.querySelector('#week-average-h').textContent = week_average_formatted.h.toFixed(0);
-    document.querySelector('#week-average-m').textContent = week_average_formatted.m.toFixed(0);
+    document.querySelector('#week-average-h').textContent = Math.floor(week_average_formatted.h);
+    document.querySelector('#week-average-m').textContent = Math.floor(week_average_formatted.m);
+    removeAllChildNodes(document.querySelector('#week-chart'));
+    document.querySelector('#week-chart').append(renderWweekChart(week));
 
     numberAnimation();
 
