@@ -1,6 +1,6 @@
-import { getWeekTotal } from './modules/getTotal.js';
-import { renderWeek } from './modules/renderWeek.js';
-import { sortHistory } from './modules/sorting.js';
+import { getWeekTotal } from '../modules/getTotal.js';
+import { renderWeek } from '../modules/renderWeek.js';
+import { sortHistory } from '../modules/sorting.js';
 
 import {
     getFormattedWeekDiffPercentage, getWeekDiffPercentage,

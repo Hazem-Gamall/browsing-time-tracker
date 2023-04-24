@@ -5,7 +5,7 @@
     "description":"Monitor the time wasted on websites",
         
     "action":{
-        "default_popup":"src/html/popup.html"
+        "default_popup":"src/html/main.html"
     },
 
     "options_ui": {
