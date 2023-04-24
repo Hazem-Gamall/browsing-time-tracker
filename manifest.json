@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name":"Test Time Tracker",
+    "name":"Browsing Time Tracker",
     "version":"2.0",
     "description":"Monitor the time wasted on websites",
         
@@ -16,7 +16,7 @@
     "content_scripts":[
         {
             "matches":["https://*.youtube.com/*"],
-            "js":["src/javascript/content.js"]
+            "js":["src/javascript/content/BrowsingTimeTrackerContent.js"]
         }
     ],
 
