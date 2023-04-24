@@ -94,20 +94,9 @@ export const renderHistory = (() => {
                     document.querySelector('#right-arrow').disabled = false;
                 }
             }
-            // for(const week in history){
-            //     let week_history_div = document.createElement('div');
-            //     week_history_div.innerHTML = 
-            //     `
-            //     <p>${JSON.stringify(history[week])}</p>
-            //     `
-            //     console.log(history[week])
-            //     week_div.append(week_history_div);
-            // }
         }
-
-
     }
 
     return closure;
-
+    
 })
