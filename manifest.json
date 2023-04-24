@@ -15,7 +15,7 @@
 
     "content_scripts":[
         {
-            "matches":["https://*.youtube.com/*"],
+            "matches":["*://*/*"],
             "js":["src/javascript/content/browsingTimeTrackerContent.js"]
         }
     ],

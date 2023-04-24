@@ -1,31 +1,44 @@
-let videoStatus = "";
 
-function definePlayingProperty(){
+window.onunload = () => { sendMessageToExtension("unload") };
+window.onbeforeunload = () => { sendMessageToExtension("before unload") };
+
+function definePlayingProperty() {
     Object.defineProperty(HTMLMediaElement.prototype, 'playing', {
-        get: function(){
+        get: function () {
             return !!(this.currentTime > 0 && !this.paused && !this.ended && this.readyState > 2);
         }
     })
 }
 
-function checkVideoPlayback(){
-    const videoElement = document.querySelector('video');
-    videoElement?.playing ?? definePlayingProperty();
-    return document.querySelector('video').playing ? "play":"paused"; 
+function checkVideoPlayback() {
+    const videoElements = document.querySelectorAll('video');
+    if (!videoElements.length)
+        return false;
+    const isAnyVideoPlaying = Array.from(videoElements).some((element) => {
+        element.playing ?? definePlayingProperty();
+        return element.playing
+    });
+
+    return isAnyVideoPlaying;
 }
 
-function reportVideoStatus(){
-    const status = checkVideoPlayback()
-    if(status === videoStatus)
+function reportVideoStatus() {
+    if (!document.hasFocus())
         return;
+    const status = checkVideoPlayback() ? "play" : "paused";
     videoStatus = status;
     console.log(`video ${videoStatus}`);
-                try{
-                    chrome.runtime.sendMessage(videoStatus);
-                }catch(e){
-                    console.log("Error:", e);
-                }
-    
+    sendMessageToExtension(videoStatus);
+
+}
+
+function sendMessageToExtension(message) {
+    console.log({ message });
+    try {
+        chrome.runtime.sendMessage(videoStatus);
+    } catch (e) {
+        console.log("Error:", e);
+    }
 }
 
 setInterval(reportVideoStatus, 1000);
