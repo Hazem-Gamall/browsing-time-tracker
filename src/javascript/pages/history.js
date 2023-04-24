@@ -87,7 +87,8 @@ export const renderHistory = (() => {
                 } else {
                     document.querySelector('#left-arrow').disabled = false;
                 }
-                if (index == history_list.length - 2) {
+
+                if (history_list.length == 1 || index == history_list.length - 2) {
                     document.querySelector('#right-arrow').disabled = true;
                 } else {
                     document.querySelector('#right-arrow').disabled = false;
