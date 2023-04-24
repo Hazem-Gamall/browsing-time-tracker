@@ -1,5 +1,5 @@
 import { getDayTotal } from "./getTotal.js";
-import { msToHM } from "./millisFormatting.js";
+import { msToHM, msToTextFormat } from "./millisFormatting.js";
 import { truncateString } from "./truncateString.js";
 import { faviconURL } from "./faviconURL.js";
 import { sortDay } from "./sorting.js";
@@ -54,8 +54,8 @@ const renderDayChart = (day) => {
                 callbacks: {
                     label: function (context) {
                         let day_total = context.parsed;
-                        const formatted_total = msToHM(day_total);
-                        return [`${context.label}`, `${Math.floor(formatted_total.h)}h ${Math.floor(formatted_total.m)}m`]
+                        const formatted_total = msToTextFormat(day_total, true);
+                        return [`${context.label}`, `${formatted_total}`]
                     }
                 }
             },

@@ -1,6 +1,6 @@
 import { faviconURL } from "./faviconURL.js";
 import { getDayTotal } from "./getTotal.js";
-import { msToHM } from "./millisFormatting.js";
+import { msToHM, msToTextFormat } from "./millisFormatting.js";
 
 export function renderDayProgress(day, prev_url) {
 
@@ -36,14 +36,14 @@ export function renderDayProgress(day, prev_url) {
 
         }
         website_entry.querySelector("span").textContent = hostname;
-        const formatted_entry = msToHM(time_spent_on_hostname);
-        website_entry.querySelector(".progress-bar").textContent = `${Math.floor(formatted_entry.h)}h ${Math.floor(formatted_entry.m)}m`;
+        const formatted_entry = msToTextFormat(time_spent_on_hostname, true);
+        website_entry.querySelector(".progress-bar").textContent = formatted_entry;
         website_entry.querySelector(".progress-bar").style.width = `${percentage}%`;
 
         website_entry.title =
             `
         <p>${hostname}</p>
-        <span>${Math.floor(formatted_entry.h)}h ${Math.floor(formatted_entry.m)}m (${Math.floor(percentage)}%)</span>
+        <span>${formatted_entry} (${Math.floor(percentage)}%)</span>
         `;
 
 

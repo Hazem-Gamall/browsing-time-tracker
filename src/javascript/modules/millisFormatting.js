@@ -22,17 +22,20 @@ function msToDays(miliseconds) {
 
 }
 
-function msToBadgeFormat(miliseconds) {
+function msToTextFormat(miliseconds, includeMinutes) {
     const seconds = Math.floor(msToS(miliseconds));
     if (seconds < 60)
         return `${seconds}s`
     const minutes = Math.floor(msToM(miliseconds));
     if (minutes < 60)
         return `${minutes}m`;
-    const { h} = msToHM(miliseconds);
+    const { h, m } = msToHM(miliseconds);
+    
+    if(includeMinutes)
+        return `${Math.floor(h)}h ${Math.floor(m)}m}`
     return `${Math.floor(h)}h`;
 }
 
 
 
-export { msToHM, msToM, msToDays, msToS, msToBadgeFormat }
+export { msToHM, msToM, msToDays, msToS, msToTextFormat }

@@ -1,5 +1,5 @@
 import { getWeekTotal } from "./modules/getTotal.js";
-import { msToBadgeFormat, msToDays, msToM, msToS } from "./modules/millisFormatting.js";
+import { msToTextFormat, msToDays, msToM, msToS } from "./modules/millisFormatting.js";
 import { sortDay, sortWeek } from "./modules/sorting.js";
 
 chrome.alarms.create('oneMinuteAlarm', { periodInMinutes: 1 });
@@ -65,7 +65,7 @@ const handleAlarm = async (alarm) => {
 chrome.alarms.onAlarm.addListener(handleAlarm);
 
 function updateBadgeText(tab_hostname_time) {
-    let badge_time_fromatted = msToBadgeFormat(tab_hostname_time);
+    let badge_time_fromatted = msToTextFormat(tab_hostname_time);
     chrome.action.setBadgeText({ text: badge_time_fromatted });
 }
 
