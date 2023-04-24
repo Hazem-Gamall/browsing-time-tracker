@@ -1,7 +1,4 @@
-//handle the video events
-document.addEventListener("load",() => {
-    
-})
+let videoStatus = "";
 
 function definePlayingProperty(){
     Object.defineProperty(HTMLMediaElement.prototype, 'playing', {
@@ -13,15 +10,18 @@ function definePlayingProperty(){
 
 function checkVideoPlayback(){
     const videoElement = document.querySelector('video');
-    videoElement.playing ?? definePlayingProperty();
+    videoElement?.playing ?? definePlayingProperty();
     return document.querySelector('video').playing ? "play":"paused"; 
 }
 
 function reportVideoStatus(){
-    const status = checkVideoPlayback();
-    console.log(`video ${status}`);
+    const status = checkVideoPlayback()
+    if(status === videoStatus)
+        return;
+    videoStatus = status;
+    console.log(`video ${videoStatus}`);
                 try{
-                    chrome.runtime.sendMessage(status);
+                    chrome.runtime.sendMessage(videoStatus);
                 }catch(e){
                     console.log("Error:", e);
                 }
