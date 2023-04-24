@@ -1,28 +1,33 @@
 //handle the video events
+document.addEventListener("load",() => {
+    
+})
 
-window.addEventListener('yt-page-data-updated', function () {
-    console.log('url change');
-    console.log('hello there')
-    var vid = document.getElementsByTagName('video')[0];
+function definePlayingProperty(){
+    Object.defineProperty(HTMLMediaElement.prototype, 'playing', {
+        get: function(){
+            return !!(this.currentTime > 0 && !this.paused && !this.ended && this.readyState > 2);
+        }
+    })
+}
 
-    if(vid){
-        let vid_event_handler = (message) => 
-            () => {
-                console.log(`video ${message}`);
+function checkVideoPlayback(){
+    const videoElement = document.querySelector('video');
+    videoElement.playing ?? definePlayingProperty();
+    console.log("video status", document.querySelector('video').playing);
+    return document.querySelector('video').playing ? "play":"paused"; 
+}
+
+function reportVideoStatus(){
+    const status = checkVideoPlayback();
+    console.log(`video ${status}`);
                 try{
-                    chrome.runtime.sendMessage(message);
+                    chrome.runtime.sendMessage(status);
                 }catch(e){
-                    console.log(e);
+                    console.log("Error:", e);
                 }
-            }
-        
-        vid.onpause = vid_event_handler('pause');
-        vid.onplay = vid_event_handler('play');
-        vid.onplaying = vid_event_handler('play');
-        vid.onabort = vid_event_handler('abort');
-        vid.onended = vid_event_handler('ended');
+    
+}
 
-    }
-
-});
+setInterval(reportVideoStatus, 1000);
 
