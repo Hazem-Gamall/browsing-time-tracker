@@ -14,15 +14,7 @@ export function renderWweekChart(week) {
             {
                 label: 'Week usage',
                 data: Object.values(week).map((day) => msToHM(getDayTotal(day)).h.toFixed(1)),
-                backgroundColor: [
-                    '#003f5c',
-                    '#374c80',
-                    '#7a5195',
-                    '#bc5090',
-                    '#ef5675',
-                    '#ff764a',
-                    '#ffa600',
-                ],
+                backgroundColor: ["#e60049", "#0bb4ff", "#50e991", "#e6d800", "#9b19f5", "#ffa300", "#dc0ab4", "#b3d4ff", "#00bfa0"],
                 // barThickness:10,
 
 
@@ -47,8 +39,8 @@ export function renderWweekChart(week) {
                             mode: "horizontal",
                             value: msToHM(getWeekTotal(week) / Object.keys(week).length).h,
                             scaleID: 'y',
-                            borderWidth: 1,
-                            borderColor: '#FF0000'
+                            borderWidth: 1.1,
+                            borderColor: '#001a4d'
                         }
                     ]
                 }
