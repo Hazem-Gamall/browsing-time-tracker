@@ -82,15 +82,23 @@ const renderDayChart = (day) => {
                 label: 'Time spent',
                 data: hostname_totals,
                 borderWidth: 1,
-                backgroundColor: day_keys.map(() => `rgb(10,32,113)`)
+                backgroundColor: [
+                    "#b30000",
+                    "#7c1158",
+                    "#4421af",
+                    "#1a53ff",
+                    "#0d88e6",
+                    "#00b7c7",
+                    "#5ad45a",
+                    "#8be04e",
+                    "#ebdc78"
+                ]
             }]
         },
         plugins: [ChartDataLabels],
         options
     });
     let day_chart_div = document.createElement("div");
-
-    Promise.all(day_keys.map((hostname, index) => setChartFaviconColor(hostname, chart, index))).then(() => chart.update());
 
     day_chart_div.append(day_canvas);
     return day_chart_div;
