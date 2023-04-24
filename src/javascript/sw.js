@@ -70,16 +70,26 @@ function updateBadgeText(tab_hostname_time) {
 }
 
 
+async function isIdle(){
+    const {vid_status, idle_state} =  await chrome.storage.local.get({'idle_state': false, 'vid_status': null})
+    console.log({ vid_status,idle_state })
+    if(idle_state === "active")
+        return false;
+    else if(idle_state === "idle" && vid_status === "play")
+        return false;
+    return true;
+}
+
 //on page updated, tab changed, state is idle/locked, or window is back in focus
 let calculateTime = async () => {
     let [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
 
     if (tab) {
         // console.log('activated tab', tab.url);
-        let { prev_time, time_table, idle_state, vid_status, inFocus } = await chrome.storage.local.get({ 'prev_time': null, 'time_table': {}, 'idle_state': false, 'vid_status': null, 'inFocus': true })
-
-        console.log({ idle_state }, { inFocus }, { vid_status });
-        if (inFocus && (!idle_state || vid_status === 'play')) {
+        let { prev_time, time_table, inFocus } = await chrome.storage.local.get({ 'prev_time': null, 'time_table': {}, 'inFocus': true })
+        const idle = await isIdle();
+        console.log({ inFocus, idle });
+        if (inFocus && !idle) {
             let tab_url;
             try {
                 tab_url = new URL(tab.url);
@@ -103,7 +113,7 @@ let calculateTime = async () => {
             console.log("time_table updated");
 
         } else {
-            console.log("idle", { idle_state }, { vid_status });
+            console.log("idle", {inFocus});
         }
         await chrome.storage.local.set(
             {
@@ -121,12 +131,18 @@ chrome.tabs.onUpdated.addListener(() => { console.log('on Updated'); calculateTi
 chrome.action.setBadgeBackgroundColor({ color: "cyan" });
 
 
-chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
-    console.log('message is here', message);
+chrome.runtime.onMessage.addListener((() => {
+    let timeoutID;
+    async function closure(message, sender, sendResponse){
+        console.log({timeoutID});
+        console.log('message is here', message);
+        await chrome.storage.local.set({ 'vid_status': message });
+        clearTimeout(timeoutID);
+        timeoutID = setTimeout(async () => await chrome.storage.local.set({ 'vid_status': 'pause' }), 30000)
+    }
+    return closure;
 
-    await chrome.storage.local.set({ 'vid_status': message });
-
-});
+})());
 
 function checkBrowserFocus() {
     chrome.windows.getCurrent(function (browser) {
@@ -138,11 +154,7 @@ function checkUserIdle() {
     chrome.idle.queryState(
         30, // seconds
         async function (newState) {
-            if (newState === "active") {
-                chrome.storage.local.set({ 'idle_state': false });
-            } else {
-                chrome.storage.local.set({ 'idle_state': true });
-            }
+            chrome.storage.local.set({ 'idle_state': newState });
         }
     );
 }
