@@ -83,7 +83,11 @@ let calculateTime = async () => {
             let tab_url;
             try {
                 tab_url = new URL(tab.url);
+                if(tab_url.hostname === 'newtab'){
+                    throw new Error("newtab");
+                }
             } catch (e) {
+                chrome.action.setBadgeText({ text: '' });
                 console.log("exception in converting url", e);
                 console.log('tab: ', tab);
                 return;
