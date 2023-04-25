@@ -59,5 +59,8 @@
   },
   "not_enough_data":{
     "message":"لا توجد بيانات كافية."
+  },
+  "usage":{
+    "message":"الاستهالك"
   }
 }

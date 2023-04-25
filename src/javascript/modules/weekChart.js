@@ -1,3 +1,4 @@
+import { localizeDate, localizeMessage } from "../localization/localize.js";
 import { getDayTotal, getWeekTotal } from "./getTotal.js";
 import { msToHMS } from "./millisFormatting.js";
 
@@ -9,10 +10,10 @@ export function renderWweekChart(week) {
 
 
     const data = {
-        labels: Object.keys(week).map((key) => key.split(' ')[0]),
+        labels: Object.keys(week).map((key) => localizeDate(new Date(key)).split(' ')[0]),
         datasets: [
             {
-                label: 'Week usage',
+                label: localizeMessage('Usage'),
                 data: Object.values(week).map((day) => msToHMS(getDayTotal(day)).h.toFixed(1)),
                 backgroundColor: ["#e60049", "#0bb4ff", "#50e991", "#e6d800", "#9b19f5", "#ffa300", "#dc0ab4", "#b3d4ff", "#00bfa0"],
                 // barThickness:10,

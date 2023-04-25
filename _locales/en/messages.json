@@ -59,5 +59,8 @@
   },
   "not_enough_data": {
     "message": "Not enough data yey"
+  },
+  "usage":{
+    "message":"Usage"
   }
 }
