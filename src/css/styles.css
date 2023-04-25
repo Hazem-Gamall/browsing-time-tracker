@@ -14,11 +14,9 @@ html,body{
 
 
 body {
-  direction: "__MSG_@@bidi_dir__";
   background-color: rgb(230, 230, 230);
   width: 380px;
   max-height: 150px;
-
 }
 
 .content{

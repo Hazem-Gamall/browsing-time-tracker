@@ -21,8 +21,12 @@
     "description": "اختصار ساعة"
   },
   "m": {
-    "message": "م",
+    "message": "د",
     "description": "اختصار دقيقة"
+  },
+  "s":{
+    "message": "ث",
+    "description": "اختصار ثانية"
   },
   "daily_average": {
     "message": "المتوسط اليومي"

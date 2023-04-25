@@ -24,6 +24,10 @@
     "message": "m",
     "description": "short for minute"
   },
+  "s":{
+    "message": "s",
+    "description": "short for second"
+  },
   "daily_average": {
     "message": "Daily avgerage"
   },

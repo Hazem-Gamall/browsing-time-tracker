@@ -6,6 +6,7 @@ import { renderWeekRelativeToHistory } from "./pages/week.js";
 
 var currentTarget = "";
 const contentElement = document.querySelector('#content');
+document.body.setAttribute("dir", chrome.i18n.getMessage("@@bidi_dir"));
 
 const navButtons = {
     popup: document.querySelector('[data-target="popup"]'),
