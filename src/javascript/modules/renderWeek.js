@@ -3,7 +3,7 @@ import { store } from "../store/store.js";
 import { renderDayChart } from "./dayChart.js";
 import { renderDayProgress } from "./dayProgress.js";
 import { getDayTotal } from "./getTotal.js";
-import { msToHM } from "./millisFormatting.js";
+import { msToHMS } from "./millisFormatting.js";
 import { numberAnimation } from "./numberAnimation.js";
 import { removeAllChildNodes } from "./removeAllChildNode.js";
 import { sortDay, sortWeek } from "./sorting.js";
@@ -29,7 +29,7 @@ const getAccordionElements = () => {
 
 const renderDayChartWithTotal = (day) => {
     let day_chart = renderDayChart(day);
-    let day_total_formatted = msToHM(getDayTotal(day));
+    let day_total_formatted = msToHMS(getDayTotal(day));
     let day_total_element = document.createElement("h5");
     day_total_element.classList.add("text-center", "mt-4");
 
@@ -114,7 +114,7 @@ const renderWeek = async (week) => {
     accordion.innerHTML = '';
     accordion.append(week_day_elements)
     let total_week_time_element = document.querySelector('#total-week-time');
-    let week_total_formatted = msToHM(week_total);
+    let week_total_formatted = msToHMS(week_total);
     total_week_time_element.innerHTML =
         `
         <span class='num'>${Math.floor(week_total_formatted.h)}</span>h <span class='num'>${Math.floor(week_total_formatted.m)}</span>m
@@ -122,7 +122,7 @@ const renderWeek = async (week) => {
 
 
 
-    let week_average_formatted = msToHM(week_total / (Object.keys(week).length));
+    let week_average_formatted = msToHMS(week_total / (Object.keys(week).length));
     document.querySelector('#week-average-h').textContent = Math.floor(week_average_formatted.h);
     document.querySelector('#week-average-m').textContent = Math.floor(week_average_formatted.m);
     removeAllChildNodes(document.querySelector('#week-chart'));
