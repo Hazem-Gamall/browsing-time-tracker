@@ -1,6 +1,5 @@
-const hour = chrome.i18n.getMessage("h");
-const min = chrome.i18n.getMessage("m");
-const sec = chrome.i18n.getMessage("s");
+import { hour, localizeAndFloor, min, sec } from "../localization/localize.js";
+
 
 
 function msToHMS(miliseconds) {
@@ -31,26 +30,31 @@ function msToDays(miliseconds) {
 
 }
 
+
 function msToTextFormat(miliseconds, includeMinutes, includeSeconds) {
-    console.log({hour, min, sec})
-    const seconds = Math.floor(msToS(miliseconds));
+    const seconds = localizeAndFloor(msToS(miliseconds));
     if (seconds < 60)
         return `${seconds}${sec}`
     let { h, m, s } = msToMS(miliseconds);
     if (m < 60) {
+        m = localizeAndFloor(m);
+        s= localizeAndFloor(s);
         if (includeSeconds)
-            return `${Math.floor(m)}${min} ${Math.floor(s)}${sec}`;
+            return `${m}${min} ${s}${sec}`;
         else
-            return `${Math.floor(m)}${min}`;
+            return `${m}${min}`;
     }
 
-    ({ h, m, s } = msToHMS(miliseconds));
+    ({ h, m, s } = Object.fromEntries(
+        Object.entries(msToHMS(miliseconds))
+            .map(([a,b]) => [a,localizeAndFloor(b)])
+    ));
 
     if (includeMinutes)
-        return `${Math.floor(h)}${hour} ${Math.floor(m)}${min}`
+        return `${h}${hour} ${m}${min}`
     else if (includeSeconds)
-        return `${Math.floor(h)}${hour} ${Math.floor(m)}${min} ${Math.floor(s)}${sec}`
-    return `${Math.floor(h)}${hour}`;
+        return `${h}${hour} ${m}${min} ${s}${sec}`
+    return `${localizeAndFloor(h)}${hour}`;
 }
 
 

@@ -53,5 +53,8 @@
   },
   "total_browsing_time":{
     "message":"Total browsing time"
+  },
+  "total_time":{
+    "message":"Total time"
   }
 }

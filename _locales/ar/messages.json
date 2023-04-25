@@ -1,6 +1,6 @@
 {
   "extName": {
-    "message": "متعقب وقت التصفح",
+    "message": "Browsing time tracker — متعقب وقت التصفح",
     "description": "اسم الإضافة"
   },
   "today": {
@@ -53,5 +53,8 @@
   },
   "total_browsing_time": {
     "message": "مجموع وقت التصفح"
+  },
+  "total_time":{
+    "message":"مجموع الوقت"
   }
 }

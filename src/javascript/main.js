@@ -2,11 +2,16 @@ import { renderTable } from "./pages/popup.js";
 import { removeAllChildNodes } from "./modules/removeAllChildNode.js";
 import { renderHistory } from "./pages/history.js";
 import { renderWeekRelativeToHistory } from "./pages/week.js";
+import { localizeHtml } from "./localization/localize.js";
 
 
 var currentTarget = "";
 const contentElement = document.querySelector('#content');
-document.body.setAttribute("dir", chrome.i18n.getMessage("@@bidi_dir"));
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    document.body.setAttribute("dir", chrome.i18n.getMessage("@@bidi_dir"));
+})
 
 const navButtons = {
     popup: document.querySelector('[data-target="popup"]'),
@@ -40,7 +45,7 @@ function renderHistoryContent() {
 }
 
 function setActiveNavButton() {
-    console.log({currentTarget});
+    console.log({ currentTarget });
     navButtons[currentTarget].classList.add("active");
     Object.keys(navButtons)
         .filter((button_key) => button_key !== currentTarget)
@@ -63,6 +68,7 @@ function renderPageContent(newTarget) {
             renderHistoryContent();
             break;
     }
+    localizeHtml(document.body);
     setActiveNavButton();
 }
 
