@@ -32,9 +32,10 @@ function msToDays(miliseconds) {
 
 
 function msToTextFormat(miliseconds, includeMinutes, includeSeconds) {
-    const seconds = localizeAndFloor(msToS(miliseconds));
-    if (seconds < 60)
-        return `${seconds}${sec}`
+    const seconds = msToS(miliseconds);
+    if (seconds < 60){
+        return `${localizeAndFloor(seconds)}${sec}`
+    }
     let { h, m, s } = msToMS(miliseconds);
     if (m < 60) {
         m = localizeAndFloor(m);
