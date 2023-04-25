@@ -1,3 +1,5 @@
+import { localizeAndFloor, localizeMessage } from "../localization/localize.js";
+
 function getWeekDiffPercentage(current_week_total, previous_week_total) {
     const change = (current_week_total - previous_week_total);
     const change_percentage = (change / previous_week_total) * 100;
@@ -5,7 +7,9 @@ function getWeekDiffPercentage(current_week_total, previous_week_total) {
 }
 
 function getFormattedWeekDiffPercentage(percentage) {
-    return `${Math.floor(Math.abs(percentage))}% ${percentage > 0 ? "higher" : "lower"} than last week.`
+    const comp_adj = localizeMessage(percentage > 0 ? "higher" : "lower")
+    const formatted_percentage = `${localizeAndFloor(Math.abs(percentage))}%`;
+    return localizeMessage("realtion_to_lw", [formatted_percentage, comp_adj])
 }
 
 function getPercentageArrowIconSpan(percentage) {
@@ -15,4 +19,4 @@ function getPercentageArrowIconSpan(percentage) {
 
 }
 
-export {getWeekDiffPercentage, getFormattedWeekDiffPercentage, getPercentageArrowIconSpan};
+export { getWeekDiffPercentage, getFormattedWeekDiffPercentage, getPercentageArrowIconSpan };

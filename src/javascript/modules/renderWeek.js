@@ -4,7 +4,7 @@ import { renderDayChart } from "./dayChart.js";
 import { renderDayProgress } from "./dayProgress.js";
 import { getDayTotal } from "./getTotal.js";
 import { msToHMS, msToTextFormat } from "./millisFormatting.js";
-import { localizeAndFloor, min, sec, hour, localizeHtml, localizeDate } from "../localization/localize.js";
+import { localizeAndFloor, min, hour, localizeDate, localizeMessage } from "../localization/localize.js";
 import { numberAnimation } from "./numberAnimation.js";
 import { removeAllChildNodes } from "./removeAllChildNode.js";
 import { sortDay } from "./sorting.js";
@@ -34,7 +34,7 @@ const renderDayChartWithTotal = (day) => {
     let day_total_element = document.createElement("h5");
     day_total_element.classList.add("text-center", "mt-4");
 
-    day_total_element.textContent = `${chrome.i18n.getMessage("total_time")}: ${day_total_formatted}`
+    day_total_element.textContent = `${localizeMessage("total_time")}: ${day_total_formatted}`
     day_chart.prepend(day_total_element);
     return day_chart;
 }
@@ -55,7 +55,7 @@ const renderWeek = async (week) => {
         let { day_entry, accordion_button, card_body, date_element, accordion_body, toggle_btn, toggle_label } = getAccordionElements();
         toggle_btn.id = `${day_key}-toggle`
         toggle_label.htmlFor = `${day_key}-toggle`;
-        toggle_label.textContent = chrome.i18n.getMessage("more_details");
+        toggle_label.textContent = localizeMessage("more_details");
         accordion_button.setAttribute("data-target", `#${day_key_id}`)
         accordion_button.setAttribute("aria-controls", `#${day_key_id}`)
 

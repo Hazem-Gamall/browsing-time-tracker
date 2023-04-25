@@ -24,7 +24,7 @@
     "message": "m",
     "description": "short for minute"
   },
-  "s":{
+  "s": {
     "message": "s",
     "description": "short for second"
   },
@@ -32,7 +32,7 @@
     "message": "Daily avgerage"
   },
   "realtion_to_lw": {
-    "message": "$$PERCENTAGE$$ $$COMP_ADJ$$ than last week.",
+    "message": "$PERCENTAGE$ $COMP_ADJ$ than last week.",
     "description": "infrom the user of the realtion between this week and last week's usage",
     "placeholders": {
       "PERCENTAGE": {
@@ -51,10 +51,13 @@
   "lower": {
     "message": "lower"
   },
-  "total_browsing_time":{
-    "message":"Total browsing time"
+  "total_browsing_time": {
+    "message": "Total browsing time"
   },
-  "total_time":{
-    "message":"Total time"
+  "total_time": {
+    "message": "Total time"
+  },
+  "not_enough_data": {
+    "message": "Not enough data yey"
   }
 }

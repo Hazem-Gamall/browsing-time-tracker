@@ -32,7 +32,7 @@
     "message": "المتوسط اليومي"
   },
   "realtion_to_lw": {
-    "message": "$$PERCENTAGE$$ $$COMP_ADJ$$ من الأسبوع الماضي.",
+    "message": "$PERCENTAGE$ $COMP_ADJ$ من الأسبوع الماضي.",
     "description": "infrom the user of the realtion between this week and last week's usage",
     "placeholders": {
       "PERCENTAGE": {
@@ -56,5 +56,8 @@
   },
   "total_time":{
     "message":"مجموع الوقت"
+  },
+  "not_enough_data":{
+    "message":"لا توجد بيانات كافية."
   }
 }
