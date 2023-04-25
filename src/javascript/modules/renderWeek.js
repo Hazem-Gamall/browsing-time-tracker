@@ -4,7 +4,7 @@ import { renderDayChart } from "./dayChart.js";
 import { renderDayProgress } from "./dayProgress.js";
 import { getDayTotal } from "./getTotal.js";
 import { msToHMS, msToTextFormat } from "./millisFormatting.js";
-import { localizeAndFloor, min, sec, hour, localizeHtml } from "../localization/localize.js";
+import { localizeAndFloor, min, sec, hour, localizeHtml, localizeDate } from "../localization/localize.js";
 import { numberAnimation } from "./numberAnimation.js";
 import { removeAllChildNodes } from "./removeAllChildNode.js";
 import { sortDay } from "./sorting.js";
@@ -102,7 +102,7 @@ const renderWeek = async (week) => {
         }
 
         accordion_button.onclick = renderCharts;
-        date_element.textContent = day_key;
+        date_element.textContent = localizeDate(new Date(day_key));
         accordion_body.id = day_key_id;
 
         week_total += getDayTotal(week[day_key]);
