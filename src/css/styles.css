@@ -2,6 +2,14 @@ html,body{
   min-height:101%;
 }
 
+@font-face {
+  font-family: 'Droid Arabic Kufi';
+  src: url('../../fonts/Droid.Arabic.Kufi.ttf') format('truetype');
+}
+
+html[lang="ar"] body{
+  font-family: 'Droid Arabic Kufi', serif;
+}
 
 @keyframes slideFromTop {
   0%{
