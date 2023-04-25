@@ -1,6 +1,6 @@
 import { faviconURL } from "./faviconURL.js";
 import { getDayTotal } from "./getTotal.js";
-import { msToHM, msToTextFormat } from "./millisFormatting.js";
+import { msToTextFormat } from "./millisFormatting.js";
 
 export function renderDayProgress(day, prev_url) {
 

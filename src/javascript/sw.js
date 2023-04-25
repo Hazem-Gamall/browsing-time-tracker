@@ -1,6 +1,6 @@
 import { getWeekTotal } from "./modules/getTotal.js";
-import { msToTextFormat, msToDays, msToM, msToS } from "./modules/millisFormatting.js";
-import { sortDay, sortWeek } from "./modules/sorting.js";
+import { msToTextFormat, msToDays} from "./modules/millisFormatting.js";
+import { sortWeek } from "./modules/sorting.js";
 
 chrome.alarms.create('oneMinuteAlarm', { periodInMinutes: 1 });
 let save_day = async (prev_day) => {

@@ -2,7 +2,7 @@
 import { renderDayChart } from '../modules/dayChart.js'
 import { renderDayProgress } from '../modules/dayProgress.js';
 import { getDayTotal } from '../modules/getTotal.js';
-import { msToHM } from '../modules/millisFormatting.js';
+import { msToHMS, msToTextFormat } from '../modules/millisFormatting.js';
 import { removeAllChildNodes } from '../modules/removeAllChildNode.js';
 import { store } from '../store/store.js';
 
@@ -31,8 +31,8 @@ export const renderTable = function () {
 
         let day_total = getDayTotal(time_table);
         let day_usage_element = document.querySelector('#day-usage');
-        const formatted_total = msToHM(day_total);
-        day_usage_element.textContent = `${Math.floor(formatted_total.h)}h ${Math.floor(formatted_total.m)}m`
+        const formatted_total = msToTextFormat(day_total, true, true);
+        day_usage_element.textContent = formatted_total;
 
 
         const websites_card = document.querySelector('#websites-card');

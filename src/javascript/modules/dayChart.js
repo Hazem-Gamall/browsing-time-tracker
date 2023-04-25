@@ -1,5 +1,4 @@
-import { getDayTotal } from "./getTotal.js";
-import { msToHM, msToTextFormat } from "./millisFormatting.js";
+import { msToTextFormat } from "./millisFormatting.js";
 import { truncateString } from "./truncateString.js";
 import { faviconURL } from "./faviconURL.js";
 import { sortDay } from "./sorting.js";

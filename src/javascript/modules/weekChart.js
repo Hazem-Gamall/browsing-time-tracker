@@ -1,5 +1,5 @@
 import { getDayTotal, getWeekTotal } from "./getTotal.js";
-import { msToHM } from "./millisFormatting.js";
+import { msToHMS } from "./millisFormatting.js";
 
 export function renderWweekChart(week) {
 
@@ -13,7 +13,7 @@ export function renderWweekChart(week) {
         datasets: [
             {
                 label: 'Week usage',
-                data: Object.values(week).map((day) => msToHM(getDayTotal(day)).h.toFixed(1)),
+                data: Object.values(week).map((day) => msToHMS(getDayTotal(day)).h.toFixed(1)),
                 backgroundColor: ["#e60049", "#0bb4ff", "#50e991", "#e6d800", "#9b19f5", "#ffa300", "#dc0ab4", "#b3d4ff", "#00bfa0"],
                 // barThickness:10,
 
@@ -37,7 +37,7 @@ export function renderWweekChart(week) {
                         {
                             type:'line',
                             mode: "horizontal",
-                            value: msToHM(getWeekTotal(week) / Object.keys(week).length).h,
+                            value: msToHMS(getWeekTotal(week) / Object.keys(week).length).h,
                             scaleID: 'y',
                             borderWidth: 1.1,
                             borderColor: '#001a4d'
