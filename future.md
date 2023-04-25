@@ -1,2 +1,9 @@
 - [x] Refactor renderWeek.js, popup.js, background.js
-- [ ]
+- [ ] import/export
+- [ ] github gist backup?
+- [ ] options page
+- [ ] localization
+- [ ] dark mode
+- [ ] options page
+- [ ] optional start of the week
+- [ ] time limits
