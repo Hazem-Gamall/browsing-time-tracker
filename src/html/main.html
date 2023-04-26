@@ -15,17 +15,28 @@
 <body class="mt-3">
     <div class="container">
         <div class="row justify-content-center">
-            <h4 class="text-center">Browsing Time Tracker</h4>
+            <div class="col-10 pr-0 pl-5 mt-1">
+                <h4 class="text-center">Browsing Time Tracker</h4>
+            </div>
+            <div class="col-2 px-0 mb-2">
+                <nav class="nav nav-pills">
+                    <btn class="btn mx-1 nav-link content-nav "><span class="fa fa-cog"></span></btn>
+                </nav>
+
+            </div>
+
         </div>
         <hr class="mt-0">
         <div class="row justify-content-center">
             <nav class="nav nav-pills nav-justified">
-                <button data-target="popup" class="btn nav-link mx-1 content-nav">Today</button>
-                <button data-target="week" class="btn nav-link mx-1 content-nav">Week</button>
-                <button data-target="history" class="btn nav-link mx-1 content-nav">History</button>
+                <div class="row">
+                    <button data-target="popup" class="btn nav-link mx-1 content-nav">Today</button>
+                    <button data-target="week" class="btn nav-link mx-1 content-nav">Week</button>
+                    <button data-target="history" class="btn nav-link mx-1 content-nav">History</button>
+                </div>
             </nav>
-        </div>
 
+        </div>
         <div id="content" class="pb-4">
 
         </div>
@@ -73,7 +84,7 @@
         </div>
     </template>
     <!-------------------------- popup template ---------------------------->
-    
+
 
     <!-------------------------- week template ---------------------------->
     <template id="week-content">
@@ -123,7 +134,7 @@
         </div>
     </template>
     <!-------------------------- week template ---------------------------->
-    
+
 
     <!-------------------------- history template ---------------------------->
     <template id="history-content">
