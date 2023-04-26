@@ -13,7 +13,7 @@ function initIdleRange(idlePeriod) {
     idleRange.oninput = idleRangeOnInput;
     idleRange.value = secondsToIdleNumbers(idlePeriod);
     idleRangeOnInput(null, secondsToIdleNumbers(idlePeriod));
-    idleRange.onchange = function () { chrome.storage.local.set({ idlePeriod: this.value }) };
+    idleRange.onchange = function () { chrome.storage.local.set({ idlePeriod: idleNumberToSeconds(this.value) }) };
 }
 
 

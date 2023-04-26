@@ -150,9 +150,10 @@ function checkBrowserFocus() {
     })
 }
 
-function checkUserIdle() {
+async function checkUserIdle() {
+    const {idlePeriod} = await chrome.storage.local.get({idlePeriod: 30})
     chrome.idle.queryState(
-        30, // seconds
+        idlePeriod, // seconds
         async function (newState) {
             chrome.storage.local.set({ 'idle_state': newState });
         }
