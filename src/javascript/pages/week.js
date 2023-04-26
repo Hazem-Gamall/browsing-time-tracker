@@ -17,8 +17,9 @@ export function renderWeekRelativeToHistory() {
         if (!week || !history) {
             document.querySelector("#relative-to-last-week").append("no enough data yet");
         } else {
-            const [{ total }] = Object.values(history).slice(0, 1);
-            const percentage = getWeekDiffPercentage(getWeekTotal(week), total);
+            const [{ total, week:previous_week }] = Object.values(history).slice(0, 1);
+            const average = total / Object.keys(previous_week).length;
+            const percentage = getWeekDiffPercentage(getWeekTotal(week) / Object.keys(week).length, average);
             const p = document.createElement("p");
             p.append(getPercentageArrowIconSpan(percentage), getFormattedWeekDiffPercentage(percentage));
             document.querySelector("#relative-to-last-week").append(p);

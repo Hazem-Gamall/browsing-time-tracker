@@ -25,10 +25,10 @@ export const renderHistory = (() => {
             if (index < history_list.length && index >= 0) {
                 week_title.textContent = history_list[index];
                 let { week, total: week_total } = history[history_list[index]]
-                let { total: previous_week_total } = history[history_list[index + 1]] ?? { total: NaN };
+                let { week: previous_week, total: previous_week_total } = history[history_list[index + 1]] ?? { total: NaN };
                 renderWeek(week);
                 if (previous_week_total) {
-                    const percentage = getWeekDiffPercentage(week_total, previous_week_total);
+                    const percentage = getWeekDiffPercentage(week_total / Object.keys(week).length, previous_week_total/Object.keys(previous_week).length);
                     const p = document.createElement("p");
                     p.append(getPercentageArrowIconSpan(percentage), getFormattedWeekDiffPercentage(percentage));
                     document.querySelector("#relative-to-last-week").innerHTML = p.outerHTML;

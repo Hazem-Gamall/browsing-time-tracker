@@ -1,6 +1,6 @@
-function getWeekDiffPercentage(current_week_total, previous_week_total) {
-    const change = (current_week_total - previous_week_total);
-    const change_percentage = (change / previous_week_total) * 100;
+function getWeekDiffPercentage(current_week_average, previous_week_average) {
+    const change = (current_week_average - previous_week_average);
+    const change_percentage = (change / previous_week_average) * 100;
     return change_percentage;
 }
 

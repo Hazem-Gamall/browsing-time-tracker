@@ -8,3 +8,4 @@
 - [ ] footer
 - [ ] optional start of the week
 - [ ] time limits
+- [ ] history should only containtt 4 entries
