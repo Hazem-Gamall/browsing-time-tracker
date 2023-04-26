@@ -15,8 +15,8 @@ const setChartFaviconColor = async (hostname, chart, index) => {
 const renderDayChart = (day) => {
 
     let day_canvas = document.createElement('canvas');
-    day_canvas.width = 320
-    day_canvas.height = 320
+    day_canvas.width = 350
+    day_canvas.height = 350
     day = sortDay(day)
     let other_count = 0;
     let hostname_totals = Object.values(day);
@@ -98,6 +98,7 @@ const renderDayChart = (day) => {
         options
     });
     let day_chart_div = document.createElement("div");
+    day_chart_div.classList.add('row', 'justify-content-center', 'm-2')
 
     day_chart_div.append(day_canvas);
     return day_chart_div;

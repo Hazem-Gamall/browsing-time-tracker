@@ -8,10 +8,10 @@ import { localizeAndFloor, min, hour, localizeDate, localizeMessage } from "../l
 import { numberAnimation } from "./numberAnimation.js";
 import { removeAllChildNodes } from "./removeAllChildNode.js";
 import { sortDay } from "./sorting.js";
-import { renderWweekChart } from "./weekChart.js";
+import { renderWeekChart } from "./weekChart.js";
 
 const getAccordionElements = () => {
-    let day_entry = document.querySelector('#day-accordion').content.cloneNode(true);
+    let day_entry = document.querySelector('#day-accordion').content.firstElementChild.cloneNode(true);
     return {
         day_entry,
         accordion_button: day_entry.querySelector("#accordion-button"),
@@ -48,7 +48,6 @@ const renderWeek = async (week) => {
 
 
     let accordion = document.querySelector('#accordion');
-    let week_day_elements = document.createElement('div');
     let week_total = 0;
     for (const day_key in week) {
         const day_key_id = day_key.replaceAll(' ', '-');
@@ -106,15 +105,13 @@ const renderWeek = async (week) => {
         accordion_body.id = day_key_id;
 
         week_total += getDayTotal(week[day_key]);
-        week_day_elements.append(day_entry);
+        accordion.append(day_entry);
 
 
         toggle_btn.onclick = toggleCharts;
 
 
     }
-    accordion.innerHTML = '';
-    accordion.append(week_day_elements)
     let total_week_time_element = document.querySelector('#total-week-time');
     let week_total_formatted = msToHMS(week_total);
     console.log(week_total_formatted);
@@ -133,7 +130,7 @@ const renderWeek = async (week) => {
     document.querySelector('#week-average-m').textContent = localizeAndFloor(week_average_formatted.m);
     document.querySelector('#week-average-m').dataset.number = Math.floor(week_average_formatted.m)
     removeAllChildNodes(document.querySelector('#week-chart'));
-    document.querySelector('#week-chart').append(renderWweekChart(week));
+    document.querySelector('#week-chart').append(renderWeekChart(week));
 
     numberAnimation();
 }
