@@ -24,6 +24,7 @@
         "idle",
         "tabs",
         "storage",
+        "scripting",
         "activeTab",
         "background",
         "alarms",

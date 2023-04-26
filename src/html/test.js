@@ -1,12 +1,7 @@
+import { TrackVideosEnum } from "../javascript/modules/enums/TrackVideos.js"
 
 
 $('[data-toggle="tooltip"]').tooltip();
-
-const TrackVideosEnum = Object.freeze({
-    YOUTUBE: 0,
-    ALL: 1,
-    OFF: 2
-});
 
 
 function idleRangeOnInput(e, value) {
@@ -18,14 +13,17 @@ function initIdleRange(idlePeriod) {
     idleRange.oninput = idleRangeOnInput;
     idleRange.value = secondsToIdleNumbers(idlePeriod);
     idleRangeOnInput(null, secondsToIdleNumbers(idlePeriod));
-    idleRange.onchange = function () { chrome.storage.local.set({idlePeriod:this.value}) };
+    idleRange.onchange = function () { chrome.storage.local.set({ idlePeriod: this.value }) };
 }
+
+
 
 function initTrackVideoSelect(trackVideos) {
     const trackVideoSelect = document.querySelector("#track-video-select");
     trackVideoSelect.value = trackVideos;
-    trackVideoSelect.onchange = function () { chrome.storage.local.set({trackVideos:this.value}) }
-
+    trackVideoSelect.onchange = function () {
+        chrome.storage.local.set({ trackVideos: this.value });
+    }
 }
 
 function initArabHinduNumeralsInput(arabHinduNumerals) {
@@ -34,13 +32,13 @@ function initArabHinduNumeralsInput(arabHinduNumerals) {
     const arabHinduNumeralsInput = document.querySelector('#arab-hindu-numerals');
     document.querySelector("#arab-hindu-numerals-div").style.display = "block";
     arabHinduNumeralsInput.checked = arabHinduNumerals;
-    arabHinduNumeralsInput.onchange = function () { chrome.storage.local.set({arabHinduNumerals: this.checked}); }
+    arabHinduNumeralsInput.onchange = function () { chrome.storage.local.set({ arabHinduNumerals: this.checked }); }
 }
 
 
 document.addEventListener("DOMContentLoaded",
     async () => {
-        let { trackVideos, idlePeriod, arabHinduNumerals } = await chrome.storage.local.get({ trackVideos: TrackVideosEnum.YOUTUBE, idlePeriod: 30, arabHinduNumerals: true });
+        let { trackVideos, idlePeriod, arabHinduNumerals } = await chrome.storage.local.get({ trackVideos: TrackVideosEnum.OFF, idlePeriod: 30, arabHinduNumerals: true });
         initIdleRange(idlePeriod);
         initTrackVideoSelect(trackVideos);
         initArabHinduNumeralsInput(arabHinduNumerals);
