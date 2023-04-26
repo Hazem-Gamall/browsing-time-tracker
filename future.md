@@ -5,5 +5,6 @@
 - [ ] localization
 - [ ] dark mode
 - [ ] options page
+- [ ] footer
 - [ ] optional start of the week
 - [ ] time limits
