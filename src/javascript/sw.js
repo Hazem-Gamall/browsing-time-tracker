@@ -1,6 +1,6 @@
 import { getWeekTotal } from "./modules/getTotal.js";
 import { msToTextFormat, msToDays} from "./modules/millisFormatting.js";
-import { sortWeek } from "./modules/sorting.js";
+import { sortHistory, sortWeek } from "./modules/sorting.js";
 
 chrome.alarms.create('oneMinuteAlarm', { periodInMinutes: 1 });
 let save_day = async (prev_day) => {
@@ -19,6 +19,23 @@ let newDayCheck = async () => {
         }
     } else {
         chrome.storage.local.set({ 'prev_day': (new Date()).toDateString() });
+    }
+}
+
+
+async function saveWeek(week){
+    if (week) {
+        let week_dates = Object.keys(week).map((day) => new Date(day));
+        let [min_day, max_day] = [new Date(Math.min.apply(null, week_dates)), new Date(Math.max.apply(null, week_dates))];
+        let { history } = await chrome.storage.local.get({ 'history': {} });
+        if(Object.keys(history).length > 3){
+            history = sortHistory(history);
+            delete history[Object.keys(history)[Object.keys(history).length - 1]];
+        }
+
+        history[`${min_day.toDateString()} - ${max_day.toDateString()}`] = { week, total: getWeekTotal(week) };
+        chrome.storage.local.set({ history, 'week2': week, 'prev_sunday': new Date().toDateString() });
+        chrome.storage.local.remove('week');
     }
 }
 
@@ -42,15 +59,7 @@ let newWeekCheck = async () => {
     }
     if (today === SUNDAY || week_passed) {
         console.log("new week check");
-
-        if (week) {
-            let week_dates = Object.keys(week).map((day) => new Date(day));
-            let [min_day, max_day] = [new Date(Math.min.apply(null, week_dates)), new Date(Math.max.apply(null, week_dates))];
-            let { history } = await chrome.storage.local.get({ 'history': {} });
-            history[`${min_day.toDateString()} - ${max_day.toDateString()}`] = { week, total: getWeekTotal(week) };
-            chrome.storage.local.set({ history, 'week2': week, 'prev_sunday': new Date().toDateString() });
-            chrome.storage.local.remove('week');
-        }
+        saveWeek(week);
     } else {
         console.log("today isn't sunday");
     }
