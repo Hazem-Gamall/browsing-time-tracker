@@ -128,5 +128,8 @@
   },
   "support_me":{
     "message":"Support me!"
+  },
+  "settings":{
+    "message":"settings"
   }
 }
