@@ -122,5 +122,8 @@
   },
   "google_forms_url":{
     "message": "https://forms.gle/xVvm36qZyWLqhH1N7"
+  },
+  "credits":{
+    "message":"الإيقونة من"
   }
 }

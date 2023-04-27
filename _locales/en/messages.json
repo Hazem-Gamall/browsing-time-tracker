@@ -122,5 +122,8 @@
   },
   "google_forms_url":{
     "message": "https://forms.gle/14C9JHCyXgjQQMqe7"
+  },
+  "credits":{
+    "message":"Icon from"
   }
 }
