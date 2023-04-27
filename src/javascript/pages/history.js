@@ -7,7 +7,10 @@ import { store } from '../store/store.js';
 
 export const renderHistory = (() => {
     let index = 0;
-
+    if(localizeMessage("@@bidi_dir") === "rtl"){
+        document.querySelector('#right-arrow').classList.replace("fa-arrow-right", "fa-arrow-left")    
+        document.querySelector('#left-arrow').classList.replace("fa-arrow-left", "fa-arrow-right" )    
+    }
     document.querySelector('#right-arrow').addEventListener('click', () => {
         index++;
         closure()
