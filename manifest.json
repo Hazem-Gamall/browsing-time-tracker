@@ -34,8 +34,6 @@
         "idle",
         "tabs",
         "storage",
-        "scripting",
-        "activeTab",
         "alarms",
         "favicon"
     ],
