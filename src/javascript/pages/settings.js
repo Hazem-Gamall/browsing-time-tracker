@@ -23,22 +23,13 @@ function initTrackVideoSelect(trackVideos) {
     }
 }
 
-function initArabHinduNumeralsInput(arabHinduNumerals) {
-    if (chrome.i18n.getUILanguage() !== "ar")
-        return;
-    const arabHinduNumeralsInput = document.querySelector('#arab-hindu-numerals');
-    document.querySelector("#arab-hindu-numerals-div").style.display = "block";
-    arabHinduNumeralsInput.checked = arabHinduNumerals;
-    arabHinduNumeralsInput.onchange = function () { chrome.storage.local.set({ arabHinduNumerals: this.checked }); }
-}
 
 
 export async function renderSettings(){
     $('[data-toggle="tooltip"]').tooltip();
-    let { trackVideos, idlePeriod, arabHinduNumerals } = await chrome.storage.local.get({ trackVideos: TrackVideosEnum.OFF, idlePeriod: 30, arabHinduNumerals: true });
+    let { trackVideos, idlePeriod } = await chrome.storage.local.get({ trackVideos: TrackVideosEnum.OFF, idlePeriod: 30});
     initIdleRange(idlePeriod);
     initTrackVideoSelect(trackVideos);
-    initArabHinduNumeralsInput(arabHinduNumerals);
 }
 
 function idleNumberToTime(number) {
