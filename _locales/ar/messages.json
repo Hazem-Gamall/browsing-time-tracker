@@ -3,6 +3,9 @@
     "message": "Browsing time tracker — متتبع وقت التصفح",
     "description": "اسم الإضافة"
   },
+  "extDescription":{
+    "message":"تتبع الوقت المنقضي في تصفح الإنترنت."
+  },
   "today": {
     "message": "اليوم"
   },

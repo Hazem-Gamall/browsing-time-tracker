@@ -3,6 +3,9 @@
     "message": "Browsing Time Tracker",
     "description": "Extension name"
   },
+  "extDescription":{
+    "message":"Monitor the time spent on browsing the internet."
+  },
   "today": {
     "message": "Today"
   },
