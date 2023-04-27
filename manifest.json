@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name":"__MSG_extName__",
-    "version":"1.0.0",
+    "version":"0.0.1",
     "default_locale": "en",
     "description":"Monitor the time wasted on websites",
 
@@ -13,6 +13,7 @@
         "16":"icons/time-management-16.png",
         "24":"icons/time-management-24.png",
         "32":"icons/time-management-32.png",
+        "48":"icons/time-management-64.png",
         "64":"icons/time-management-64.png",
         "128":"icons/time-management-128.png"
     },
