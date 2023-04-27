@@ -20,7 +20,8 @@
             </div>
             <div class="col-2 px-0 mb-2">
                 <nav class="nav nav-pills">
-                    <button data-target="settings" class="btn mx-1 nav-link content-nav"><span class="fa fa-cog"></span></a>
+                    <button data-target="settings" class="btn mx-1 nav-link content-nav"><span
+                            class="fa fa-cog"></span></a>
                 </nav>
 
             </div>
@@ -31,11 +32,11 @@
             <nav class="nav nav-pills nav-justified">
                 <div class="row">
                     <button data-target="popup" class="btn nav-link mx-1 content-nav" translate="yes"
-                    data-translation-key="today"></button>
+                        data-translation-key="today"></button>
                     <button data-target="week" class="btn nav-link mx-1 content-nav" translate="yes"
-                    data-translation-key="week"></button>
+                        data-translation-key="week"></button>
                     <button data-target="history" class="btn nav-link mx-1 content-nav" translate="yes"
-                    data-translation-key="history"></button>
+                        data-translation-key="history"></button>
                 </div>
             </nav>
 
@@ -205,54 +206,57 @@
 
 
     <!-------------------------- settings templates -------------------------->
-    
-        <template id="settings-content">
-            <div class="row justify-content-center mt-3">
-                <div class="card">
-                    <div class="card-body">
-                        <form class="container">
-    
-    
-                            <div class="form-group form-row">
-                                <label for="">Stop tracking if <u data-toggle="tooltip"
-                                        title="no mouse or keyboared input">idle</u> for <span
-                                        id="idle-time"></span></label>
-                                <input type="range" name="" value="1" min="1" max="19" step="1" id="idle-range"
-                                    style="width: 100%;">
-                            </div>
-    
-                            <hr>
-    
-                            <div class="form-group form-row">
-                                <label for="">Track time while watching videos when <u data-toggle="tooltip"
-                                        title="no mouse or keyboared input">idle</u> on</label>
-                                <select name="" class="form-control" id="track-video-select">
-                                    <option value="0">Youtube only</option>
-                                    <option value="1">All websites</option>
-                                    <option value="2">Off</option>
-                                </select>
-                            </div>
-    
-                            <hr>
-    
-                        </form>
-    
-                    </div>
+
+    <template id="settings-content">
+        <div class="row justify-content-center mt-3">
+            <div class="card">
+                <div class="card-body">
+                    <form class="container">
+
+
+                        <div class="form-group form-row">
+                            <label for="idle-range"><span translate="yes" data-translation-key="stop_tracking">Stop
+                                    tracking if</span> <u translate="yes" data-translation-key="idle" data-translate-title="yes" data-title-translation-key="idle_title"
+                                    >idle</u> <span translate="yes" data-translation-key="for" >for</span> <span
+                                    id="idle-time"></span></label>
+                            <input type="range" name="" value="1" min="1" max="19" step="1" id="idle-range"
+                                style="width: 100%;">
+                        </div>
+
+                        <hr>
+
+                        <div class="form-group form-row">
+                            <label for="track-video-select"> <span translate="yes" data-translation-key="track_video_label">Track time while watching videos when</span> <u translate="yes" data-translation-key="idle" data-translate-title="yes" data-title-translation-key="idle_title"
+                                >idle</u> on</label>
+                            <select name="" class="form-control" id="track-video-select" style="height: 100%;">
+                                <option value="0" translate="yes" data-translation-key="youtube_only">Youtube only</option>
+                                <option value="1" translate="yes" data-translation-key="all_websites">All websites</option>
+                                <option value="2" translate="yes" data-translation-key="none">None</option>
+                            </select>
+                        </div>
+
+                        <hr>
+
+                    </form>
+
                 </div>
             </div>
-    
-            <div class="mt-4 pl-3">
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <span class="fa fa-comments mr-1"></span>
-                        <h4>Feedback</h4>
-                        <p>If you are experiencing problems, having questions or suggestions, please fill out support form <a target="_blank" href="https://forms.gle/14C9JHCyXgjQQMqe7">here.</a></p>
-                        <p><span class="fa fa-brands fa-github"></span> <a target="_blank" href="https://github.com/Hazem-Gamall/browsing-time-tracker">Source code</a></p>
-                    </div>
+        </div>
+
+        <div class="mt-4 pl-3">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <span class="fa fa-comments mr-1"></span>
+                    <h4 translate="yes" data-translation-key="feedback">Feedback</h4>
+                    <p><span translate="yes" data-translation-key="feedback_paragraph">If you are experiencing problems, having questions or suggestions, please fill out support form</span>
+                        <a translate="yes" translate-href data-href-translation-key="google_forms_url" data-translation-key="here"  target="_blank" href="https://forms.gle/14C9JHCyXgjQQMqe7">here.</a></p>
+                    <p><span class="fa fa-brands fa-github"></span> <a translate="yes" data-translation-key="source_code" target="_blank"
+                            href="https://github.com/Hazem-Gamall/browsing-time-tracker">Source code</a></p>
                 </div>
             </div>
-        </template>
-    
+        </div>
+    </template>
+
 
 
     <!-------------------------- common templates ---------------------------->

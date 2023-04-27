@@ -1,7 +1,7 @@
 const TrackVideosEnum = Object.freeze({
     YOUTUBE: "0",
     ALL: "1",
-    OFF: "2"
+    NONE: "2"
 });
 
 window.onunload = () => { sendMessageToExtension("unload") };
@@ -28,7 +28,7 @@ function checkVideoPlayback() {
 }
 
 async function reportVideoStatus() {
-    const { trackVideos } = await chrome.storage.local.get({ trackVideos: TrackVideosEnum.OFF })
+    const { trackVideos } = await chrome.storage.local.get({ trackVideos: TrackVideosEnum.NONE })
     const status = checkVideoPlayback();
     if (!document.hasFocus() || trackVideos === TrackVideosEnum.OFF ||
         (document.location.hostname !== "www.youtube.com" && trackVideos === TrackVideosEnum.YOUTUBE)

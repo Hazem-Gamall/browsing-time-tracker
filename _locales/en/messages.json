@@ -60,7 +60,67 @@
   "not_enough_data": {
     "message": "Not enough data yey"
   },
-  "usage":{
-    "message":"Usage"
+  "usage": {
+    "message": "Usage"
+  },
+  "stop_tracking": {
+    "message": "Stop tracking if"
+  },
+  "idle": {
+    "message": "idle"
+  },
+  "idle_title": {
+    "message": "No mouse or keyboared input"
+  },
+  "for": {
+    "message": "for"
+  },
+  "second": {
+    "message": "second"
+  },
+  "seconds": {
+    "message": "seconds"
+  },
+  "minute": {
+    "message": "minute"
+  },
+  "few_minutes": {
+    "message": "minutes"
+  },
+  "many_minutes": {
+    "message": "minutes"
+  },
+  "hour": {
+    "message": "hour"
+  },
+  "hours": {
+    "message": "hours"
+  },
+  "track_video_label": {
+    "message": "Track time while watching videos when"
+  },
+  "youtube_only": {
+    "message": "Youtube only."
+  },
+  "all_websites": {
+    "message": "All websites."
+  },
+  "none": {
+    "message": "None"
+  },
+  "feedback": {
+    "message": "Feedback"
+  },
+  "feedback_paragraph": {
+    "message": "If you are experiencing problems, having questions or suggestions, please fill out the support form"
+  },
+  "here":{
+    "message":"here"
+  },
+  "source_code":{
+    "message":"Source code"
+  },
+  "google_forms_url":{
+    "message": "https://forms.gle/14C9JHCyXgjQQMqe7"
   }
 }

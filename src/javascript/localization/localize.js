@@ -19,6 +19,8 @@ function localizeDate(date){
 
 function localizeHtml(htmlElement){
     Array.from(htmlElement.querySelectorAll('[translate="yes"]')).forEach((element) => element.textContent = localizeMessage(element.dataset.translationKey))
+    Array.from(htmlElement.querySelectorAll('[data-translate-title="yes"]')).forEach((element) => {element.title = localizeMessage(element.dataset.titleTranslationKey); $(element).tooltip()})
+    Array.from(htmlElement.querySelectorAll('[translate-href]')).forEach((element) => element.href = localizeMessage(element.dataset.hrefTranslationKey))
 }
 
 export {hour, min, sec, localizeAndFloor, localizeHtml, localizeDate, localizeMessage}

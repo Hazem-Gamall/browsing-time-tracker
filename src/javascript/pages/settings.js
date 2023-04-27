@@ -1,3 +1,4 @@
+import { localizeAndFloor, localizeMessage } from "../localization/localize.js";
 import { TrackVideosEnum } from "../modules/enums/TrackVideos.js"
 
 
@@ -27,24 +28,24 @@ function initTrackVideoSelect(trackVideos) {
 
 export async function renderSettings(){
     $('[data-toggle="tooltip"]').tooltip();
-    let { trackVideos, idlePeriod } = await chrome.storage.local.get({ trackVideos: TrackVideosEnum.OFF, idlePeriod: 30});
+    let { trackVideos, idlePeriod } = await chrome.storage.local.get({ trackVideos: TrackVideosEnum.NONE, idlePeriod: 30});
     initIdleRange(idlePeriod);
     initTrackVideoSelect(trackVideos);
 }
 
 function idleNumberToTime(number) {
-    if (number < 3)
-        return `${number * 15} seconds`;
-    else if (number == 3)
-        return `${number - 2} minute`;
-    else if (number < 8)
-        return `${number - 2} minutes`;
-    else if (number < 18)
-        return `${(number - 6) * 5} minutes`;
-    else if (number == 18)
-        return `${number - 17} hour`
-    else
-        return `${number - 17} hours`
+    if (number < 3) //15 or 30 seconds
+        return `${localizeAndFloor(number * 15)} ${localizeMessage('seconds')}`;
+    else if (number == 3) //1 minutes
+        return `${localizeAndFloor(number - 2)} ${localizeMessage('minute')}`;
+    else if (number < 8) //2,3,4,5 minutes
+        return `${localizeAndFloor(number - 2)} ${localizeMessage('few_minutes')}`;
+    else if (number < 18) //10,15,25...55 minutes
+        return `${localizeAndFloor((number - 6) * 5)} ${localizeMessage(number === 8 ? 'few_minutes': 'many_minutes')}`;
+    else if (number == 18) //1 hour
+        return `${localizeAndFloor(number - 17)} ${localizeMessage('hour')}`
+    else //2 hours
+        return `${localizeAndFloor(number - 17)} ${localizeMessage('hours')}`
 }
 
 function idleNumberToSeconds(number) {
