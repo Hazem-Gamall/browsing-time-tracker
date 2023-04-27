@@ -16,7 +16,8 @@
     "content_scripts":[
         {
             "matches":["*://*/*"],
-            "js":["src/javascript/content/browsingTimeTrackerContent.js"]
+            "js":["src/javascript/content/browsingTimeTrackerContent.js"],
+            "all_frames": true
         }
     ],
 

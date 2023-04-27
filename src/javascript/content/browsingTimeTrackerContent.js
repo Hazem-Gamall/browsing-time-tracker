@@ -21,18 +21,19 @@ function checkVideoPlayback() {
         return false;
     const isAnyVideoPlaying = Array.from(videoElements).some((element) => {
         element.playing ?? definePlayingProperty();
-        return element.playing
+        return element.playing;
     });
 
-    return isAnyVideoPlaying;
+    return isAnyVideoPlaying ? "play" : "paused";
 }
 
 async function reportVideoStatus() {
     const { trackVideos } = await chrome.storage.local.get({ trackVideos: TrackVideosEnum.OFF })
+    const status = checkVideoPlayback();
     if (!document.hasFocus() || trackVideos === TrackVideosEnum.OFF ||
-        (document.location.hostname !== "www.youtube.com" && trackVideos === TrackVideosEnum.YOUTUBE))
+        (document.location.hostname !== "www.youtube.com" && trackVideos === TrackVideosEnum.YOUTUBE)
+        || !status)
         return;
-    const status = checkVideoPlayback() ? "play" : "paused";
     videoStatus = status;
     console.log(`video ${videoStatus}`);
     sendMessageToExtension(videoStatus);
