@@ -2,6 +2,7 @@ import { renderTable } from "./pages/popup.js";
 import { removeAllChildNodes } from "./modules/removeAllChildNode.js";
 import { renderHistory } from "./pages/history.js";
 import { renderWeekRelativeToHistory } from "./pages/week.js";
+import { renderSettings } from "./pages/settings.js";
 
 
 var currentTarget = "";
@@ -11,6 +12,7 @@ const navButtons = {
     popup: document.querySelector('[data-target="popup"]'),
     week: document.querySelector('[data-target="week"]'),
     history: document.querySelector('[data-target="history"]'),
+    settings: document.querySelector('[data-target="settings"]'),
 }
 
 
@@ -38,8 +40,16 @@ function renderHistoryContent() {
     renderHistory()();
 }
 
+function renderSettingsContent() {
+    removeAllChildNodes(contentElement);
+    const settingsContent = document.querySelector("#settings-content").content.cloneNode(true);
+    contentElement.append(settingsContent);
+
+    renderSettings();
+}
+
 function setActiveNavButton() {
-    console.log({currentTarget});
+    console.log({ currentTarget });
     navButtons[currentTarget].classList.add("active");
     Object.keys(navButtons)
         .filter((button_key) => button_key !== currentTarget)
@@ -60,6 +70,9 @@ function renderPageContent(newTarget) {
             break;
         case "history":
             renderHistoryContent();
+            break;
+        case "settings":
+            renderSettingsContent();
             break;
     }
     setActiveNavButton();

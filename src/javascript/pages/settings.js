@@ -1,5 +1,4 @@
-import { TrackVideosEnum } from "../javascript/modules/enums/TrackVideos.js"
-
+import { TrackVideosEnum } from "../modules/enums/TrackVideos.js"
 
 $('[data-toggle="tooltip"]').tooltip();
 
@@ -36,14 +35,12 @@ function initArabHinduNumeralsInput(arabHinduNumerals) {
 }
 
 
-document.addEventListener("DOMContentLoaded",
-    async () => {
-        let { trackVideos, idlePeriod, arabHinduNumerals } = await chrome.storage.local.get({ trackVideos: TrackVideosEnum.OFF, idlePeriod: 30, arabHinduNumerals: true });
-        initIdleRange(idlePeriod);
-        initTrackVideoSelect(trackVideos);
-        initArabHinduNumeralsInput(arabHinduNumerals);
-    }
-)
+export async function renderSettings(){
+    let { trackVideos, idlePeriod, arabHinduNumerals } = await chrome.storage.local.get({ trackVideos: TrackVideosEnum.OFF, idlePeriod: 30, arabHinduNumerals: true });
+    initIdleRange(idlePeriod);
+    initTrackVideoSelect(trackVideos);
+    initArabHinduNumeralsInput(arabHinduNumerals);
+}
 
 function idleNumberToTime(number) {
     if (number < 3)
@@ -83,5 +80,3 @@ function secondsToIdleNumbers(seconds) {
         return (seconds / (60 * 60)) + 17;
 }
 
-
-// new HTMLInputElement().
