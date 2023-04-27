@@ -1,0 +1,66 @@
+{
+  "extName": {
+    "message": "Browsing Time Tracker",
+    "description": "Extension name"
+  },
+  "today": {
+    "message": "Today"
+  },
+  "week": {
+    "message": "Week"
+  },
+  "history": {
+    "message": "History"
+  },
+  "more_details": {
+    "message": "Get more details",
+    "description": "text for the get more detail toggle button"
+  },
+  "h": {
+    "message": "h",
+    "description": "short for hour"
+  },
+  "m": {
+    "message": "m",
+    "description": "short for minute"
+  },
+  "s": {
+    "message": "s",
+    "description": "short for second"
+  },
+  "daily_average": {
+    "message": "Daily avgerage"
+  },
+  "realtion_to_lw": {
+    "message": "$PERCENTAGE$ $COMP_ADJ$ than last week.",
+    "description": "infrom the user of the realtion between this week and last week's usage",
+    "placeholders": {
+      "PERCENTAGE": {
+        "content": "$1",
+        "example": "35%"
+      },
+      "COMP_ADJ": {
+        "content": "$2",
+        "example": "higher | lower"
+      }
+    }
+  },
+  "higher": {
+    "message": "higher"
+  },
+  "lower": {
+    "message": "lower"
+  },
+  "total_browsing_time": {
+    "message": "Total browsing time"
+  },
+  "total_time": {
+    "message": "Total time"
+  },
+  "not_enough_data": {
+    "message": "Not enough data yey"
+  },
+  "usage":{
+    "message":"Usage"
+  }
+}

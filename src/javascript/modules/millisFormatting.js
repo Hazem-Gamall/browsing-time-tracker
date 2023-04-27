@@ -1,3 +1,7 @@
+import { hour, localizeAndFloor, min, sec } from "../localization/localize.js";
+
+
+
 function msToHMS(miliseconds) {
     const h = miliseconds / 1000 / 60 / 60;
     const m = (h % 1) * 60;
@@ -26,25 +30,32 @@ function msToDays(miliseconds) {
 
 }
 
+
 function msToTextFormat(miliseconds, includeMinutes, includeSeconds) {
-    const seconds = Math.floor(msToS(miliseconds));
-    if (seconds < 60)
-        return `${seconds}s`
+    const seconds = msToS(miliseconds);
+    if (seconds < 60){
+        return `${localizeAndFloor(seconds)}${sec}`
+    }
     let { h, m, s } = msToMS(miliseconds);
     if (m < 60) {
+        m = localizeAndFloor(m);
+        s= localizeAndFloor(s);
         if (includeSeconds)
-            return `${Math.floor(m)}m ${Math.floor(s)}s`;
+            return `${m}${min} ${s}${sec}`;
         else
-            return `${Math.floor(m)}m`;
+            return `${m}${min}`;
     }
 
-    ({ h, m, s } = msToHMS(miliseconds));
+    ({ h, m, s } = Object.fromEntries(
+        Object.entries(msToHMS(miliseconds))
+            .map(([a,b]) => [a,localizeAndFloor(b)])
+    ));
 
     if (includeMinutes)
-        return `${Math.floor(h)}h ${Math.floor(m)}m`
+        return `${h}${hour} ${m}${min}`
     else if (includeSeconds)
-        return `${Math.floor(h)}h ${Math.floor(m)}m ${Math.floor(s)}s`
-    return `${Math.floor(h)}h`;
+        return `${h}${hour} ${m}${min} ${s}${sec}`
+    return `${localizeAndFloor(h)}${hour}`;
 }
 
 

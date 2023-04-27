@@ -1,8 +1,13 @@
 {
     "manifest_version": 3,
-    "name":"Browsing Time Tracker",
-    "version":"2.0",
+    "name":"__MSG_extName__",
+    "version":"2.0.0",
+    "default_locale": "en",
     "description":"Monitor the time wasted on websites",
+
+    "author":{
+        "email":"hazemgamalelgendy@gmail.com"
+    },
         
     "action":{
         "default_popup":"src/html/main.html"

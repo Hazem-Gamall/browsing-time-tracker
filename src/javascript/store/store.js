@@ -28,6 +28,7 @@ export const store = {
             if (!this._history) {
                 const { history: temp } = await chrome.storage.local.get({ "history": {} });
                 this._history = sortHistory(temp);
+                this._history = Object.fromEntries( Object.entries( this._history ).map( ([key, value]) => [key, {week: sortWeek(value.week), total:value.total}] ) );
             }
             return this._history;
         })();

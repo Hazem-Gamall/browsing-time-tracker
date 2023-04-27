@@ -1,0 +1,66 @@
+{
+  "extName": {
+    "message": "Browsing time tracker — متعقب وقت التصفح",
+    "description": "اسم الإضافة"
+  },
+  "today": {
+    "message": "اليوم"
+  },
+  "week": {
+    "message": "الأسبوع"
+  },
+  "history": {
+    "message": "السجل"
+  },
+  "more_details": {
+    "message": "عرض المزيد",
+    "description": "text for the get more detail toggle button"
+  },
+  "h": {
+    "message": "س",
+    "description": "اختصار ساعة"
+  },
+  "m": {
+    "message": "د",
+    "description": "اختصار دقيقة"
+  },
+  "s":{
+    "message": "ث",
+    "description": "اختصار ثانية"
+  },
+  "daily_average": {
+    "message": "المتوسط اليومي"
+  },
+  "realtion_to_lw": {
+    "message": "$PERCENTAGE$ $COMP_ADJ$ من الأسبوع الماضي.",
+    "description": "infrom the user of the realtion between this week and last week's usage",
+    "placeholders": {
+      "PERCENTAGE": {
+        "content": "$1",
+        "example": "35%"
+      },
+      "COMP_ADJ": {
+        "content": "$2",
+        "example": "أكبر | أصغر"
+      }
+    }
+  },
+  "higher": {
+    "message": "اعلى"
+  },
+  "lower": {
+    "message": "اقل"
+  },
+  "total_browsing_time": {
+    "message": "مجموع وقت التصفح"
+  },
+  "total_time":{
+    "message":"مجموع الوقت"
+  },
+  "not_enough_data":{
+    "message":"لا توجد بيانات كافية."
+  },
+  "usage":{
+    "message":"الاستهالك"
+  }
+}

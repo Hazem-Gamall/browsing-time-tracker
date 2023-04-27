@@ -2,8 +2,16 @@ html,body{
   min-height:101%;
 }
 
+@font-face {
+  font-family: 'Droid Arabic Kufi';
+  src: url('../../fonts/Droid.Arabic.Kufi.ttf') format('truetype');
+}
 
-@keyframes slideFromTop {
+html[lang="ar"] body{
+  font-family: 'Droid Arabic Kufi', serif;
+}
+
+@keyframes slideFromSide {
   0%{
     transform: translateX(-100%);
   }
@@ -15,9 +23,8 @@ html,body{
 
 body {
   background-color: rgb(230, 230, 230);
-  width: 380px;
+  width: 420px;
   max-height: 150px;
-
 }
 
 .content{
@@ -35,7 +42,7 @@ body {
 
 
 .card {
-  width: 300px;
+  width: 350px;
   border-radius: 4%;
   outline: rgb(195, 195, 195) solid 1px;
 }
@@ -48,9 +55,9 @@ body {
   /* background-color: rgb(220, 220, 220); */
 }
 
-.card:hover {
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-}
+/* .card {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+} */
 
 @keyframes slideInFromLeft {
   0% {

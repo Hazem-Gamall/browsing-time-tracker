@@ -1,8 +1,9 @@
 
+import { localizeDate, localizeMessage } from '../localization/localize.js';
 import { renderDayChart } from '../modules/dayChart.js'
 import { renderDayProgress } from '../modules/dayProgress.js';
 import { getDayTotal } from '../modules/getTotal.js';
-import { msToHMS, msToTextFormat } from '../modules/millisFormatting.js';
+import { msToTextFormat } from '../modules/millisFormatting.js';
 import { removeAllChildNodes } from '../modules/removeAllChildNode.js';
 import { store } from '../store/store.js';
 
@@ -48,7 +49,7 @@ export const renderTable = function () {
 
 
         let today_element = document.querySelector('#today');
-        today_element.textContent = `Today, ${new Date().toDateString()}`
+        today_element.textContent = `${localizeMessage("Today")}, ${localizeDate(new Date())}`
     }
     return closure;
 }

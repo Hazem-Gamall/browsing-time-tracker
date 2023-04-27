@@ -1,3 +1,4 @@
+import { localizeDate, localizeMessage } from '../localization/localize.js';
 import { renderWeek } from '../modules/renderWeek.js'
 import { sortHistory } from '../modules/sorting.js';
 import { getFormattedWeekDiffPercentage, getPercentageArrowIconSpan, getWeekDiffPercentage } from '../modules/weekDiffPercentage.js';
@@ -23,7 +24,7 @@ export const renderHistory = (() => {
         if (history) {
             let history_list = Object.keys(history);
             if (index < history_list.length && index >= 0) {
-                week_title.textContent = history_list[index];
+                week_title.textContent = (history_list[index].split('-').map((date) => localizeDate(new Date(date)))).join(' - ');
                 let { week, total: week_total } = history[history_list[index]]
                 let { week: previous_week, total: previous_week_total } = history[history_list[index + 1]] ?? { total: NaN };
                 renderWeek(week);
@@ -33,7 +34,7 @@ export const renderHistory = (() => {
                     p.append(getPercentageArrowIconSpan(percentage), getFormattedWeekDiffPercentage(percentage));
                     document.querySelector("#relative-to-last-week").innerHTML = p.outerHTML;
                 } else {
-                    document.querySelector("#relative-to-last-week").innerHTML = `no enought data yet`
+                    document.querySelector("#relative-to-last-week").innerHTML = localizeMessage("not_enough_data");
                 }
                 if (index == 0) {
                     document.querySelector('#left-arrow').disabled = true;

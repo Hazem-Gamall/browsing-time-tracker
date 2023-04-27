@@ -3,10 +3,17 @@ import { removeAllChildNodes } from "./modules/removeAllChildNode.js";
 import { renderHistory } from "./pages/history.js";
 import { renderWeekRelativeToHistory } from "./pages/week.js";
 import { renderSettings } from "./pages/settings.js";
+import { localizeHtml } from "./localization/localize.js";
 
 
 var currentTarget = "";
 const contentElement = document.querySelector('#content');
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    document.body.setAttribute("dir", chrome.i18n.getMessage("@@bidi_dir"));
+    document.documentElement.setAttribute("lang", chrome.i18n.getUILanguage());
+})
 
 const navButtons = {
     popup: document.querySelector('[data-target="popup"]'),
@@ -75,6 +82,7 @@ function renderPageContent(newTarget) {
             renderSettingsContent();
             break;
     }
+    localizeHtml(document.body);
     setActiveNavButton();
 }
 

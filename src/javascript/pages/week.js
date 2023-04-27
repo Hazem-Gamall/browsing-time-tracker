@@ -1,6 +1,6 @@
+import { localizeMessage } from '../localization/localize.js';
 import { getWeekTotal } from '../modules/getTotal.js';
 import { renderWeek } from '../modules/renderWeek.js';
-import { sortHistory } from '../modules/sorting.js';
 
 import {
     getFormattedWeekDiffPercentage, getWeekDiffPercentage,
@@ -15,7 +15,7 @@ export function renderWeekRelativeToHistory() {
         const week = await store.week;
         const history = await store.history
         if (!week || !history) {
-            document.querySelector("#relative-to-last-week").append("no enough data yet");
+            document.querySelector("#relative-to-last-week").append(localizeMessage("no enough data yet"));
         } else {
             const [{ total, week:previous_week }] = Object.values(history).slice(0, 1);
             const average = total / Object.keys(previous_week).length;
