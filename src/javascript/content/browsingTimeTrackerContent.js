@@ -28,15 +28,20 @@ function checkVideoPlayback() {
 }
 
 async function reportVideoStatus() {
-    const { trackVideos } = await chrome.storage.local.get({ trackVideos: TrackVideosEnum.NONE })
-    const status = checkVideoPlayback();
-    if (!document.hasFocus() || trackVideos === TrackVideosEnum.OFF ||
-        (document.location.hostname !== "www.youtube.com" && trackVideos === TrackVideosEnum.YOUTUBE)
-        || !status)
-        return;
-    videoStatus = status;
-    console.log(`video ${videoStatus}`);
-    sendMessageToExtension(videoStatus);
+    try {
+        const { trackVideos } = await chrome.storage.local.get({ trackVideos: TrackVideosEnum.NONE })
+        const status = checkVideoPlayback();
+        if (!document.hasFocus() || trackVideos === TrackVideosEnum.NONE ||
+            (document.location.hostname !== "www.youtube.com" && trackVideos === TrackVideosEnum.YOUTUBE)
+            || !status)
+            return;
+        videoStatus = status;
+        console.log(`video ${videoStatus}`);
+        sendMessageToExtension(videoStatus);
+
+    } catch (e) {
+        console.log("Error:", e);
+    }
 
 }
 
