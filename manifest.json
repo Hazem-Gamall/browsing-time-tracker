@@ -36,10 +36,8 @@
         "storage",
         "scripting",
         "activeTab",
-        "background",
         "alarms",
-        "favicon",
-        "unlimitedStorage"
+        "favicon"
     ],
 
     
