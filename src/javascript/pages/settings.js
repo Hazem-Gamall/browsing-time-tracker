@@ -1,7 +1,5 @@
 import { TrackVideosEnum } from "../modules/enums/TrackVideos.js"
 
-$('[data-toggle="tooltip"]').tooltip();
-
 
 function idleRangeOnInput(e, value) {
     document.querySelector("#idle-time").textContent = idleNumberToTime(value ?? this.value);
@@ -36,6 +34,7 @@ function initArabHinduNumeralsInput(arabHinduNumerals) {
 
 
 export async function renderSettings(){
+    $('[data-toggle="tooltip"]').tooltip();
     let { trackVideos, idlePeriod, arabHinduNumerals } = await chrome.storage.local.get({ trackVideos: TrackVideosEnum.OFF, idlePeriod: 30, arabHinduNumerals: true });
     initIdleRange(idlePeriod);
     initTrackVideoSelect(trackVideos);
