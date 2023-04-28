@@ -169,4 +169,4 @@ async function checkUserIdle() {
     );
 }
 
-setInterval(() => { checkUserIdle(); checkBrowserFocus(); calculateTime(); }, 1000)
+setInterval(() => { checkUserIdle(); checkBrowserFocus(); handleAlarm(); }, 1000)
