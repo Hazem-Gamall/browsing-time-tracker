@@ -48,6 +48,7 @@ const renderWeek = async (week) => {
 
 
     let accordion = document.querySelector('#accordion');
+    removeAllChildNodes(accordion);
     let week_total = 0;
     for (const day_key in week) {
         const day_key_id = day_key.replaceAll(' ', '-');
