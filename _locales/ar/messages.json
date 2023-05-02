@@ -1,0 +1,138 @@
+{
+  "extName": {
+    "message": "Browsing time tracker — متتبع وقت التصفح",
+    "description": "اسم الإضافة"
+  },
+  "extDescription":{
+    "message":"تتبع الوقت المنقضي في تصفح الإنترنت."
+  },
+  "today": {
+    "message": "اليوم"
+  },
+  "week": {
+    "message": "الأسبوع"
+  },
+  "history": {
+    "message": "السجل"
+  },
+  "more_details": {
+    "message": "عرض المزيد",
+    "description": "text for the get more detail toggle button"
+  },
+  "h": {
+    "message": "س",
+    "description": "اختصار ساعة"
+  },
+  "m": {
+    "message": "د",
+    "description": "اختصار دقيقة"
+  },
+  "s": {
+    "message": "ث",
+    "description": "اختصار ثانية"
+  },
+  "daily_average": {
+    "message": "المتوسط اليومي"
+  },
+  "realtion_to_lw": {
+    "message": "$PERCENTAGE$ $COMP_ADJ$ من الأسبوع الماضي.",
+    "description": "infrom the user of the realtion between this week and last week's usage",
+    "placeholders": {
+      "PERCENTAGE": {
+        "content": "$1",
+        "example": "35%"
+      },
+      "COMP_ADJ": {
+        "content": "$2",
+        "example": "أكبر | أصغر"
+      }
+    }
+  },
+  "higher": {
+    "message": "اعلى"
+  },
+  "lower": {
+    "message": "اقل"
+  },
+  "total_browsing_time": {
+    "message": "مجموع وقت التصفح"
+  },
+  "total_time": {
+    "message": "مجموع الوقت"
+  },
+  "not_enough_data": {
+    "message": "لا توجد بيانات كافية."
+  },
+  "usage": {
+    "message": "الاستهالك"
+  },
+  "stop_tracking": {
+    "message": "توقف عن التتبع إذا كان الجهاز "
+  },
+  "idle": {
+    "message": "خاملًا"
+  },
+  "idle_title": {
+    "message": "لا يوجد إدخال من الفأرة أو لوحة المفاتيح"
+  },
+  "for": {
+    "message": "لمدة"
+  },
+  "second": {
+    "message": "ثانية"
+  },
+  "seconds": {
+    "message": "ثانية"
+  },
+  "minute": {
+    "message": "دقيقة"
+  },
+  "few_minutes": {
+    "message": "دقائق"
+  },
+  "many_minutes": {
+    "message": "دقيقة"
+  },
+  "hour": {
+    "message": "ساعة"
+  },
+  "hours": {
+    "message": "ساعات"
+  },
+  "track_video_label":{
+    "message":"تتبع الوقت عند مشاهدة الفيديوهات إذا كان الجهاز"
+  },
+  "youtube_only":{
+    "message":"اليوتيوب فقط."
+  },
+  "all_websites":{
+    "message":"جميع المواقع."
+  },
+  "none":{
+    "message":"لا شيئ مما سبق."
+  },
+  "feedback": {
+    "message": "التواصل"
+  },
+  "feedback_paragraph": {
+    "message": "إذا كنت تواجه أي مشكلات أو لديك أسئلة أو اقتراحات، يرجى ملء هذا النموذج"
+  },
+  "here":{
+    "message":"هنا"
+  },
+  "source_code":{
+    "message":"الكود المصدري"
+  },
+  "google_forms_url":{
+    "message": "https://forms.gle/xVvm36qZyWLqhH1N7"
+  },
+  "credits":{
+    "message":"الإيقونة من"
+  },
+  "support_me":{
+    "message":"ادعمني!"
+  },
+  "settings":{
+    "message":"الإعدادات"
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "extName": {
+    "message": "Browsing Time Tracker",
+    "description": "Extension name"
+  },
+  "extDescription":{
+    "message":"Monitor the time spent on browsing the internet."
+  },
+  "today": {
+    "message": "Today"
+  },
+  "week": {
+    "message": "Week"
+  },
+  "history": {
+    "message": "History"
+  },
+  "more_details": {
+    "message": "Get more details",
+    "description": "text for the get more detail toggle button"
+  },
+  "h": {
+    "message": "h",
+    "description": "short for hour"
+  },
+  "m": {
+    "message": "m",
+    "description": "short for minute"
+  },
+  "s": {
+    "message": "s",
+    "description": "short for second"
+  },
+  "daily_average": {
+    "message": "Daily avgerage"
+  },
+  "realtion_to_lw": {
+    "message": "$PERCENTAGE$ $COMP_ADJ$ than last week.",
+    "description": "infrom the user of the realtion between this week and last week's usage",
+    "placeholders": {
+      "PERCENTAGE": {
+        "content": "$1",
+        "example": "35%"
+      },
+      "COMP_ADJ": {
+        "content": "$2",
+        "example": "higher | lower"
+      }
+    }
+  },
+  "higher": {
+    "message": "higher"
+  },
+  "lower": {
+    "message": "lower"
+  },
+  "total_browsing_time": {
+    "message": "Total browsing time"
+  },
+  "total_time": {
+    "message": "Total time"
+  },
+  "not_enough_data": {
+    "message": "Not enough data yet"
+  },
+  "usage": {
+    "message": "Usage"
+  },
+  "stop_tracking": {
+    "message": "Stop tracking if"
+  },
+  "idle": {
+    "message": "idle"
+  },
+  "idle_title": {
+    "message": "No mouse or keyboared input"
+  },
+  "for": {
+    "message": "for"
+  },
+  "second": {
+    "message": "second"
+  },
+  "seconds": {
+    "message": "seconds"
+  },
+  "minute": {
+    "message": "minute"
+  },
+  "few_minutes": {
+    "message": "minutes"
+  },
+  "many_minutes": {
+    "message": "minutes"
+  },
+  "hour": {
+    "message": "hour"
+  },
+  "hours": {
+    "message": "hours"
+  },
+  "track_video_label": {
+    "message": "Track time while watching videos when"
+  },
+  "youtube_only": {
+    "message": "Youtube only."
+  },
+  "all_websites": {
+    "message": "All websites."
+  },
+  "none": {
+    "message": "None"
+  },
+  "feedback": {
+    "message": "Feedback"
+  },
+  "feedback_paragraph": {
+    "message": "If you are experiencing problems, having questions or suggestions, please fill out the support form"
+  },
+  "here":{
+    "message":"here"
+  },
+  "source_code":{
+    "message":"Source code"
+  },
+  "google_forms_url":{
+    "message": "https://forms.gle/14C9JHCyXgjQQMqe7"
+  },
+  "credits":{
+    "message":"Icon from"
+  },
+  "support_me":{
+    "message":"Support me!"
+  },
+  "settings":{
+    "message":"settings"
+  }
+}
