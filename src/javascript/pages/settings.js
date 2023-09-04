@@ -54,7 +54,9 @@ function idleNumberToSeconds(number) {
     else if (number < 8)
         return (number - 2) * 60;
     else if (number < 18)
-        return ((number - 6) * 5) * 60;
+        return ((number - 6) * 5) * 60; // x - 6 will make it go back to the 2,3,4,... range
+                                        // which when multiplied by 5 will give us the correct minutes
+                                        // because the steps are multiples of 5.
     else
         return (number - 17) * 60 * 60;
 }
@@ -65,7 +67,7 @@ function secondsToIdleNumbers(seconds) {
         return seconds / 15;
     else if (seconds <= 300)
         return (seconds / 60) + 2;
-    else if (seconds < 18)
+    else if (seconds <= 3300) 
         return ((seconds / (60 * 5)) + 6);
     else
         return (seconds / (60 * 60)) + 17;
